@@ -1,0 +1,9 @@
+*~
+*.pyc
+
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+
+etc/mc_rtc.yaml
