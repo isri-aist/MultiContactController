@@ -1,0 +1,76 @@
+cmake_minimum_required(VERSION 3.8)
+
+set(PROJECT_NAME multi_contact_controller)
+set(PROJECT_GENERATED_HEADERS_SKIP_DEPRECATED ON)
+set(PROJECT_GENERATED_HEADERS_SKIP_CONFIG ON)
+set(PROJECT_GENERATED_HEADERS_SKIP_WARNING ON)
+set(PROJECT_URL https://github.com/isri-aist/MultiContactController)
+set(PROJECT_DESCRIPTION "")
+set(CMAKE_CXX_STANDARD 17)
+set(PROJECT_USE_CMAKE_EXPORT TRUE)
+set(CXX_DISABLE_WERROR ON)
+option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
+
+include(cmake/base.cmake)
+project(multi_contact_controller LANGUAGES CXX)
+
+# mc_rtc
+add_project_dependency(mc_rtc REQUIRED)
+if(NOT TARGET mc_rtc::mc_rtc_ros)
+  message(FATAL_ERROR "mc_rtc ROS plugin is required for this controller")
+endif()
+
+if(DEFINED CATKIN_DEVEL_PREFIX)
+  set(DOXYGEN_HTML_OUTPUT doc/html)
+  find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    geometry_msgs
+    trajectory_collection
+    force_control_collection
+    centroidal_control_collection
+  )
+
+  # Eigen
+  find_package(Eigen3 REQUIRED)
+  include_directories(${EIGEN3_INCLUDE_DIR})
+
+  catkin_package(
+    CATKIN_DEPENDS
+    roscpp
+    geometry_msgs
+    trajectory_collection
+    force_control_collection
+    centroidal_control_collection
+    DEPENDS EIGEN3
+    INCLUDE_DIRS include
+    LIBRARIES MultiContactController
+  )
+
+  include_directories(include ${catkin_INCLUDE_DIRS})
+  link_directories(${catkin_LIBRARY_DIRS})
+  set(CONFIG_OUT "${CATKIN_DEVEL_PREFIX}/lib/mc_controller/etc/MultiContactController.yaml")
+  configure_file(etc/mc_rtc.in.yaml ${PROJECT_SOURCE_DIR}/etc/mc_rtc.yaml @ONLY)
+  set(STATES_INSTALL_PREFIX ${CATKIN_DEVEL_PREFIX}/lib)
+else()
+  set(DOXYGEN_HTML_OUTPUT doxygen-html)
+  set(CATKIN_ENABLE_TESTING OFF)
+  option(BUILD_SHARED_LIBS "Build libraries as shared as opposed to static" ON)
+  add_project_dependency(trajectory_collection REQUIRED)
+  add_project_dependency(force_control_collection REQUIRED)
+  add_project_dependency(centroidal_control_collection REQUIRED)
+  set(CONFIG_OUT "${CMAKE_CURRENT_BINARY_DIR}/etc/MultiContactController.yaml")
+  set(STATES_INSTALL_PREFIX ${MC_CONTROLLER_INSTALL_PREFIX})
+endif()
+
+configure_file(etc/MultiContactController.in.yaml "${CONFIG_OUT}" @ONLY)
+install(FILES ${CONFIG_OUT} DESTINATION ${MC_RTC_LIBDIR}/mc_controller/etc/)
+
+add_subdirectory(src)
+
+if(BUILD_TESTING OR CATKIN_ENABLE_TESTING)
+  add_subdirectory(tests)
+endif()
+
+if(INSTALL_DOCUMENTATION)
+  add_subdirectory(doc)
+endif()
