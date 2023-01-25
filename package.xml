@@ -22,7 +22,6 @@
 
   <exec_depend>rviz</exec_depend>
   <exec_depend>rospy</exec_depend>
-  <exec_depend>cnoid_ros_utils</exec_depend>
 
   <doc_depend>doxygen</doc_depend>
 </package>
