@@ -5,9 +5,10 @@
 #include <mc_tasks/MetaTaskLoader.h>
 #include <mc_tasks/OrientationTask.h>
 
+#include <BaselineWalkingController/ConfigUtils.h>
+
 #include <MultiContactController/MultiContactController.h>
 // #include <MultiContactController/CentroidalManager.h>
-#include <MultiContactController/ConfigUtils.h>
 // #include <MultiContactController/FootManager.h>
 
 using namespace MMC;
@@ -15,7 +16,7 @@ using namespace MMC;
 MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
                                                double dt,
                                                const mc_rtc::Configuration & _config)
-: mc_control::fsm::Controller(rm, dt, overwriteConfig(_config, rm->name))
+: mc_control::fsm::Controller(rm, dt, BWC::overwriteConfig(_config, rm->name))
 {
   config()("controllerName", name_);
 

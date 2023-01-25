@@ -1,4 +1,7 @@
 - git:
+    local-name: isri-aist/BaselineWalkingController
+    uri: https://github.com/isri-aist/BaselineWalkingController
+- git:
     local-name: isri-aist/CentroidalControlCollection
     uri: https://github.com/isri-aist/CentroidalControlCollection
 - git:

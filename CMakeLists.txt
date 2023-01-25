@@ -23,11 +23,7 @@ endif()
 if(DEFINED CATKIN_DEVEL_PREFIX)
   set(DOXYGEN_HTML_OUTPUT html)
   find_package(catkin REQUIRED COMPONENTS
-    roscpp
-    geometry_msgs
-    trajectory_collection
-    force_control_collection
-    centroidal_control_collection
+    baseline_walking_controller
   )
 
   # Eigen
@@ -36,11 +32,7 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
 
   catkin_package(
     CATKIN_DEPENDS
-    roscpp
-    geometry_msgs
-    trajectory_collection
-    force_control_collection
-    centroidal_control_collection
+    baseline_walking_controller
     DEPENDS EIGEN3
     INCLUDE_DIRS include
     LIBRARIES MultiContactController
@@ -55,9 +47,7 @@ else()
   set(DOXYGEN_HTML_OUTPUT doxygen-html)
   set(CATKIN_ENABLE_TESTING OFF)
   option(BUILD_SHARED_LIBS "Build libraries as shared as opposed to static" ON)
-  add_project_dependency(trajectory_collection REQUIRED)
-  add_project_dependency(force_control_collection REQUIRED)
-  add_project_dependency(centroidal_control_collection REQUIRED)
+  add_project_dependency(baseline_walking_controller REQUIRED)
   set(CONFIG_OUT "${CMAKE_CURRENT_BINARY_DIR}/etc/MultiContactController.yaml")
   set(STATES_INSTALL_PREFIX ${MC_CONTROLLER_INSTALL_PREFIX})
 endif()

@@ -12,11 +12,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>roscpp</depend>
-  <depend>geometry_msgs</depend>
-  <depend>trajectory_collection</depend>
-  <depend>force_control_collection</depend>
-  <depend>centroidal_control_collection</depend>
+  <depend>baseline_walking_controller</depend>
 
   <build_depend>eigen</build_depend>
 

@@ -10,9 +10,7 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
   target_link_libraries(${CONTROLLER_NAME} PUBLIC ${catkin_LIBRARIES})
 else()
   target_link_libraries(${CONTROLLER_NAME} PUBLIC
-    trajectory_collection::TrajColl
-    force_control_collection::ForceColl
-    centroidal_control_collection::CCC
+    baseline_walking_controller::BaselineWalkingController
   )
 endif()
 
