@@ -1,0 +1,4 @@
+name: MultiContactController documentation
+gems:
+  - jekyll-redirect-from
+  - jekyll-sitemap
