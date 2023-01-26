@@ -179,7 +179,7 @@ void LimbManager::update()
     }
   }
 
-  // Set target of limb tasks
+  // Set target of limb task
   {
     limbTask_->targetPose(targetPose_);
     // ImpedanceTask::targetVel receive the velocity represented in the world frame
@@ -187,6 +187,40 @@ void LimbManager::update()
     // ImpedanceTask::targetAccel receive the acceleration represented in the world frame
     limbTask_->targetAccel(targetAccel_);
     limbTask_->setGains(taskGain_.stiffness, taskGain_.damping);
+  }
+
+  // Update impGainType_ and requireImpGainUpdate_
+  {
+    std::string newImpGainType;
+    if(isContact())
+    {
+      if(true) // \todo (ctl().limbManagerSet_->contactList().size() == 1)
+      {
+        newImpGainType = "SingleContact";
+      }
+      else
+      {
+        newImpGainType = "MultiContact";
+      }
+    }
+    else
+    {
+      newImpGainType = "Swing";
+    }
+
+    if(impGainType_ != newImpGainType)
+    {
+      impGainType_ = newImpGainType;
+      requireImpGainUpdate_ = true;
+    }
+  }
+
+  // Set impedance gains of limb task
+  if(requireImpGainUpdate_)
+  {
+    requireImpGainUpdate_ = false;
+
+    limbTask_->gains() = config_.impGains.at(impGainType_);
   }
 }
 
