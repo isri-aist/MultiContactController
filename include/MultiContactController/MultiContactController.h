@@ -2,22 +2,22 @@
 
 #include <mc_control/fsm/Controller.h>
 
-// #include <MultiContactController/FootTypes.h>
+#include <MultiContactController/LimbTypes.h>
 
 namespace mc_tasks
 {
-class CoMTask;
-class OrientationTask;
+struct CoMTask;
+struct OrientationTask;
 
 namespace force
 {
-class FirstOrderImpedanceTask;
+struct FirstOrderImpedanceTask;
 }
 } // namespace mc_tasks
 
-namespace MMC
+namespace MCC
 {
-// class FootManager;
+class LimbManager;
 // class CentroidalManager;
 
 /** \brief Humanoid multi-contact motion controller. */
@@ -73,8 +73,8 @@ public:
   //! Base link orientation task
   std::shared_ptr<mc_tasks::OrientationTask> baseOriTask_;
 
-  //! Foot tasks
-  // std::unordered_map<Foot, std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask>> footTasks_;
+  //! Limb tasks
+  std::unordered_map<Limb, std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask>> limbTasks_;
 
   //! Foot manager
   // std::shared_ptr<FootManager> footManager_;
@@ -92,4 +92,4 @@ protected:
   //! Current time [sec]
   double t_ = 0;
 };
-} // namespace MMC
+} // namespace MCC

@@ -2,7 +2,7 @@
 
 #include <ForceColl/Contact.h>
 
-#include <MultiContactController/ContactCommand.h>
+#include <MultiContactController/ContactTypes.h>
 
 using namespace MCC;
 

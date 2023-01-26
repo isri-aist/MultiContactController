@@ -11,7 +11,7 @@
 // #include <MultiContactController/CentroidalManager.h>
 // #include <MultiContactController/FootManager.h>
 
-using namespace MMC;
+using namespace MCC;
 
 MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
                                                double dt,

@@ -54,4 +54,23 @@ struct ContactCommand
   //! Configuration for swing trajectory
   mc_rtc::Configuration swingTrajConfig = {};
 };
+
+/** \brief Contact state. */
+struct ContactState
+{
+  /** \brief Constructor.
+      \param surfacePose surface pose
+      \param constraint contact constraint
+   */
+  ContactState(const sva::PTransformd & _surfacePose, const std::shared_ptr<ContactConstraint> & _constraint)
+  : surfacePose(_surfacePose), constraint(_constraint)
+  {
+  }
+
+  //! Surface pose
+  sva::PTransformd surfacePose;
+
+  //! Contact constraint
+  std::shared_ptr<ContactConstraint> constraint;
+};
 } // namespace MCC
