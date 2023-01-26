@@ -38,4 +38,24 @@ namespace std
 {
 /** \brief Convert limb to string. */
 std::string to_string(const MCC::Limb & limb);
+
+/** \brief Equal operator of Limb.
+
+    This is required to use Limb as a key in std::unordered_map.
+*/
+template<>
+struct equal_to<MCC::Limb>
+{
+  bool operator()(const MCC::Limb & lhs, const MCC::Limb & rhs) const;
+};
+
+/** \brief Hash operator of Limb.
+
+    This is required to use Limb as a key in std::unordered_map.
+*/
+template<>
+struct hash<MCC::Limb>
+{
+  size_t operator()(const MCC::Limb & limb) const;
+};
 } // namespace std
