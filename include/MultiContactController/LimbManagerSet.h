@@ -33,6 +33,12 @@ public:
   */
   void stop();
 
+  /** \brief Add entries to the GUI. */
+  void addToGUI(mc_rtc::gui::StateBuilder & gui){}; // \todo
+
+  /** \brief Add entries to the logger. */
+  void addToLogger(mc_rtc::Logger & logger){}; // \todo
+
   /** \brief Get contact constraint list at the specified time.
       \param t time
    */

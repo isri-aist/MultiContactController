@@ -64,6 +64,24 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   {
     mc_rtc::log::warning("[MultiContactController] LimbManagerSet configuration is missing.");
   }
+  if(config().has("CentroidalManager"))
+  {
+    std::string centroidalManagerMethod = config()("CentroidalManager")("method", std::string(""));
+    if(centroidalManagerMethod == "DdpCentroidal")
+    {
+      // centroidalManager_ = std::make_shared<CentroidalManagerDdpCentroidal>(this, config()("CentroidalManager")); //
+      // \todo
+    }
+    else
+    {
+      mc_rtc::log::error_and_throw("[BaselineWalkingController] Invalid centroidalManagerMethod: {}.",
+                                   centroidalManagerMethod);
+    }
+  }
+  else
+  {
+    mc_rtc::log::warning("[BaselineWalkingController] CentroidalManager configuration is missing.");
+  }
 
   // Load other configurations
   if(config().has("SwingTraj"))
@@ -102,6 +120,7 @@ bool MultiContactController::run()
   {
     // Update managers
     limbManagerSet_->update();
+    centroidalManager_->update();
   }
 
   return mc_control::fsm::Controller::run();
@@ -120,6 +139,8 @@ void MultiContactController::stop()
   // Clean up managers
   limbManagerSet_->stop();
   limbManagerSet_.reset();
+  centroidalManager_->stop();
+  centroidalManager_.reset();
 
   // Clean up anchor
   setDefaultAnchor();

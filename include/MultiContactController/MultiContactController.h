@@ -18,7 +18,7 @@ struct FirstOrderImpedanceTask;
 namespace MCC
 {
 class LimbManagerSet;
-// class CentroidalManager;
+class CentroidalManager;
 
 /** \brief Humanoid multi-contact motion controller. */
 struct MultiContactController : public mc_control::fsm::Controller
@@ -80,7 +80,7 @@ public:
   std::shared_ptr<LimbManagerSet> limbManagerSet_;
 
   //! Centroidal manager
-  // std::shared_ptr<CentroidalManager> centroidalManager_;
+  std::shared_ptr<CentroidalManager> centroidalManager_;
 
   //! Whether to enable manager update
   bool enableManagerUpdate_ = false;
