@@ -17,7 +17,7 @@ struct FirstOrderImpedanceTask;
 
 namespace MCC
 {
-class LimbManager;
+class LimbManagerSet;
 // class CentroidalManager;
 
 /** \brief Humanoid multi-contact motion controller. */
@@ -76,8 +76,8 @@ public:
   //! Limb tasks
   std::unordered_map<Limb, std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask>> limbTasks_;
 
-  //! Foot manager
-  // std::shared_ptr<FootManager> footManager_;
+  //! Limb manager set
+  std::shared_ptr<LimbManagerSet> limbManagerSet_;
 
   //! Centroidal manager
   // std::shared_ptr<CentroidalManager> centroidalManager_;

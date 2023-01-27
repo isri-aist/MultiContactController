@@ -15,6 +15,14 @@
 #include <MultiContactController/LimbTypes.h>
 #include <MultiContactController/RobotUtils.h>
 
+namespace mc_tasks
+{
+namespace force
+{
+struct FirstOrderImpedanceTask;
+}
+} // namespace mc_tasks
+
 namespace MCC
 {
 class MultiContactController;
@@ -138,9 +146,6 @@ public:
 
   /** \brief Get contact state at the specified time. */
   std::shared_ptr<ContactState> getContactState(double t) const;
-
-  /** \brief Get whether the limb is contacting now. */
-  bool isContact() const;
 
   /** \brief Get whether the limb is contacting at the specified time.
       \param t time

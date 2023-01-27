@@ -8,8 +8,9 @@
 #include <BaselineWalkingController/ConfigUtils.h>
 
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 // #include <MultiContactController/CentroidalManager.h>
-// #include <MultiContactController/FootManager.h>
+#include <MultiContactController/LimbManagerSet.h>
 
 using namespace MCC;
 
@@ -39,22 +40,36 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   {
     mc_rtc::log::warning("[MultiContactController] BaseOrientationTask configuration is missing.");
   }
-  // if(config().has("FootTaskList"))
-  // {
-  //   for(const auto & footTaskConfig : config()("FootTaskList"))
-  //   {
-  //     Foot foot = strToFoot(footTaskConfig("foot"));
-  //     footTasks_.emplace(
-  //         foot, mc_tasks::MetaTaskLoader::load<mc_tasks::force::FirstOrderImpedanceTask>(solver(), footTaskConfig));
-  //     footTasks_.at(foot)->name("FootTask_" + std::to_string(foot));
-  //   }
-  // }
-  // else
-  // {
-  //   mc_rtc::log::warning("[MultiContactController] FootTaskList configuration is missing.");
-  // }
+  if(config().has("LimbTaskList"))
+  {
+    for(const auto & limbTaskConfig : config()("LimbTaskList"))
+    {
+      Limb limb = Limb(limbTaskConfig("limb"));
+      limbTasks_.emplace(
+          limb, mc_tasks::MetaTaskLoader::load<mc_tasks::force::FirstOrderImpedanceTask>(solver(), limbTaskConfig));
+      limbTasks_.at(limb)->name("LimbTask_" + std::to_string(limb));
+    }
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] LimbTaskList configuration is missing.");
+  }
 
   // Setup managers
+  if(config().has("LimbManagerSet"))
+  {
+    limbManagerSet_ = std::make_shared<LimbManagerSet>(this, config()("LimbManagerSet"));
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] LimbManagerSet configuration is missing.");
+  }
+
+  // Load other configurations
+  if(config().has("SwingTraj"))
+  {
+    SwingTrajCubicSplineSimple::loadDefaultConfig(config()("SwingTraj")("CubicSplineSimple", mc_rtc::Configuration{}));
+  }
 
   // Setup anchor
   setDefaultAnchor();
@@ -86,6 +101,7 @@ bool MultiContactController::run()
   if(enableManagerUpdate_)
   {
     // Update managers
+    limbManagerSet_->update();
   }
 
   return mc_control::fsm::Controller::run();
@@ -96,12 +112,14 @@ void MultiContactController::stop()
   // Clean up tasks
   solver().removeTask(comTask_);
   solver().removeTask(baseOriTask_);
-  // for(const auto & foot : Feet::Both)
-  // {
-  //   solver().removeTask(footTasks_.at(foot));
-  // }
+  for(const auto & limbTaskKV : limbTasks_)
+  {
+    solver().removeTask(limbTaskKV.second);
+  }
 
   // Clean up managers
+  limbManagerSet_->stop();
+  limbManagerSet_.reset();
 
   // Clean up anchor
   setDefaultAnchor();
@@ -117,6 +135,7 @@ void MultiContactController::setDefaultAnchor()
     datastore().remove(anchorName);
   }
   datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) {
+    // \todo
     return sva::PTransformd::Identity();
     // return sva::interpolate(robot.surfacePose(footManager_->surfaceName(Foot::Left)),
     //                         robot.surfacePose(footManager_->surfaceName(Foot::Right)), 0.5);

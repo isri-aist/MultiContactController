@@ -1,19 +1,8 @@
-#include <algorithm>
-#include <limits>
-
-#include <mc_filter/utils/clamp.h>
-#include <mc_rtc/gui/ArrayInput.h>
-#include <mc_rtc/gui/Checkbox.h>
-#include <mc_rtc/gui/ComboInput.h>
-#include <mc_rtc/gui/IntegerInput.h>
-#include <mc_rtc/gui/Label.h>
-#include <mc_rtc/gui/NumberInput.h>
-#include <mc_rtc/gui/Polygon.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 
 #include <ForceColl/Contact.h>
 
-#include <MultiContactController/LimbManager.h>
+#include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
@@ -255,7 +244,7 @@ void LimbManager::update()
     std::string newImpGainType;
     if(isContact_)
     {
-      if(true) // \todo (ctl().limbManagerSet_->contactList().size() == 1)
+      if(ctl().limbManagerSet_->contactList(ctl().t()).size() == 1)
       {
         newImpGainType = "SingleContact";
       }
@@ -375,11 +364,6 @@ std::shared_ptr<ContactState> LimbManager::getContactState(double t) const
     return it->second;
   }
 }
-bool LimbManager::isContact() const
-{
-  return isContact_;
-}
-
 bool LimbManager::isContact(double t) const
 {
   return getContactState(t) != nullptr;
