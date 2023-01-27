@@ -40,7 +40,7 @@ public:
     std::string defaultSwingTrajType = "CubicSplineSimple";
 
     //! Policy for determining the start pose of the swing trajectory
-    std::string swingStartPolicy = "IK";
+    std::string swingStartPolicy = "ControlRobot";
 
     //! Whether to overwrite landing pose so that the relative pose from support limb to swing limb is retained
     bool overwriteLandingPose = false;
@@ -194,6 +194,9 @@ protected:
 
   //! ContactCommand currently executing
   const ContactCommand * executingCommand_ = nullptr;
+
+  //! Previous command pose
+  std::shared_ptr<sva::PTransformd> prevCommandPose_ = nullptr;
 
   //! Contact state list (sorted by time)
   std::map<double, std::shared_ptr<ContactState>> contactStateList_;

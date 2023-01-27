@@ -45,8 +45,8 @@ struct ContactCommand
   //! Time to add contact (only used for Type::Add, same as endTime by default)
   double addTime = 0;
 
-  //! Goal pose of surface (only used for Type::Add)
-  sva::PTransformd surfacePose = sva::PTransformd::Identity();
+  //! Surface pose (only used for Type::Add)
+  sva::PTransformd pose = sva::PTransformd::Identity();
 
   //! Constraint (only used for Type::Add)
   std::shared_ptr<ContactConstraint> constraint = nullptr;
@@ -59,16 +59,16 @@ struct ContactCommand
 struct ContactState
 {
   /** \brief Constructor.
-      \param surfacePose surface pose
+      \param pose surface pose
       \param constraint contact constraint
    */
-  ContactState(const sva::PTransformd & _surfacePose, const std::shared_ptr<ContactConstraint> & _constraint)
-  : surfacePose(_surfacePose), constraint(_constraint)
+  ContactState(const sva::PTransformd & _pose, const std::shared_ptr<ContactConstraint> & _constraint)
+  : pose(_pose), constraint(_constraint)
   {
   }
 
   //! Surface pose
-  sva::PTransformd surfacePose;
+  sva::PTransformd pose;
 
   //! Contact constraint
   std::shared_ptr<ContactConstraint> constraint;

@@ -17,7 +17,7 @@ ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
     constraintConfig.load(mcRtcConfig("constraint"));
     if(!constraintConfig.has("pose"))
     {
-      constraintConfig.add("pose", mcRtcConfig("surfacePose"));
+      constraintConfig.add("pose", mcRtcConfig("pose"));
     }
 
     type = Type::Add;
@@ -25,7 +25,7 @@ ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
     endTime = mcRtcConfig("endTime");
     removeTime = mcRtcConfig("removeTime", std::as_const(startTime));
     addTime = mcRtcConfig("addTime", std::as_const(endTime));
-    surfacePose = mcRtcConfig("surfacePose");
+    pose = mcRtcConfig("pose");
     constraint = ContactConstraint::makeSharedFromConfig(constraintConfig);
     mcRtcConfig("swingTrajConfig", swingTrajConfig);
   }

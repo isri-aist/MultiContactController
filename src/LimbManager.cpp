@@ -15,7 +15,7 @@
 
 #include <MultiContactController/LimbManager.h>
 #include <MultiContactController/MultiContactController.h>
-#include <MultiContactController/SwingTraj.h> // \todo remove
+#include <MultiContactController/SwingTraj.h> // \todo tmp
 // #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
 using namespace MCC;
@@ -55,6 +55,7 @@ void LimbManager::reset(const mc_rtc::Configuration & constraintConfig)
   commandQueue_.clear();
 
   executingCommand_ = nullptr;
+  prevCommandPose_.reset();
 
   touchDown_ = false;
 
@@ -110,6 +111,8 @@ void LimbManager::update()
         targetAccel_ = sva::MotionVecd::Zero();
       }
 
+      prevCommandPose_ = std::make_shared<sva::PTransformd>(completedCommand.pose);
+
       taskGain_ = config_.taskGain;
 
       touchDown_ = false;
@@ -153,6 +156,44 @@ void LimbManager::update()
 
       // Set swingTraj_
       {
+        sva::PTransformd swingStartPose;
+        if(config_.swingStartPolicy == "ControlRobot")
+        {
+          swingStartPose = limbTask_->surfacePose(); // control robot pose (i.e., IK result)
+        }
+        else if(config_.swingStartPolicy == "Target")
+        {
+          swingStartPose = limbTask_->targetPose(); // target pose
+        }
+        else if(config_.swingStartPolicy == "Compliance")
+        {
+          swingStartPose = limbTask_->compliancePose(); // compliance pose, which is modified by impedance
+        }
+        else
+        {
+          mc_rtc::log::error_and_throw(
+              "[LimbEndManager({})] swingStartPolicy must be ControlRobot, Target, or Compliance, but {} is specified.",
+              std::to_string(limb_), config_.swingStartPolicy);
+        }
+        sva::PTransformd swingEndPose = executingCommand_->pose;
+        if(config_.overwriteLandingPose && prevCommandPose_)
+        {
+          sva::PTransformd swingRelPose = executingCommand_->pose * prevCommandPose_->inv();
+          swingEndPose = swingRelPose * swingStartPose;
+        }
+
+        std::string swingTrajType =
+            executingCommand_->swingTrajConfig("type", static_cast<std::string>(config_.defaultSwingTrajType));
+        if(swingTrajType == "CubicSplineSimple")
+        {
+          // swingTraj_ = std::make_shared<SwingTrajCubicSplineSimple>(
+          //     swingStartPose, swingEndPose, executingCommand_->startTime, executingCommand_->endTime,
+          //     config_.taskGain, executingCommand_->swingTrajConfig);
+        }
+        else
+        {
+          mc_rtc::log::error_and_throw("[LimbManager] Invalid swingTrajType: {}.", swingTrajType);
+        }
       }
 
       // Remove contact during adding/removing contact
@@ -291,7 +332,7 @@ bool LimbManager::appendContactCommand(const ContactCommand & command)
   contactStateList_.emplace(command.removeTime, nullptr);
   if(command.type == ContactCommand::Type::Add)
   {
-    contactStateList_.emplace(command.addTime, std::make_shared<ContactState>(command.surfacePose, command.constraint));
+    contactStateList_.emplace(command.addTime, std::make_shared<ContactState>(command.pose, command.constraint));
   }
 
   return true;
