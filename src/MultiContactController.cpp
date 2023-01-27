@@ -7,10 +7,10 @@
 
 #include <BaselineWalkingController/ConfigUtils.h>
 
+#include <MultiContactController/CentroidalManager.h>
+#include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
-// #include <MultiContactController/CentroidalManager.h>
-#include <MultiContactController/LimbManagerSet.h>
 
 using namespace MCC;
 
