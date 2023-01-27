@@ -15,8 +15,7 @@
 
 #include <MultiContactController/LimbManager.h>
 #include <MultiContactController/MultiContactController.h>
-#include <MultiContactController/SwingTraj.h> // \todo tmp
-// #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
+#include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
 using namespace MCC;
 
@@ -57,7 +56,18 @@ void LimbManager::reset(const mc_rtc::Configuration & constraintConfig)
   executingCommand_ = nullptr;
   prevCommandPose_.reset();
 
+  targetPose_ = limbTask_->surfacePose();
+  targetVel_ = sva::MotionVecd::Zero();
+  targetAccel_ = sva::MotionVecd::Zero();
+  taskGain_ = config_.taskGain;
+
+  swingTraj_.reset();
+
+  isContact_ = false;
+
   touchDown_ = false;
+
+  impGainType_ = "Uninitialized"; // will be updated in the update method
 
   requireImpGainUpdate_ = false;
 
@@ -70,7 +80,7 @@ void LimbManager::reset(const mc_rtc::Configuration & constraintConfig)
   {
     limbTask_->reset();
     ctl().solver().addTask(limbTask_);
-    limbTask_->setGains(config_.taskGain.stiffness, config_.taskGain.damping);
+    limbTask_->setGains(taskGain_.stiffness, taskGain_.damping);
 
     contactStateList_.emplace(
         ctl().t(), std::make_shared<ContactState>(limbTask_->surfacePose(),
@@ -95,6 +105,9 @@ void LimbManager::update()
       }
     }
   }
+
+  // Update isContact_
+  isContact_ = isContact(ctl().t());
 
   // Complete executing command
   while(!commandQueue_.empty() && commandQueue_.front().endTime < ctl().t())
@@ -149,9 +162,16 @@ void LimbManager::update()
 
       // Enable hold mode to prevent IK target pose from jumping
       // https://github.com/jrl-umi3218/mc_rtc/pull/143
-      if(isContact())
+      if(isContact_)
       {
         limbTask_->hold(true);
+      }
+
+      // Add limb task
+      if(executingCommand_->type == ContactCommand::Type::Add)
+      {
+        limbTask_->reset();
+        ctl().solver().addTask(limbTask_);
       }
 
       // Set swingTraj_
@@ -186,9 +206,9 @@ void LimbManager::update()
             executingCommand_->swingTrajConfig("type", static_cast<std::string>(config_.defaultSwingTrajType));
         if(swingTrajType == "CubicSplineSimple")
         {
-          // swingTraj_ = std::make_shared<SwingTrajCubicSplineSimple>(
-          //     swingStartPose, swingEndPose, executingCommand_->startTime, executingCommand_->endTime,
-          //     config_.taskGain, executingCommand_->swingTrajConfig);
+          swingTraj_ = std::make_shared<SwingTrajCubicSplineSimple>(
+              executingCommand_->type, isContact_, swingStartPose, swingEndPose, executingCommand_->startTime,
+              executingCommand_->endTime, config_.taskGain, executingCommand_->swingTrajConfig);
         }
         else
         {
@@ -233,7 +253,7 @@ void LimbManager::update()
   // Update impGainType_ and requireImpGainUpdate_
   {
     std::string newImpGainType;
-    if(isContact())
+    if(isContact_)
     {
       if(true) // \todo (ctl().limbManagerSet_->contactList().size() == 1)
       {
@@ -281,7 +301,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
 
   logger.addLogEntry(name + "_contactCommandQueueSize", this, [this]() { return commandQueue_.size(); });
   logger.addLogEntry(name + "_contactStateListSize", this, [this]() { return contactStateList_.size(); });
-  logger.addLogEntry(name + "_isContact", this, [this]() { return isContact(); });
+  logger.addLogEntry(name + "_isContact", this, [this]() { return isContact_; });
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
   logger.addLogEntry(name + "_phase", this, [this]() -> std::string {
@@ -289,7 +309,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
     {
       return touchDown_ ? "Swing (TouchDown)" : "Swing";
     }
-    else if(isContact())
+    else if(isContact_)
     {
       return "Contact";
     }
@@ -357,7 +377,7 @@ std::shared_ptr<ContactState> LimbManager::getContactState(double t) const
 }
 bool LimbManager::isContact() const
 {
-  return isContact(ctl().t());
+  return isContact_;
 }
 
 bool LimbManager::isContact(double t) const

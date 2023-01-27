@@ -216,6 +216,9 @@ protected:
   //! Limb swing trajectory
   std::shared_ptr<SwingTraj> swingTraj_ = nullptr;
 
+  //! Whether the limb is contacting now
+  bool isContact_ = false;
+
   //! Whether touch down is detected during swing
   bool touchDown_ = false;
 

@@ -5,6 +5,7 @@ add_library(${CONTROLLER_NAME} SHARED
   LimbTypes.cpp
   ContactTypes.cpp
   LimbManager.cpp
+  swing/SwingTrajCubicSplineSimple.cpp
   )
 target_link_libraries(${CONTROLLER_NAME} PUBLIC mc_rtc::mc_control_fsm mc_rtc::mc_rtc_ros)
 

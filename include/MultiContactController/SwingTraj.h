@@ -3,6 +3,7 @@
 #include <mc_rtc/Configuration.h>
 #include <SpaceVecAlg/SpaceVecAlg>
 
+#include <MultiContactController/ContactTypes.h>
 #include <MultiContactController/RobotUtils.h>
 
 namespace MCC
@@ -25,6 +26,8 @@ public:
 
 public:
   /** \brief Constructor.
+      \param commandType type of contact command
+      \param isContact whether the limb is contacting
       \param startPose start pose
       \param endPose pose end pose
       \param startTime start time
@@ -32,13 +35,16 @@ public:
       \param taskGain IK task gain
       \param mcRtcConfig mc_rtc configuration
   */
-  SwingTraj(const sva::PTransformd & startPose,
+  SwingTraj(const ContactCommand::Type & commandType,
+            bool isContact,
+            const sva::PTransformd & startPose,
             const sva::PTransformd & endPose,
             double startTime,
             double endTime,
             const TaskGain & taskGain,
             const mc_rtc::Configuration & mcRtcConfig = {})
-  : startPose_(startPose), endPose_(endPose), startTime_(startTime), endTime_(endTime), taskGain_(taskGain)
+  : commandType_(commandType), isContact_(isContact), startPose_(startPose), endPose_(endPose), startTime_(startTime),
+    endTime_(endTime), taskGain_(taskGain)
   {
     config_.load(mcRtcConfig);
   }
@@ -88,17 +94,23 @@ public:
   //! Configuration
   Configuration config_;
 
+  //! Type of contact command
+  ContactCommand::Type commandType_;
+
+  //! Whether the limb is contacting
+  bool isContact_;
+
   //! Start pose
-  sva::PTransformd startPose_ = sva::PTransformd::Identity();
+  sva::PTransformd startPose_;
 
   //! End pose
-  sva::PTransformd endPose_ = sva::PTransformd::Identity();
+  sva::PTransformd endPose_;
 
   //! Start time [sec]
-  double startTime_ = 0.0;
+  double startTime_;
 
   //! End time [sec]
-  double endTime_ = 0.0;
+  double endTime_;
 
   //! IK task gain
   TaskGain taskGain_;
