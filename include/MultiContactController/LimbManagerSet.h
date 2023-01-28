@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_set>
+
 #include <MultiContactController/LimbManager.h>
 
 namespace MCC
@@ -34,14 +36,26 @@ public:
   void stop();
 
   /** \brief Add entries to the GUI. */
-  void addToGUI(mc_rtc::gui::StateBuilder & gui){}; // \todo
+  void addToGUI(mc_rtc::gui::StateBuilder & gui);
 
   /** \brief Add entries to the logger. */
-  void addToLogger(mc_rtc::Logger & logger){}; // \todo
+  void addToLogger(mc_rtc::Logger & logger);
 
   /** \brief Get contact constraint list at the specified time.
       \param t time
    */
   std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList(double t);
+
+  /** \brief Get limbs of the specified group.
+      \param group limb group
+   */
+  inline const std::unordered_set<Limb> & limbsFromGroup(const std::string & group) const
+  {
+    return groupLimbsMap_.at(group);
+  }
+
+protected:
+  //! Map from limb group to limb
+  std::unordered_map<std::string, std::unordered_set<Limb>> groupLimbsMap_;
 };
 } // namespace MCC

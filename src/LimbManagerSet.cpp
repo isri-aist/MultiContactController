@@ -10,6 +10,8 @@ LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Co
     this->emplace(limbTaskKV.first, std::make_shared<LimbManager>(
                                         ctlPtr, limbTaskKV.first,
                                         mcRtcConfig(std::to_string(limbTaskKV.first), mc_rtc::Configuration{})));
+
+    groupLimbsMap_[limbTaskKV.first.group].insert(limbTaskKV.first);
   }
 }
 
@@ -49,4 +51,14 @@ std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> LimbManagerSet::con
     }
   }
   return contactList;
+}
+
+void addToGUI(mc_rtc::gui::StateBuilder & gui) {}
+
+void LimbManagerSet::addToLogger(mc_rtc::Logger & logger)
+{
+  for(const auto & limbManagerKV : *this)
+  {
+    limbManagerKV.second->addToLogger(logger);
+  }
 }

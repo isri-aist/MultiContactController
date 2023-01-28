@@ -7,30 +7,32 @@ namespace MCC
 /** \brief Limb. */
 struct Limb
 {
-  /** \brief Limb type. */
-  enum class Type
+  /** \brief Limb group.
+
+      This is defined only for namespace.
+  */
+  struct Group
   {
-    //! Hand
-    Hand = 0,
+    //! Hand group
+    static inline std::string Hand = "Hand";
 
-    //! Foot
-    Foot,
-
-    //! Other
-    Other
+    //! Foot group
+    static inline std::string Foot = "Foot";
   };
 
   /** \brief Constructor.
       \param _name limb name
-      \param _type limb type (automatically set if "hand" or "foot" (case-insensitive) is included in the name)
+      \param _group limb group
+
+      limb group is automatically set if _group is empty and _name contains "hand" or "foot" (case-insensitive).
   */
-  Limb(const std::string & _name, const Type & _type = Type::Other) : name(_name), type(_type) {}
+  Limb(const std::string & _name, const std::string & _group = "");
 
   //! Limb name
   std::string name;
 
-  //! Limb type
-  Type type;
+  //! Limb group
+  std::string group;
 };
 } // namespace MCC
 
