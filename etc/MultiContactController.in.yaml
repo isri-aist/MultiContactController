@@ -211,42 +211,35 @@ Contacts:
       type: Surface
       fricCoeff: 0.5
 
-# OverwriteConfigKeys: [NoSensors]
+
+OverwriteConfigKeys: [NoSensors]
 
 OverwriteConfigList:
   NoSensors:
-    FootManager:
-      impedanceGains:
-        SingleContact:
-          damper:
-            linear: [300, 300, 300]
-            angular: [40, 40, 40]
-          spring:
-            linear: [2250, 2250, 2250]
-            angular: [400, 400, 400]
-          wrench:
-            linear: [0, 0, 0]
-            angular: [0, 0, 0]
-        MultiContact:
-          damper:
-            linear: [300, 300, 300]
-            angular: [40, 40, 40]
-          spring:
-            linear: [2250, 2250, 2250]
-            angular: [400, 400, 400]
-          wrench:
-            linear: [0, 0, 0]
-            angular: [0, 0, 0]
-        Swing:
-          damper:
-            linear: [300, 300, 300]
-            angular: [40, 40, 40]
-          spring:
-            linear: [2250, 2250, 2250]
-            angular: [400, 400, 400]
-          wrench:
-            linear: [0, 0, 0]
-            angular: [0, 0, 0]
+    LimbManagerSet:
+      LimbManager:
+        default:
+          impedanceGains:
+            SingleContact:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
+            MultiContact:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
+        LeftHand:
+          impedanceGains:
+            MultiContact:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
+        RightHand:
+          impedanceGains:
+            MultiContact:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
 
   jvrc1:
     PostureTask:
@@ -268,13 +261,3 @@ OverwriteConfigList:
 
     BaseOrientationTask:
       frame: WAIST_R_S
-
-    FootManager:
-      enableArmSwing: true
-      jointAnglesForArmSwing:
-        Left:
-          R_SHOULDER_P: [-0.13962634015954636] # -8
-          L_SHOULDER_P: [0.06981317007977318] # 4
-        Right:
-          R_SHOULDER_P: [0.06981317007977318] # 4
-          L_SHOULDER_P: [-0.13962634015954636] # -8
