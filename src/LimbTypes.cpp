@@ -1,5 +1,3 @@
-#include <locale>
-
 #include <MultiContactController/LimbTypes.h>
 
 using namespace MCC;
@@ -8,12 +6,11 @@ Limb::Limb(const std::string & _name, const std::string & _group) : name(_name),
 {
   if(group.empty())
   {
-    std::string lowerName = std::tolower(name, std::locale::classic());
-    if(lowerName.find("hand") != std::string::npos)
+    if(name.find("Hand") != std::string::npos)
     {
       group = Group::Hand;
     }
-    else if(lowerName.find("foot") != std::string::npos)
+    else if(name.find("Foot") != std::string::npos)
     {
       group = Group::Foot;
     }

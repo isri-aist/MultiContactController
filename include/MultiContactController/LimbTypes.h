@@ -24,7 +24,7 @@ struct Limb
       \param _name limb name
       \param _group limb group
 
-      limb group is automatically set if _group is empty and _name contains "hand" or "foot" (case-insensitive).
+      limb group is automatically set if _group is empty and _name contains "Hand" or "Foot" (case-sensitive).
   */
   Limb(const std::string & _name, const std::string & _group = "");
 

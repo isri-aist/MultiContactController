@@ -34,6 +34,9 @@ class SwingTraj;
 */
 class LimbManager
 {
+  // Allow access to LimbManager config_ from LimbManagerSet
+  friend class LimbManagerSet;
+
 public:
   /** \brief Configuration. */
   struct Configuration

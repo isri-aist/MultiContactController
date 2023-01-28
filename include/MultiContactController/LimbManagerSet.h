@@ -9,6 +9,18 @@ namespace MCC
 /** \brief Set of LimbManager. */
 class LimbManagerSet : public std::unordered_map<Limb, std::shared_ptr<LimbManager>>
 {
+  /** \brief Configuration. */
+  struct Configuration
+  {
+    //! Name
+    std::string name = "LimbManagerSet";
+
+    /** \brief Load mc_rtc configuration.
+        \param mcRtcConfig mc_rtc configuration
+    */
+    void load(const mc_rtc::Configuration & mcRtcConfig);
+  };
+
 public:
   /** \brief Constructor.
       \param ctlPtr pointer to controller
@@ -35,6 +47,12 @@ public:
   */
   void stop();
 
+  /** \brief Const accessor to the configuration. */
+  inline const Configuration & config() const noexcept
+  {
+    return config_;
+  }
+
   /** \brief Add entries to the GUI. */
   void addToGUI(mc_rtc::gui::StateBuilder & gui);
 
@@ -44,7 +62,7 @@ public:
   /** \brief Get contact constraint list at the specified time.
       \param t time
    */
-  std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList(double t);
+  std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList(double t) const;
 
   /** \brief Get limbs of the specified group.
       \param group limb group
@@ -55,6 +73,25 @@ public:
   }
 
 protected:
+  /** \brief Const accessor to the controller. */
+  inline const MultiContactController & ctl() const
+  {
+    return *ctlPtr_;
+  }
+
+  /** \brief Accessor to the controller. */
+  inline MultiContactController & ctl()
+  {
+    return *ctlPtr_;
+  }
+
+protected:
+  //! Configuration
+  Configuration config_;
+
+  //! Pointer to controller
+  MultiContactController * ctlPtr_ = nullptr;
+
   //! Map from limb group to limb
   std::unordered_map<std::string, std::unordered_set<Limb>> groupLimbsMap_;
 };

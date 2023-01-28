@@ -92,9 +92,76 @@ LimbTaskList:
     frame: RightFootCenter
     cutoffPeriod: 0.01
     weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftHand
+    frame: LeftGripper
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightHand
+    frame: RightGripper
+    cutoffPeriod: 0.01
+    weight: 1000.0
 
 LimbManagerSet:
-  {}
+  name: LimbManagerSet
+  LimbManager:
+    default:
+      impedanceGains:
+        SingleContact:
+          damper:
+            linear: [300, 300, 300]
+            angular: [100, 100, 100]
+          spring:
+            linear: [1125, 1125, 1125]
+            angular: [0, 0, 2000]
+          wrench:
+            linear: [0, 0, 0]
+            angular: [1, 1, 0]
+        MultiContact:
+          damper:
+            linear: [1e4, 1e4, 1e4]
+            angular: [100, 100, 100]
+          spring:
+            linear: [0, 0, 0]
+            angular: [0, 0, 2000]
+          wrench:
+            linear: [1, 1, 1]
+            angular: [1, 1, 0]
+        Swing:
+          damper:
+            linear: [300, 300, 300]
+            angular: [40, 40, 40]
+          spring:
+            linear: [2250, 2250, 2250]
+            angular: [400, 400, 400]
+          wrench:
+            linear: [0, 0, 0]
+            angular: [0, 0, 0]
+    LeftHand:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [1e3, 1e3, 1e3]
+            angular: [100, 100, 100]
+          spring:
+            linear: [0, 0, 0]
+            angular: [0, 0, 2000]
+          wrench:
+            linear: [1, 1, 1]
+            angular: [1, 1, 0]
+    RightHand:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [1e3, 1e3, 1e3]
+            angular: [100, 100, 100]
+          spring:
+            linear: [0, 0, 0]
+            angular: [0, 0, 2000]
+          wrench:
+            linear: [1, 1, 1]
+            angular: [1, 1, 0]
 
 CentroidalManager:
   name: CentroidalManager
@@ -126,6 +193,10 @@ Contacts:
       vertices: [[-0.08, -0.05, 0.0], [-0.08, 0.05, 0.0], [0.08, 0.05, 0.0], [0.08, -0.05, 0.0]]
     - name: RightFoot
       vertices: [[-0.08, -0.05, 0.0], [-0.08, 0.05, 0.0], [0.08, 0.05, 0.0], [0.08, -0.05, 0.0]]
+    - name: LeftHand
+      vertices: [[0, 0, 0]]
+    - name: RightHand
+      vertices: [[0, 0, 0]]
 
   Grasp: {}
 
@@ -136,6 +207,9 @@ Contacts:
     RightFoot:
       type: Surface
       fricCoeff: 0.5
+    LeftHand:
+      type: Surface
+      fricCoeff: 0.5
 
 # OverwriteConfigKeys: [NoSensors]
 
@@ -143,7 +217,7 @@ OverwriteConfigList:
   NoSensors:
     FootManager:
       impedanceGains:
-        singleSupport:
+        SingleContact:
           damper:
             linear: [300, 300, 300]
             angular: [40, 40, 40]
@@ -153,7 +227,7 @@ OverwriteConfigList:
           wrench:
             linear: [0, 0, 0]
             angular: [0, 0, 0]
-        doubleSupport:
+        MultiContact:
           damper:
             linear: [300, 300, 300]
             angular: [40, 40, 40]
@@ -163,7 +237,7 @@ OverwriteConfigList:
           wrench:
             linear: [0, 0, 0]
             angular: [0, 0, 0]
-        swing:
+        Swing:
           damper:
             linear: [300, 300, 300]
             angular: [40, 40, 40]
