@@ -5,11 +5,13 @@
 #include <mc_tasks/MetaTaskLoader.h>
 #include <mc_tasks/OrientationTask.h>
 
+#include <ForceColl/Contact.h>
+
 #include <BaselineWalkingController/ConfigUtils.h>
 
-#include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/centroidal/CentroidalManagerDdpCentroidal.h>
 #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
 using namespace MCC;
@@ -69,8 +71,7 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     std::string centroidalManagerMethod = config()("CentroidalManager")("method", std::string(""));
     if(centroidalManagerMethod == "DdpCentroidal")
     {
-      // centroidalManager_ = std::make_shared<CentroidalManagerDdpCentroidal>(this, config()("CentroidalManager")); //
-      // \todo
+      centroidalManager_ = std::make_shared<CentroidalManagerDdpCentroidal>(this, config()("CentroidalManager"));
     }
     else
     {
@@ -84,6 +85,12 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   }
 
   // Load other configurations
+  if(config().has("Contacts"))
+  {
+    const auto & contactsConfig = config()("Contacts");
+    ForceColl::SurfaceContact::loadVerticesMap(contactsConfig("Surface", mc_rtc::Configuration{}));
+    ForceColl::GraspContact::loadVerticesMap(contactsConfig("Grasp", mc_rtc::Configuration{}));
+  }
   if(config().has("SwingTraj"))
   {
     SwingTrajCubicSplineSimple::loadDefaultConfig(config()("SwingTraj")("CubicSplineSimple", mc_rtc::Configuration{}));

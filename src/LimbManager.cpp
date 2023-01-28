@@ -38,7 +38,7 @@ LimbManager::LimbManager(MultiContactController * ctlPtr, const Limb & limb, con
   config_.load(mcRtcConfig);
 }
 
-void LimbManager::reset(const mc_rtc::Configuration & constraintConfig)
+void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 {
   commandQueue_.clear();
 
@@ -61,7 +61,7 @@ void LimbManager::reset(const mc_rtc::Configuration & constraintConfig)
   requireImpGainUpdate_ = false;
 
   contactStateList_.clear();
-  if(constraintConfig.empty())
+  if(_constraintConfig.empty())
   {
     ctl().solver().removeTask(limbTask_);
   }
@@ -71,6 +71,21 @@ void LimbManager::reset(const mc_rtc::Configuration & constraintConfig)
     ctl().solver().addTask(limbTask_);
     limbTask_->setGains(taskGain_.stiffness, taskGain_.damping);
 
+    // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
+    mc_rtc::Configuration constraintConfig;
+    constraintConfig.load(_constraintConfig);
+    if(!constraintConfig.has("name"))
+    {
+      constraintConfig.add("name", std::to_string(limb_));
+    }
+    if(!constraintConfig.has("verticesName"))
+    {
+      constraintConfig.add("verticesName", std::to_string(limb_));
+    }
+    if(!constraintConfig.has("pose"))
+    {
+      constraintConfig.add("pose", targetPose_);
+    }
     contactStateList_.emplace(
         ctl().t(), std::make_shared<ContactState>(limbTask_->surfacePose(),
                                                   ContactConstraint::makeSharedFromConfig(constraintConfig)));

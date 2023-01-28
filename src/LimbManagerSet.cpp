@@ -5,14 +5,11 @@ using namespace MCC;
 
 LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
 {
-  for(const auto & limbManagerConfig : mcRtcConfig)
+  for(const auto & limbTaskKV : ctlPtr->limbTasks_)
   {
-    const auto & limb = Limb(limbManagerConfig("limb"));
-    if(ctlPtr->limbTasks_.count(limb) == 0)
-    {
-      mc_rtc::log::error_and_throw("[LimbManagerSet] LimbTask of {} is missing.", std::to_string(limb));
-    }
-    this->emplace(limb, std::make_shared<LimbManager>(ctlPtr, limb, limbManagerConfig));
+    this->emplace(limbTaskKV.first, std::make_shared<LimbManager>(
+                                        ctlPtr, limbTaskKV.first,
+                                        mcRtcConfig(std::to_string(limbTaskKV.first), mc_rtc::Configuration{})));
   }
 }
 
@@ -20,7 +17,7 @@ void LimbManagerSet::reset(const mc_rtc::Configuration & constraintSetConfig)
 {
   for(const auto & limbManagerKV : *this)
   {
-    limbManagerKV.second->reset(constraintSetConfig(std::to_string(limbManagerKV.first)));
+    limbManagerKV.second->reset(constraintSetConfig(std::to_string(limbManagerKV.first), mc_rtc::Configuration{}));
   }
 }
 

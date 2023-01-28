@@ -10,11 +10,17 @@ ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
 {
   if(mcRtcConfig("type") == "Add")
   {
-    // Automatically set constraint pose if it is not set
-    // Make deep copy to avoid changing the original configuration
-    // See https://github.com/jrl-umi3218/mc_rtc/issues/195
+    // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
     mc_rtc::Configuration constraintConfig;
     constraintConfig.load(mcRtcConfig("constraint"));
+    if(!constraintConfig.has("name"))
+    {
+      constraintConfig.add("name", mcRtcConfig("limb"));
+    }
+    if(!constraintConfig.has("verticesName"))
+    {
+      constraintConfig.add("verticesName", mcRtcConfig("limb"));
+    }
     if(!constraintConfig.has("pose"))
     {
       constraintConfig.add("pose", mcRtcConfig("pose"));

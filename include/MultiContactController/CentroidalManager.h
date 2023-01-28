@@ -53,7 +53,7 @@ public:
     mc_rtc::Configuration wrenchDistConfig;
 
     /** \brief Load mc_rtc configuration. */
-    virtual void load(const mc_rtc::Configuration & mcRtcConfig);
+    virtual void load(const mc_rtc::Configuration & mcRtcConfig){}; // \todo
   };
 
 public:
@@ -61,7 +61,8 @@ public:
       \param ctlPtr pointer to controller
       \param mcRtcConfig mc_rtc configuration
    */
-  CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {}){};
+  CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {})
+  : ctlPtr_(ctlPtr){};
 
   /** \brief Reset.
 
@@ -124,7 +125,10 @@ protected:
   /** \brief Calculate anchor frame.
       \param robot robot
    */
-  sva::PTransformd calcAnchorFrame(const mc_rbdyn::Robot & robot) const;
+  sva::PTransformd calcAnchorFrame(const mc_rbdyn::Robot & robot) const
+  {
+    return sva::PTransformd::Identity();
+  }; // \todo
 
 protected:
   //! Pointer to controller

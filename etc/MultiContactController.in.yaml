@@ -38,16 +38,17 @@ states:
   MCC::Initial_:
     base: MCC::Initial
 
-  MCC::GuiWalk_:
-    base: MCC::GuiWalk
+  # MCC::GuiMotion_:
+  #   base: MCC::GuiMotion
 
-  MCC::Main_:
-    base: Parallel
-    states: [MCC::GuiWalk_]
+  # MCC::Main_:
+  #   base: Parallel
+  #   states: [MCC::GuiMotion_]
 
 # Transitions map
 transitions:
-  - [MCC::Initial_, OK, MCC::Main_, Auto]
+  - [MCC::Initial_, OK, MCC::Initial_, Strict] # TODO: temporary
+  # - [MCC::Initial_, OK, MCC::Main_, Auto]
 # Initial state
 init: MCC::Initial_
 
@@ -80,101 +81,20 @@ BaseOrientationTask:
   stiffness: 300.0
   weight: 500.0
 
-FootTaskList:
+LimbTaskList:
   - type: firstOrderImpedance
-    foot: Left
-    surface: LeftFootCenter
+    limb: LeftFoot
+    frame: LeftFootCenter
     cutoffPeriod: 0.01
     weight: 1000.0
   - type: firstOrderImpedance
-    foot: Right
-    surface: RightFootCenter
+    limb: RightFoot
+    frame: RightFootCenter
     cutoffPeriod: 0.01
     weight: 1000.0
 
-FootManager:
-  name: FootManager
-  footstepDuration: 0.8 # [sec]
-  doubleSupportRatio: 0.125 # []
-  deltaTransLimit: [0.15, 0.1, 12.5] # (x [m], y [m], theta [deg])
-  midToFootTranss:
-    Left:
-      translation: [0, 0.105, 0] # [m]
-    Right:
-      translation: [0, -0.105, 0] # [m]
-  footTaskGain:
-    stiffness: 1000.0
-  zmpHorizon: 2.0 # [sec]
-  zmpOffset: [0, -0.02, 0] # (positive for x-forward, y-outside, z-upward) [m]
-  defaultSwingTrajType: IndHorizontalVertical
-  overwriteLandingPose: false
-  stopSwingTrajForTouchDownFoot: true
-  keepSupportFootPoseForTouchDownFoot: false
-  enableWrenchDistForTouchDownFoot: true
-  enableArmSwing: false
-  fricCoeff: 0.5
-  touchDownRemainingDuration: 0.2 # [sec]
-  touchDownPosError: 0.02 # [m]
-  touchDownForceZ: 100 # [N]
-  impedanceGains:
-    singleSupport:
-      damper:
-        linear: [300, 300, 300]
-        angular: [100, 100, 100]
-      spring:
-        linear: [2250, 2250, 2250]
-        angular: [0, 0, 2000]
-      wrench:
-        linear: [0, 0, 0]
-        angular: [1, 1, 0]
-    doubleSupport:
-      damper:
-        linear: [300, 300, 1e4]
-        angular: [100, 100, 100]
-      spring:
-        linear: [2250, 2250, 0]
-        angular: [0, 0, 2000]
-      wrench:
-        linear: [0, 0, 1]
-        angular: [1, 1, 0]
-    swing:
-      damper:
-        linear: [300, 300, 300]
-        angular: [40, 40, 40]
-      spring:
-        linear: [2250, 2250, 2250]
-        angular: [400, 400, 400]
-      wrench:
-        linear: [0, 0, 0]
-        angular: [0, 0, 0]
-  VelMode:
-    footstepQueueSize: 3
-    enableOnlineFootstepUpdate: true
-  SwingTraj:
-    CubicSplineSimple:
-      withdrawDurationRatio: 0.25
-      withdrawOffset: [0, 0, 0.015] # [m]
-      approachDurationRatio: 0.25
-      approachOffset: [0, 0, 0.015] # [m]
-      swingOffset: [0, 0, 0.05] # [m]
-    IndHorizontalVertical:
-      withdrawDurationRatio: 0.25
-      approachDurationRatio: 0.25
-      verticalTopDurationRatio: 0.5
-      verticalTopOffset: [0, 0, 0.05] # [m]
-      tiltAngleWithdraw: 20 # [deg]
-      tiltAngleApproach: 10 # [deg]
-      tiltAngleWithdrawDurationRatio: 0.25
-      tiltAngleApproachDurationRatio: 0.25
-      tiltCenterWithdrawDurationRatio: 0.25
-      tiltCenterApproachDurationRatio: 0.25
-      tiltDistThre: 0.2 # [m]
-      tiltForwardAngleThre: 10 # [deg]
-    VariableTaskGain:
-      withdrawDurationRatio: 0.25
-      approachDurationRatio: 0.25
-      verticalTopDurationRatio: 0.5
-      verticalTopOffset: [0, 0, 0.05] # [m]
+LimbManagerSet:
+  {}
 
 CentroidalManager:
   name: CentroidalManager
@@ -195,25 +115,27 @@ CentroidalManager:
     regularWeight: 1e-8
     ridgeForceMinMax: [3, 1000] # [N]
 
-  # PreviewControlZmp
-  method: PreviewControlZmp
+  # DdpCentroidal
+  method: DdpCentroidal
   horizonDuration: 2.0 # [sec]
   horizonDt: 0.005 # [sec]
 
-  # # DdpZmp
-  # method: DdpZmp
-  # horizonDuration: 2.0 # [sec]
-  # horizonDt: 0.02 # [sec]
-  # ddpMaxIter: 3
+Contacts:
+  Surface:
+    - name: LeftFoot
+      vertices: [[-0.08, -0.05, 0.0], [-0.08, 0.05, 0.0], [0.08, 0.05, 0.0], [0.08, -0.05, 0.0]]
+    - name: RightFoot
+      vertices: [[-0.08, -0.05, 0.0], [-0.08, 0.05, 0.0], [0.08, 0.05, 0.0], [0.08, -0.05, 0.0]]
 
-  # # FootGuidedControl
-  # method: FootGuidedControl
+  Grasp: {}
 
-  # # IntrinsicallyStableMpc
-  # method: IntrinsicallyStableMpc
-  # horizonDuration: 2.0 # [sec]
-  # horizonDt: 0.02 # [sec]
-
+  Initial:
+    LeftFoot:
+      type: Surface
+      fricCoeff: 0.5
+    RightFoot:
+      type: Surface
+      fricCoeff: 0.5
 
 # OverwriteConfigKeys: [NoSensors]
 
@@ -271,7 +193,7 @@ OverwriteConfigList:
       "L_HIP_Y", "L_HIP_R", "L_HIP_P", "L_KNEE", "L_ANKLE_P", "L_ANKLE_R"]
 
     BaseOrientationTask:
-      body: WAIST_R_S
+      frame: WAIST_R_S
 
     FootManager:
       enableArmSwing: true
@@ -282,86 +204,3 @@ OverwriteConfigList:
         Right:
           R_SHOULDER_P: [0.06981317007977318] # 4
           L_SHOULDER_P: [-0.13962634015954636] # -8
-
-  hrp5_p:
-    PostureTask:
-      jointWeights:
-        WP: 50
-        WR: 50
-      # For arm swing
-      jointGains:
-        - jointName: RSP
-          stiffness: 400
-        - jointName: LSP
-          stiffness: 400
-
-    CoMTask:
-      activeJoints: [
-      "Root",
-      "LCY", "LCR", "LCP", "LKP", "LAP", "LAR",
-      "RCY", "RCR", "RCP", "RKP", "RAP", "RAR"]
-
-    BaseOrientationTask:
-      body: Chest_Link2
-
-    FootManager:
-      footstepDuration: 0.9 # [sec]
-      doubleSupportRatio: 0.15 # []
-      impedanceGains:
-        singleSupport:
-          spring:
-            linear: [2250, 2250, 450] # Weaken Z-component spring to avoid a too fast recovery for mass errors
-      jointAnglesForArmSwing:
-        Left:
-          RSP: [0.9599310885968813] # 55
-          LSP: [1.1344640137963142] # 65
-        Right:
-          RSP: [1.1344640137963142] # 65
-          LSP: [0.9599310885968813] # 55
-
-    CentroidalManager:
-      dcmGainP: 2.0 # It must be greater than 1 to be stable
-      comZGainP: 20000.0
-      refComZ: 0.95 # [m]
-      method: PreviewControlZmp
-      horizonDuration: 2.0 # [sec]
-      horizonDt: 0.002 # [sec]
-
-  hrp2_drc:
-    PostureTask:
-      jointWeights:
-        CHEST_JOINT1: 50
-      # For arm swing
-      jointGains:
-        - jointName: RARM_JOINT0
-          stiffness: 400
-        - jointName: LARM_JOINT0
-          stiffness: 400
-
-    CoMTask:
-      activeJoints: [
-      "Root",
-      "RLEG_JOINT0", "RLEG_JOINT1", "RLEG_JOINT2", "RLEG_JOINT3", "RLEG_JOINT4", "RLEG_JOINT5",
-      "LLEG_JOINT0", "LLEG_JOINT1", "LLEG_JOINT2", "LLEG_JOINT3", "LLEG_JOINT4", "LLEG_JOINT5"]
-
-    BaseOrientationTask:
-      body: CHEST_LINK1
-
-    FootManager:
-      footstepDuration: 0.9 # [sec]
-      doubleSupportRatio: 0.15 # []
-      zmpOffset: [0, -0.03, 0] # (positive for x-forward, y-outside, z-upward) [m]
-      jointAnglesForArmSwing:
-        Left:
-          RARM_JOINT0: [0.6108652381980153] # 35
-          LARM_JOINT0: [0.7853981633974483] # 45
-        Right:
-          RARM_JOINT0: [0.7853981633974483] # 45
-          LARM_JOINT0: [0.6108652381980153] # 35
-
-    CentroidalManager:
-      dcmGainP: 2.0 # It must be greater than 1 to be stable
-      refComZ: 0.87 # [m]
-      method: PreviewControlZmp
-      horizonDuration: 2.0 # [sec]
-      horizonDt: 0.005 # [sec]
