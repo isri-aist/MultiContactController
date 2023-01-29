@@ -42,7 +42,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
 
     // Reset and add tasks
     ctl().comTask_->reset();
-    ctl().solver().addTask(ctl().comTask_);
+    // ctl().solver().addTask(ctl().comTask_); // \todo temporary
     ctl().baseOriTask_->reset();
     ctl().solver().addTask(ctl().baseOriTask_);
     // limb tasks are added in LimbManager

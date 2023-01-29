@@ -45,12 +45,61 @@ states:
         - limb: LeftFoot
           type: Add
           startTime: 8.0
-          endTime: 12.0
+          endTime: 10.0
           pose:
-            translation: [0.3, 0.1, 0]
+            translation: [0.2, 0.1, 0]
           constraint:
             type: Surface
             fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 12.0
+          endTime: 14.0
+          pose:
+            translation: [0.4, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftHand
+          type: Add
+          startTime: 12.0
+          endTime: 14.0
+          pose:
+            translation: [0.4, 0.3, 0.75]
+            rotation: [3.141592653589793, 0, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+          swingTrajConfig:
+            withdrawOffset: [0, 0, -0.06]
+            approachOffset: [0, 0, -0.06]
+            swingOffset:  [0, 0, -0.12]
+        - limb: LeftFoot
+          type: Add
+          startTime: 16.0
+          endTime: 18.0
+          pose:
+            translation: [0.6, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 20.0
+          endTime: 22.0
+          pose:
+            translation: [0.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftHand
+          type: Remove
+          startTime: 20.0
+          endTime: 22.0
+          swingTrajConfig:
+            withdrawOffset: [0, 0, -0.06]
+            approachOffset: [0, 0, -0.06]
+            swingOffset:  [0, 0, -0.12]
 
   MCC::Main_:
     base: Parallel
@@ -215,9 +264,6 @@ Contacts:
       type: Surface
       fricCoeff: 0.5
     RightFoot:
-      type: Surface
-      fricCoeff: 0.5
-    LeftHand:
       type: Surface
       fricCoeff: 0.5
 
