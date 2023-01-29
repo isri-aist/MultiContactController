@@ -9,13 +9,13 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
   State::start(_ctl);
 
   // Send contact command
-  if(config_.has("configs") && config_("configs").has("contactList"))
+  if(config_.has("configs") && config_("configs").has("contactCommandList"))
   {
-    for(const auto & commandConfig : config_("configs")("contactList"))
+    for(const auto & contactCommandConfig : config_("configs")("contactCommandList"))
     {
-      ContactCommand command = ContactCommand(commandConfig);
-      Limb limb = Limb(commandConfig("limb"));
-      ctl().limbManagerSet_->at(limb)->appendContactCommand(command);
+      ContactCommand contactCommand = ContactCommand(contactCommandConfig);
+      Limb limb = Limb(contactCommandConfig("limb"));
+      ctl().limbManagerSet_->at(limb)->appendContactCommand(contactCommand);
     }
   }
 

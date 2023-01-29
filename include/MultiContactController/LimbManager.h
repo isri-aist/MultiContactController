@@ -130,15 +130,15 @@ public:
   void removeFromLogger(mc_rtc::Logger & logger);
 
   /** \brief Append a target contact command to the queue.
-      \param command contact command to append
-      \return whether command is appended
+      \param newContactCommand contact command to append
+      \return whether newContactCommand is appended
   */
-  bool appendContactCommand(const ContactCommand & command);
+  bool appendContactCommand(const ContactCommand & newContactCommand);
 
   /** \brief Access contact command queue. */
   inline const std::deque<ContactCommand> & contactCommandQueue() const noexcept
   {
-    return commandQueue_;
+    return contactCommandQueue_;
   }
 
   /** \brief Access contact state list. */
@@ -198,13 +198,13 @@ protected:
   std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> limbTask_;
 
   //! Contact command queue
-  std::deque<ContactCommand> commandQueue_;
+  std::deque<ContactCommand> contactCommandQueue_;
 
-  //! ContactCommand currently executing
-  const ContactCommand * executingCommand_ = nullptr;
+  //! Contact command currently executing
+  const ContactCommand * executingContactCommand_ = nullptr;
 
-  //! Previous command pose
-  std::shared_ptr<sva::PTransformd> prevCommandPose_ = nullptr;
+  //! Previous contact command pose
+  std::shared_ptr<sva::PTransformd> prevContactCommandPose_ = nullptr;
 
   //! Contact state list (sorted by time)
   std::map<double, std::shared_ptr<ContactState>> contactStateList_;

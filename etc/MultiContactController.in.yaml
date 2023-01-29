@@ -41,7 +41,7 @@ states:
   MCC::ConfigMotion_:
     base: MCC::ConfigMotion
     configs:
-      contactList:
+      contactCommandList:
         - limb: LeftFoot
           type: Add
           startTime: 8.0
