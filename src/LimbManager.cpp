@@ -110,9 +110,6 @@ void LimbManager::update()
     }
   }
 
-  // Update isContact_
-  isContact_ = isContact(ctl().t());
-
   // Complete executing command
   while(!commandQueue_.empty() && commandQueue_.front().endTime < ctl().t())
   {
@@ -243,6 +240,9 @@ void LimbManager::update()
       taskGain_ = swingTraj_->taskGain(ctl().t());
     }
   }
+
+  // Update isContact_
+  isContact_ = isContact(ctl().t());
 
   // Set target of limb task
   {

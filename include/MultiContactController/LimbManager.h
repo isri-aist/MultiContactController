@@ -130,10 +130,10 @@ public:
   void removeFromLogger(mc_rtc::Logger & logger);
 
   /** \brief Append a target contact command to the queue.
-      \param newContactCommand contact command to append
-      \return whether newContactCommand is appended
+      \param command contact command to append
+      \return whether command is appended
   */
-  bool appendContactCommand(const ContactCommand & newContactCommand);
+  bool appendContactCommand(const ContactCommand & command);
 
   /** \brief Access contact command queue. */
   inline const std::deque<ContactCommand> & contactCommandQueue() const noexcept

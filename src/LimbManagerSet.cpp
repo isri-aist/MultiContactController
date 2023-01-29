@@ -69,6 +69,19 @@ std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> LimbManagerSet::con
   return contactList;
 }
 
+bool LimbManagerSet::contactStateStacked() const
+{
+  for(const auto & limbManagerKV : *this)
+  {
+    const auto & contactStateList = limbManagerKV.second->contactStateList();
+    if(contactStateList.upper_bound(ctl().t()) != contactStateList.end())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   for(const auto & groupLimbsKV : groupLimbsMap_)
