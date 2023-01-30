@@ -35,7 +35,7 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
 {
   // Parse the simple configuration format
   mc_rtc::Configuration mcRtcConfig;
-  if(mcRtcConfig.has("swingCommand") || mcRtcConfig.has("contactCommandList"))
+  if(_mcRtcConfig.has("swingCommand") || _mcRtcConfig.has("contactCommandList"))
   {
     mcRtcConfig = _mcRtcConfig;
   }
