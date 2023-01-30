@@ -54,6 +54,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 
   touchDown_ = false;
 
+  phase_ = "Uninitialized"; // will be updated in the update method
+
   impGainType_ = "Uninitialized"; // will be updated in the update method
 
   requireImpGainUpdate_ = false;
@@ -247,6 +249,20 @@ void LimbManager::update()
   // Update currentContact_ (this should be after setting swingTraj_)
   currentContact_ = getContactCommand(ctl().t());
 
+  // Update phase_
+  if(executingSwingCommand_)
+  {
+    phase_ = "Swing (" + swingTraj_->type() + ")" + (touchDown_ ? " [TouchDown]" : "");
+  }
+  else if(currentContact_)
+  {
+    phase_ = "Contact (" + currentContact_->constraint->type() + ")";
+  }
+  else
+  {
+    phase_ = "Free";
+  }
+
   // Set target of limb task
   {
     limbTask_->targetPose(targetPose_);
@@ -304,22 +320,8 @@ void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                  mc_rtc::gui::Label("surface", [this]() { return limbTask_->surface(); }),
                  mc_rtc::gui::Label("swingCommandQueueSize", [this]() { return swingCommandQueue_.size(); }),
                  mc_rtc::gui::Label("contactCommandListSize", [this]() { return contactCommandList_.size(); }),
-                 mc_rtc::gui::Label("phase",
-                                    [this]() -> std::string {
-                                      if(executingSwingCommand_)
-                                      {
-                                        return touchDown_ ? "Swing (TouchDown)" : "Swing";
-                                      }
-                                      else if(currentContact_)
-                                      {
-                                        return "Contact (" + currentContact_->constraint->type() + ")";
-                                      }
-                                      else
-                                      {
-                                        return "Free";
-                                      }
-                                    }),
-                 mc_rtc::gui::Label("impGainType", [this]() { return impGainType_; }));
+                 mc_rtc::gui::Label("phase", [this]() -> const std::string & { return phase_; }),
+                 mc_rtc::gui::Label("impGainType", [this]() -> const std::string & { return impGainType_; }));
 }
 
 void LimbManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -333,22 +335,9 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
 
   logger.addLogEntry(name + "_swingCommandQueueSize", this, [this]() { return swingCommandQueue_.size(); });
   logger.addLogEntry(name + "_contactCommandListSize", this, [this]() { return contactCommandList_.size(); });
-  logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
+  MC_RTC_LOG_HELPER(name + "_phase", phase_);
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
-  logger.addLogEntry(name + "_phase", this, [this]() -> std::string {
-    if(executingSwingCommand_)
-    {
-      return touchDown_ ? "Swing (TouchDown)" : "Swing";
-    }
-    else if(currentContact_)
-    {
-      return "Contact (" + currentContact_->constraint->type() + ")";
-    }
-    else
-    {
-      return "Free";
-    }
-  });
+  logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
 }
 
 void LimbManager::removeFromLogger(mc_rtc::Logger & logger)
@@ -426,10 +415,6 @@ std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
     }
     return it->second;
   }
-}
-bool LimbManager::isContact(double t) const
-{
-  return getContactCommand(t) != nullptr;
 }
 
 double LimbManager::getContactWeight(double t, double weightTransitDuration) const

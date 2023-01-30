@@ -147,13 +147,12 @@ public:
     return contactCommandList_;
   }
 
-  /** \brief Get contact command at the specified time. */
-  std::shared_ptr<ContactCommand> getContactCommand(double t) const;
-
-  /** \brief Get whether the limb is contacting at the specified time.
+  /** \brief Get contact command at the specified time.
       \param t time
+
+      If nullptr is returned, the limb is not contacting at the specified time, otherwise it is contacting.
    */
-  bool isContact(double t) const;
+  std::shared_ptr<ContactCommand> getContactCommand(double t) const;
 
   /** \brief Get contact weight at the specified time.
       \param t time
@@ -232,6 +231,9 @@ protected:
 
   //! Whether touch down is detected during swing
   bool touchDown_ = false;
+
+  //! Phase
+  std::string phase_ = "Uninitialized";
 
   //! Type of impedance gains
   std::string impGainType_ = "Uninitialized";
