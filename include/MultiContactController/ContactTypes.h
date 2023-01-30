@@ -65,6 +65,7 @@ struct ContactState
   ContactState(const sva::PTransformd & _pose, const std::shared_ptr<ContactConstraint> & _constraint)
   : pose(_pose), constraint(_constraint)
   {
+    assert(constraint);
   }
 
   //! Surface pose

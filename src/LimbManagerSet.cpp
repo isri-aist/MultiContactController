@@ -84,6 +84,11 @@ bool LimbManagerSet::contactStateStacked() const
 
 void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
+  for(const auto & limbManagerKV : *this)
+  {
+    limbManagerKV.second->addToGUI(gui);
+  }
+
   for(const auto & groupLimbsKV : groupLimbsMap_)
   {
     const auto & group = groupLimbsKV.first;

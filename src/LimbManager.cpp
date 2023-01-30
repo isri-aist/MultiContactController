@@ -64,6 +64,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
   if(_constraintConfig.empty())
   {
     ctl().solver().removeTask(limbTask_);
+    contactStateList_.emplace(ctl().t(), nullptr);
   }
   else
   {
@@ -296,9 +297,34 @@ void LimbManager::stop()
   removeFromLogger(ctl().logger());
 }
 
-void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui) {}
+void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
+{
+  gui.addElement({ctl().name(), config_.name, std::to_string(limb_)},
+                 mc_rtc::gui::Label("surface", [this]() { return limbTask_->surface(); }),
+                 mc_rtc::gui::Label("contactCommandQueueSize", [this]() { return contactCommandQueue_.size(); }),
+                 mc_rtc::gui::Label("contactStateListSize", [this]() { return contactStateList_.size(); }),
+                 mc_rtc::gui::Label("phase",
+                                    [this]() -> std::string {
+                                      if(executingContactCommand_)
+                                      {
+                                        return touchDown_ ? "Swing (TouchDown)" : "Swing";
+                                      }
+                                      else if(isContact_)
+                                      {
+                                        return "Contact (" + getContactState(ctl().t())->constraint->type() + ")";
+                                      }
+                                      else
+                                      {
+                                        return "Free";
+                                      }
+                                    }),
+                 mc_rtc::gui::Label("impGainType", [this]() { return impGainType_; }));
+}
 
-void LimbManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui) {}
+void LimbManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
+{
+  gui.removeCategory({ctl().name(), config_.name, std::to_string(limb_)});
+}
 
 void LimbManager::addToLogger(mc_rtc::Logger & logger)
 {
@@ -306,7 +332,6 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
 
   logger.addLogEntry(name + "_contactCommandQueueSize", this, [this]() { return contactCommandQueue_.size(); });
   logger.addLogEntry(name + "_contactStateListSize", this, [this]() { return contactStateList_.size(); });
-  logger.addLogEntry(name + "_isContact", this, [this]() { return isContact_; });
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
   logger.addLogEntry(name + "_phase", this, [this]() -> std::string {
@@ -316,7 +341,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
     }
     else if(isContact_)
     {
-      return "Contact";
+      return "Contact (" + getContactState(ctl().t())->constraint->type() + ")";
     }
     else
     {

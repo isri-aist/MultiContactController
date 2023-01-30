@@ -176,7 +176,7 @@ protected:
 
   /** \brief Get the remaining duration for next touch down.
 
-      Returns zero in double stance phase. */
+      Returns zero if the limb is not swinging . */
   double touchDownRemainingDuration() const;
 
   /** \brief Detect touch down.
