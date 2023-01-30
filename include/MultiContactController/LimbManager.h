@@ -209,6 +209,9 @@ protected:
   //! Contact command list (sorted by time)
   std::map<double, std::shared_ptr<ContactCommand>> contactCommandList_;
 
+  //! Current contact command
+  std::shared_ptr<ContactCommand> currentContact_ = nullptr;
+
   //! Target limb pose represented in world frame
   sva::PTransformd targetPose_;
 
@@ -223,9 +226,6 @@ protected:
 
   //! Limb swing trajectory
   std::shared_ptr<SwingTraj> swingTraj_ = nullptr;
-
-  //! Whether the limb is contacting now
-  bool isContact_ = false;
 
   //! Whether touch down is detected during swing
   bool touchDown_ = false;

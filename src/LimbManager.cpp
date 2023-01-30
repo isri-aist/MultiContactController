@@ -52,8 +52,6 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 
   swingTraj_.reset();
 
-  isContact_ = false;
-
   touchDown_ = false;
 
   impGainType_ = "Uninitialized"; // will be updated in the update method
@@ -64,7 +62,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
   if(_constraintConfig.empty())
   {
     ctl().solver().removeTask(limbTask_);
-    contactCommandList_.emplace(ctl().t(), nullptr);
+    currentContact_ = nullptr;
   }
   else
   {
@@ -87,10 +85,10 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     {
       constraintConfig.add("pose", targetPose_);
     }
-    contactCommandList_.emplace(
-        ctl().t(), std::make_shared<ContactCommand>(ctl().t(), limbTask_->surfacePose(),
-                                                    ContactConstraint::makeSharedFromConfig(constraintConfig)));
+    currentContact_ = std::make_shared<ContactCommand>(ctl().t(), limbTask_->surfacePose(),
+                                                       ContactConstraint::makeSharedFromConfig(constraintConfig));
   }
+  contactCommandList_.emplace(ctl().t(), currentContact_);
 }
 
 void LimbManager::update()
@@ -164,7 +162,7 @@ void LimbManager::update()
 
       // Enable hold mode to prevent IK target pose from jumping
       // https://github.com/jrl-umi3218/mc_rtc/pull/143
-      if(isContact_)
+      if(currentContact_)
       {
         limbTask_->hold(true);
       }
@@ -209,8 +207,9 @@ void LimbManager::update()
         if(swingTrajType == "CubicSplineSimple")
         {
           swingTraj_ = std::make_shared<SwingTrajCubicSplineSimple>(
-              executingSwingCommand_->type, isContact_, swingStartPose, swingEndPose, executingSwingCommand_->startTime,
-              executingSwingCommand_->endTime, config_.taskGain, executingSwingCommand_->config);
+              executingSwingCommand_->type, static_cast<bool>(currentContact_), swingStartPose, swingEndPose,
+              executingSwingCommand_->startTime, executingSwingCommand_->endTime, config_.taskGain,
+              executingSwingCommand_->config);
         }
         else
         {
@@ -243,8 +242,8 @@ void LimbManager::update()
     }
   }
 
-  // Update isContact_
-  isContact_ = isContact(ctl().t());
+  // Update currentContact_ (this should be after setting swingTraj_)
+  currentContact_ = getContactCommand(ctl().t());
 
   // Set target of limb task
   {
@@ -259,7 +258,7 @@ void LimbManager::update()
   // Update impGainType_ and requireImpGainUpdate_
   {
     std::string newImpGainType;
-    if(isContact_)
+    if(currentContact_)
     {
       if(ctl().limbManagerSet_->contactList(ctl().t()).size() == 1)
       {
@@ -309,9 +308,9 @@ void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                                       {
                                         return touchDown_ ? "Swing (TouchDown)" : "Swing";
                                       }
-                                      else if(isContact_)
+                                      else if(currentContact_)
                                       {
-                                        return "Contact (" + getContactCommand(ctl().t())->constraint->type() + ")";
+                                        return "Contact (" + currentContact_->constraint->type() + ")";
                                       }
                                       else
                                       {
@@ -339,9 +338,9 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
     {
       return touchDown_ ? "Swing (TouchDown)" : "Swing";
     }
-    else if(isContact_)
+    else if(currentContact_)
     {
-      return "Contact (" + getContactCommand(ctl().t())->constraint->type() + ")";
+      return "Contact (" + currentContact_->constraint->type() + ")";
     }
     else
     {
