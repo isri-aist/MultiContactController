@@ -41,7 +41,7 @@ states:
   MCC::ConfigMotion_:
     base: MCC::ConfigMotion
     configs:
-      contactCommandList:
+      stepCommandList:
         - limb: LeftFoot
           type: Add
           startTime: 8.0
@@ -70,7 +70,7 @@ states:
           constraint:
             type: Surface
             fricCoeff: 0.5
-          swingTrajConfig:
+          swingConfig:
             withdrawOffset: [0, 0, -0.06]
             approachOffset: [0, 0, -0.06]
             swingOffset:  [0, 0, -0.12]
@@ -96,7 +96,7 @@ states:
           type: Remove
           startTime: 20.0
           endTime: 22.0
-          swingTrajConfig:
+          swingConfig:
             withdrawOffset: [0, 0, -0.06]
             approachOffset: [0, 0, -0.06]
             swingOffset:  [0, 0, -0.12]

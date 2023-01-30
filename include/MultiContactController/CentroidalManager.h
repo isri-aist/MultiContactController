@@ -3,7 +3,7 @@
 #include <mc_rtc/gui/StateBuilder.h>
 #include <mc_rtc/log/Logger.h>
 
-#include <MultiContactController/ContactTypes.h>
+#include <MultiContactController/CommandTypes.h>
 #include <MultiContactController/LimbTypes.h>
 
 namespace mc_rbdyn

@@ -60,21 +60,21 @@ std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> LimbManagerSet::con
   std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList;
   for(const auto & limbManagerKV : *this)
   {
-    const auto & contactState = limbManagerKV.second->getContactState(t);
-    if(contactState)
+    const auto & contactCommand = limbManagerKV.second->getContactCommand(t);
+    if(contactCommand)
     {
-      contactList.emplace(limbManagerKV.first, contactState->constraint);
+      contactList.emplace(limbManagerKV.first, contactCommand->constraint);
     }
   }
   return contactList;
 }
 
-bool LimbManagerSet::contactStateStacked() const
+bool LimbManagerSet::contactCommandStacked() const
 {
   for(const auto & limbManagerKV : *this)
   {
-    const auto & contactStateList = limbManagerKV.second->contactStateList();
-    if(contactStateList.upper_bound(ctl().t()) != contactStateList.end())
+    const auto & contactCommandList = limbManagerKV.second->contactCommandList();
+    if(contactCommandList.upper_bound(ctl().t()) != contactCommandList.end())
     {
       return true;
     }

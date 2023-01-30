@@ -64,8 +64,8 @@ public:
    */
   std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList(double t) const;
 
-  /** \brief Get whether future contact state is stacked. */
-  bool contactStateStacked() const;
+  /** \brief Get whether future contact command is stacked. */
+  bool contactCommandStacked() const;
 
   /** \brief Get limbs of the specified group.
       \param group limb group

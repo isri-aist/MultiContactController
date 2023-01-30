@@ -4,7 +4,7 @@ add_library(${CONTROLLER_NAME} SHARED
   MultiContactController.cpp
   State.cpp
   LimbTypes.cpp
-  ContactTypes.cpp
+  CommandTypes.cpp
   LimbManager.cpp
   LimbManagerSet.cpp
   swing/SwingTrajCubicSplineSimple.cpp

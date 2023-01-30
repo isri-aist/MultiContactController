@@ -11,7 +11,7 @@
 #include <TrajColl/CubicInterpolator.h>
 #include <TrajColl/CubicSpline.h>
 
-#include <MultiContactController/ContactTypes.h>
+#include <MultiContactController/CommandTypes.h>
 #include <MultiContactController/LimbTypes.h>
 #include <MultiContactController/RobotUtils.h>
 
@@ -30,7 +30,7 @@ class SwingTraj;
 
 /** \brief Limb manager.
 
-    Limb manager generates a swing limb trajectory from a specified contact command sequence.
+    Limb manager generates a swing limb trajectory from a specified swing command sequence.
 */
 class LimbManager
 {
@@ -129,26 +129,26 @@ public:
   /** \brief Remove entries from the logger. */
   void removeFromLogger(mc_rtc::Logger & logger);
 
-  /** \brief Append a target contact command to the queue.
-      \param newContactCommand contact command to append
-      \return whether newContactCommand is appended
+  /** \brief Append a step command to the queue.
+      \param stepCommand step command to append
+      \return whether stepCommand is appended
   */
-  bool appendContactCommand(const ContactCommand & newContactCommand);
+  bool appendStepCommand(const StepCommand & stepCommand);
 
-  /** \brief Access contact command queue. */
-  inline const std::deque<ContactCommand> & contactCommandQueue() const noexcept
+  /** \brief Access swing command queue. */
+  inline const std::deque<std::shared_ptr<SwingCommand>> & swingCommandQueue() const noexcept
   {
-    return contactCommandQueue_;
+    return swingCommandQueue_;
   }
 
-  /** \brief Access contact state list. */
-  inline const std::map<double, std::shared_ptr<ContactState>> & contactStateList() const noexcept
+  /** \brief Access contact command list. */
+  inline const std::map<double, std::shared_ptr<ContactCommand>> & contactCommandList() const noexcept
   {
-    return contactStateList_;
+    return contactCommandList_;
   }
 
-  /** \brief Get contact state at the specified time. */
-  std::shared_ptr<ContactState> getContactState(double t) const;
+  /** \brief Get contact command at the specified time. */
+  std::shared_ptr<ContactCommand> getContactCommand(double t) const;
 
   /** \brief Get whether the limb is contacting at the specified time.
       \param t time
@@ -197,17 +197,17 @@ protected:
   //! Limb task
   std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> limbTask_;
 
-  //! Contact command queue
-  std::deque<ContactCommand> contactCommandQueue_;
+  //! Swing command queue (sorted by time)
+  std::deque<std::shared_ptr<SwingCommand>> swingCommandQueue_;
 
-  //! Contact command currently executing
-  const ContactCommand * executingContactCommand_ = nullptr;
+  //! Swing command currently executing
+  std::shared_ptr<SwingCommand> executingSwingCommand_ = nullptr;
 
-  //! Previous contact command pose
-  std::shared_ptr<sva::PTransformd> prevContactCommandPose_ = nullptr;
+  //! Previous swing command pose
+  std::shared_ptr<sva::PTransformd> prevSwingCommandPose_ = nullptr;
 
-  //! Contact state list (sorted by time)
-  std::map<double, std::shared_ptr<ContactState>> contactStateList_;
+  //! Contact command list (sorted by time)
+  std::map<double, std::shared_ptr<ContactCommand>> contactCommandList_;
 
   //! Target limb pose represented in world frame
   sva::PTransformd targetPose_;

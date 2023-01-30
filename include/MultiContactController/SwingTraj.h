@@ -3,7 +3,7 @@
 #include <mc_rtc/Configuration.h>
 #include <SpaceVecAlg/SpaceVecAlg>
 
-#include <MultiContactController/ContactTypes.h>
+#include <MultiContactController/CommandTypes.h>
 #include <MultiContactController/RobotUtils.h>
 
 namespace MCC
@@ -26,7 +26,7 @@ public:
 
 public:
   /** \brief Constructor.
-      \param commandType type of contact command
+      \param commandType type of swing command
       \param isContact whether the limb is contacting
       \param startPose start pose
       \param endPose pose end pose
@@ -35,7 +35,7 @@ public:
       \param taskGain IK task gain
       \param mcRtcConfig mc_rtc configuration
   */
-  SwingTraj(const ContactCommand::Type & commandType,
+  SwingTraj(const SwingCommand::Type & commandType,
             bool isContact,
             const sva::PTransformd & startPose,
             const sva::PTransformd & endPose,
@@ -94,8 +94,8 @@ public:
   //! Configuration
   Configuration config_;
 
-  //! Type of contact command
-  ContactCommand::Type commandType_;
+  //! Type of swing command
+  SwingCommand::Type commandType_;
 
   //! Whether the limb is contacting
   bool isContact_;

@@ -69,7 +69,7 @@ public:
 
 public:
   /** \brief Constructor.
-      \param commandType type of contact command
+      \param commandType type of swing command
       \param isContact whether the limb is contacting
       \param startPose start pose
       \param endPose pose end pose
@@ -78,7 +78,7 @@ public:
       \param taskGain IK task gain
       \param mcRtcConfig mc_rtc configuration
   */
-  SwingTrajCubicSplineSimple(const ContactCommand::Type & commandType,
+  SwingTrajCubicSplineSimple(const SwingCommand::Type & commandType,
                              bool isContact,
                              const sva::PTransformd & startPose,
                              const sva::PTransformd & endPose,

@@ -14,10 +14,10 @@ struct Limb
   struct Group
   {
     //! Hand group
-    static inline std::string Hand = "Hand";
+    static inline const std::string Hand = "Hand";
 
     //! Foot group
-    static inline std::string Foot = "Foot";
+    static inline const std::string Foot = "Foot";
   };
 
   /** \brief Constructor.

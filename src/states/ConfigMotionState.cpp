@@ -8,14 +8,14 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
 {
   State::start(_ctl);
 
-  // Send contact command
-  if(config_.has("configs") && config_("configs").has("contactCommandList"))
+  // Send step command
+  if(config_.has("configs") && config_("configs").has("stepCommandList"))
   {
-    for(const auto & contactCommandConfig : config_("configs")("contactCommandList"))
+    for(const auto & stepCommandConfig : config_("configs")("stepCommandList"))
     {
-      ContactCommand contactCommand = ContactCommand(contactCommandConfig);
-      Limb limb = Limb(contactCommandConfig("limb"));
-      ctl().limbManagerSet_->at(limb)->appendContactCommand(contactCommand);
+      StepCommand stepCommand = StepCommand(stepCommandConfig);
+      Limb limb = Limb(stepCommandConfig("limb"));
+      ctl().limbManagerSet_->at(limb)->appendStepCommand(stepCommand);
     }
   }
 
@@ -24,7 +24,7 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
 
 bool ConfigMotionState::run(mc_control::fsm::Controller &)
 {
-  return !ctl().limbManagerSet_->contactStateStacked();
+  return !ctl().limbManagerSet_->contactCommandStacked();
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}

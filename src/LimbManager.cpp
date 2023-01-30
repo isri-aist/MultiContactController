@@ -40,10 +40,10 @@ LimbManager::LimbManager(MultiContactController * ctlPtr, const Limb & limb, con
 
 void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 {
-  contactCommandQueue_.clear();
+  swingCommandQueue_.clear();
 
-  executingContactCommand_ = nullptr;
-  prevContactCommandPose_.reset();
+  executingSwingCommand_.reset();
+  prevSwingCommandPose_.reset();
 
   targetPose_ = limbTask_->surfacePose();
   targetVel_ = sva::MotionVecd::Zero();
@@ -60,11 +60,11 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 
   requireImpGainUpdate_ = false;
 
-  contactStateList_.clear();
+  contactCommandList_.clear();
   if(_constraintConfig.empty())
   {
     ctl().solver().removeTask(limbTask_);
-    contactStateList_.emplace(ctl().t(), nullptr);
+    contactCommandList_.emplace(ctl().t(), nullptr);
   }
   else
   {
@@ -87,9 +87,9 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     {
       constraintConfig.add("pose", targetPose_);
     }
-    contactStateList_.emplace(
-        ctl().t(), std::make_shared<ContactState>(limbTask_->surfacePose(),
-                                                  ContactConstraint::makeSharedFromConfig(constraintConfig)));
+    contactCommandList_.emplace(
+        ctl().t(), std::make_shared<ContactCommand>(ctl().t(), limbTask_->surfacePose(),
+                                                    ContactConstraint::makeSharedFromConfig(constraintConfig)));
   }
 }
 
@@ -98,25 +98,25 @@ void LimbManager::update()
   // Disable hold mode by default
   limbTask_->hold(false);
 
-  // Remove old contact state
+  // Remove old contact command
   {
-    auto it = contactStateList_.upper_bound(ctl().t());
-    if(it != contactStateList_.begin())
+    auto it = contactCommandList_.upper_bound(ctl().t());
+    if(it != contactCommandList_.begin())
     {
       it--;
-      if(it != contactStateList_.begin())
+      if(it != contactCommandList_.begin())
       {
-        contactStateList_.erase(contactStateList_.begin(), it);
+        contactCommandList_.erase(contactCommandList_.begin(), it);
       }
     }
   }
 
-  // Complete executing contact command
-  while(!contactCommandQueue_.empty() && contactCommandQueue_.front().endTime < ctl().t())
+  // Complete executing swing command
+  while(!swingCommandQueue_.empty() && swingCommandQueue_.front()->endTime < ctl().t())
   {
-    const auto & completedContactCommand = contactCommandQueue_.front();
+    const auto & completedSwingCommand = swingCommandQueue_.front();
 
-    if(completedContactCommand.type == ContactCommand::Type::Add)
+    if(completedSwingCommand->type == SwingCommand::Type::Add)
     {
       // Update target
       if(!(config_.keepPoseForTouchDownLimb && touchDown_))
@@ -126,13 +126,13 @@ void LimbManager::update()
         targetAccel_ = sva::MotionVecd::Zero();
       }
 
-      prevContactCommandPose_ = std::make_shared<sva::PTransformd>(completedContactCommand.pose);
+      prevSwingCommandPose_ = std::make_shared<sva::PTransformd>(completedSwingCommand->pose);
 
       taskGain_ = config_.taskGain;
 
       touchDown_ = false;
     }
-    else // if(completedContactCommand.type == ContactCommand::Type::Remove)
+    else // if(completedSwingCommand->type == SwingCommand::Type::Remove)
     {
       ctl().solver().removeTask(limbTask_);
     }
@@ -140,27 +140,27 @@ void LimbManager::update()
     // Clear swingTraj_
     swingTraj_.reset();
 
-    // Clear executingContactCommand_
-    executingContactCommand_ = nullptr;
+    // Clear executingSwingCommand_
+    executingSwingCommand_.reset();
 
-    // Remove contact command from queue
-    contactCommandQueue_.pop_front();
+    // Remove swing command from queue
+    swingCommandQueue_.pop_front();
   }
 
-  if(!contactCommandQueue_.empty() && (contactCommandQueue_.front().startTime <= ctl().t()))
+  if(!swingCommandQueue_.empty() && (swingCommandQueue_.front()->startTime <= ctl().t()))
   {
-    if(executingContactCommand_)
+    if(executingSwingCommand_)
     {
-      // Check if executingContactCommand_ is consistent
-      if(executingContactCommand_ != &(contactCommandQueue_.front()))
+      // Check if executingSwingCommand_ is consistent
+      if(executingSwingCommand_ != swingCommandQueue_.front())
       {
-        mc_rtc::log::error_and_throw("[LimbManager] Contact command is not consistent.");
+        mc_rtc::log::error_and_throw("[LimbManager({})] Swing command is not consistent.", std::to_string(limb_));
       }
     }
     else
     {
-      // Set executingContactCommand_
-      executingContactCommand_ = &(contactCommandQueue_.front());
+      // Set executingSwingCommand_
+      executingSwingCommand_ = swingCommandQueue_.front();
 
       // Enable hold mode to prevent IK target pose from jumping
       // https://github.com/jrl-umi3218/mc_rtc/pull/143
@@ -170,7 +170,7 @@ void LimbManager::update()
       }
 
       // Add limb task
-      if(executingContactCommand_->type == ContactCommand::Type::Add)
+      if(executingSwingCommand_->type == SwingCommand::Type::Add)
       {
         limbTask_->reset();
         ctl().solver().addTask(limbTask_);
@@ -194,28 +194,28 @@ void LimbManager::update()
         else
         {
           mc_rtc::log::error_and_throw(
-              "[LimbEndManager({})] swingStartPolicy must be ControlRobot, Target, or Compliance, but {} is specified.",
+              "[LimbManager({})] swingStartPolicy must be ControlRobot, Target, or Compliance, but {} is specified.",
               std::to_string(limb_), config_.swingStartPolicy);
         }
-        sva::PTransformd swingEndPose = executingContactCommand_->pose;
-        if(config_.overwriteLandingPose && prevContactCommandPose_)
+        sva::PTransformd swingEndPose = executingSwingCommand_->pose;
+        if(config_.overwriteLandingPose && prevSwingCommandPose_)
         {
-          sva::PTransformd swingRelPose = executingContactCommand_->pose * prevContactCommandPose_->inv();
+          sva::PTransformd swingRelPose = executingSwingCommand_->pose * prevSwingCommandPose_->inv();
           swingEndPose = swingRelPose * swingStartPose;
         }
 
         std::string swingTrajType =
-            executingContactCommand_->swingTrajConfig("type", static_cast<std::string>(config_.defaultSwingTrajType));
+            executingSwingCommand_->config("type", static_cast<std::string>(config_.defaultSwingTrajType));
         if(swingTrajType == "CubicSplineSimple")
         {
           swingTraj_ = std::make_shared<SwingTrajCubicSplineSimple>(
-              executingContactCommand_->type, isContact_, swingStartPose, swingEndPose,
-              executingContactCommand_->startTime, executingContactCommand_->endTime, config_.taskGain,
-              executingContactCommand_->swingTrajConfig);
+              executingSwingCommand_->type, isContact_, swingStartPose, swingEndPose, executingSwingCommand_->startTime,
+              executingSwingCommand_->endTime, config_.taskGain, executingSwingCommand_->config);
         }
         else
         {
-          mc_rtc::log::error_and_throw("[LimbManager] Invalid swingTrajType: {}.", swingTrajType);
+          mc_rtc::log::error_and_throw("[LimbManager({})] Invalid swingTrajType: {}.", std::to_string(limb_),
+                                       swingTrajType);
         }
       }
 
@@ -224,7 +224,7 @@ void LimbManager::update()
     }
 
     // Update touchDown_
-    if(executingContactCommand_->type == ContactCommand::Type::Add && !touchDown_ && detectTouchDown())
+    if(executingSwingCommand_->type == SwingCommand::Type::Add && !touchDown_ && detectTouchDown())
     {
       touchDown_ = true;
 
@@ -301,17 +301,17 @@ void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.addElement({ctl().name(), config_.name, std::to_string(limb_)},
                  mc_rtc::gui::Label("surface", [this]() { return limbTask_->surface(); }),
-                 mc_rtc::gui::Label("contactCommandQueueSize", [this]() { return contactCommandQueue_.size(); }),
-                 mc_rtc::gui::Label("contactStateListSize", [this]() { return contactStateList_.size(); }),
+                 mc_rtc::gui::Label("swingCommandQueueSize", [this]() { return swingCommandQueue_.size(); }),
+                 mc_rtc::gui::Label("contactCommandListSize", [this]() { return contactCommandList_.size(); }),
                  mc_rtc::gui::Label("phase",
                                     [this]() -> std::string {
-                                      if(executingContactCommand_)
+                                      if(executingSwingCommand_)
                                       {
                                         return touchDown_ ? "Swing (TouchDown)" : "Swing";
                                       }
                                       else if(isContact_)
                                       {
-                                        return "Contact (" + getContactState(ctl().t())->constraint->type() + ")";
+                                        return "Contact (" + getContactCommand(ctl().t())->constraint->type() + ")";
                                       }
                                       else
                                       {
@@ -330,18 +330,18 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
 {
   std::string name = config_.name + "_" + std::to_string(limb_);
 
-  logger.addLogEntry(name + "_contactCommandQueueSize", this, [this]() { return contactCommandQueue_.size(); });
-  logger.addLogEntry(name + "_contactStateListSize", this, [this]() { return contactStateList_.size(); });
+  logger.addLogEntry(name + "_swingCommandQueueSize", this, [this]() { return swingCommandQueue_.size(); });
+  logger.addLogEntry(name + "_contactCommandListSize", this, [this]() { return contactCommandList_.size(); });
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
   logger.addLogEntry(name + "_phase", this, [this]() -> std::string {
-    if(executingContactCommand_)
+    if(executingSwingCommand_)
     {
       return touchDown_ ? "Swing (TouchDown)" : "Swing";
     }
     else if(isContact_)
     {
-      return "Contact (" + getContactState(ctl().t())->constraint->type() + ")";
+      return "Contact (" + getContactCommand(ctl().t())->constraint->type() + ")";
     }
     else
     {
@@ -355,45 +355,63 @@ void LimbManager::removeFromLogger(mc_rtc::Logger & logger)
   logger.removeLogEntries(this);
 }
 
-bool LimbManager::appendContactCommand(const ContactCommand & newContactCommand)
+bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
 {
-  // Check time of new contactCommand
-  if(newContactCommand.startTime < ctl().t())
+  // Check time of swing command
+  if(stepCommand.swingCommand->startTime < ctl().t())
   {
-    mc_rtc::log::error("[LimbManager({})] Ignore a new contact command with past time: {} < {}", std::to_string(limb_),
-                       newContactCommand.startTime, ctl().t());
+    mc_rtc::log::error("[LimbManager({})] Ignore a new step command with swing command with past time: {} < {}",
+                       std::to_string(limb_), stepCommand.swingCommand->startTime, ctl().t());
     return false;
   }
-  if(!contactCommandQueue_.empty())
+  if(!swingCommandQueue_.empty())
   {
-    const auto & lastContactCommand = contactCommandQueue_.back();
-    if(newContactCommand.startTime < lastContactCommand.endTime)
+    const auto & lastSwingCommand = swingCommandQueue_.back();
+    if(stepCommand.swingCommand->startTime < lastSwingCommand->endTime)
     {
       mc_rtc::log::error(
-          "[LimbManager({})] Ignore a new contact command earlier than the last contact command: {} < {}",
-          std::to_string(limb_), newContactCommand.startTime, lastContactCommand.endTime);
+          "[LimbManager({})] Ignore a new step command with swing command earlier than the last swing command: {} < {}",
+          std::to_string(limb_), stepCommand.swingCommand->startTime, lastSwingCommand->endTime);
       return false;
     }
   }
 
-  // Push to the queue
-  contactCommandQueue_.push_back(newContactCommand);
-
-  // Insert contact state
-  contactStateList_.emplace(newContactCommand.removeTime, nullptr);
-  if(newContactCommand.type == ContactCommand::Type::Add)
+  // Check time of contact command
+  if(!stepCommand.contactCommandList.empty())
   {
-    contactStateList_.emplace(newContactCommand.addTime,
-                              std::make_shared<ContactState>(newContactCommand.pose, newContactCommand.constraint));
+    double contactCommandTime = stepCommand.contactCommandList.begin()->first;
+    if(contactCommandTime < ctl().t())
+    {
+      mc_rtc::log::error("[LimbManager({})] Ignore a new step command with contact command with past time: {} < {}",
+                         std::to_string(limb_), contactCommandTime, ctl().t());
+      return false;
+    }
+    if(!contactCommandList_.empty())
+    {
+      const auto & lastContactCommandTime = contactCommandList_.rbegin()->first;
+      if(contactCommandTime < lastContactCommandTime)
+      {
+        mc_rtc::log::error("[LimbManager({})] Ignore a new step command with contact command earlier than the last "
+                           "contact command: {} < {}",
+                           std::to_string(limb_), contactCommandTime, lastContactCommandTime);
+        return false;
+      }
+    }
   }
+
+  // Append swing command
+  swingCommandQueue_.push_back(stepCommand.swingCommand);
+
+  // Append contact command
+  contactCommandList_.insert(stepCommand.contactCommandList.begin(), stepCommand.contactCommandList.end());
 
   return true;
 }
 
-std::shared_ptr<ContactState> LimbManager::getContactState(double t) const
+std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
 {
-  auto it = contactStateList_.upper_bound(t);
-  if(it == contactStateList_.begin())
+  auto it = contactCommandList_.upper_bound(t);
+  if(it == contactCommandList_.begin())
   {
     return nullptr;
   }
@@ -409,13 +427,13 @@ std::shared_ptr<ContactState> LimbManager::getContactState(double t) const
 }
 bool LimbManager::isContact(double t) const
 {
-  return getContactState(t) != nullptr;
+  return getContactCommand(t) != nullptr;
 }
 
 double LimbManager::getContactWeight(double t, double weightTransitDuration) const
 {
-  auto endIt = contactStateList_.upper_bound(t);
-  if(endIt == contactStateList_.begin())
+  auto endIt = contactCommandList_.upper_bound(t);
+  if(endIt == contactCommandList_.begin())
   {
     return 0;
   }
@@ -430,7 +448,7 @@ double LimbManager::getContactWeight(double t, double weightTransitDuration) con
 
   // t is between startIt->first and endIt->first
   assert(t - startIt->first >= 0);
-  if(endIt != contactStateList_.end())
+  if(endIt != contactCommandList_.end())
   {
     assert(!endIt->second);
     assert(endIt->first - t >= 0);
@@ -440,7 +458,7 @@ double LimbManager::getContactWeight(double t, double weightTransitDuration) con
   {
     return mc_filter::utils::clamp((t - startIt->first) / weightTransitDuration, 1e-8, 1.0);
   }
-  else if(endIt != contactStateList_.end() && endIt->first - t < weightTransitDuration)
+  else if(endIt != contactCommandList_.end() && endIt->first - t < weightTransitDuration)
   {
     return mc_filter::utils::clamp((endIt->first - t) / weightTransitDuration, 1e-8, 1.0);
   }
@@ -452,9 +470,9 @@ double LimbManager::getContactWeight(double t, double weightTransitDuration) con
 
 double LimbManager::touchDownRemainingDuration() const
 {
-  if(executingContactCommand_)
+  if(executingSwingCommand_)
   {
-    return executingContactCommand_->endTime - ctl().t();
+    return executingSwingCommand_->endTime - ctl().t();
   }
   else
   {
@@ -464,9 +482,9 @@ double LimbManager::touchDownRemainingDuration() const
 
 bool LimbManager::detectTouchDown() const
 {
-  if(!executingContactCommand_)
+  if(!executingSwingCommand_)
   {
-    mc_rtc::log::error_and_throw("[LimbManager({})] detectTouchDown is called, but executingContactCommand is empty.",
+    mc_rtc::log::error_and_throw("[LimbManager({})] detectTouchDown is called, but executingSwingCommand is empty.",
                                  std::to_string(limb_));
   }
 

@@ -51,7 +51,7 @@ void SwingTrajCubicSplineSimple::removeConfigFromGUI(mc_rtc::gui::StateBuilder &
   gui.removeCategory(category);
 }
 
-SwingTrajCubicSplineSimple::SwingTrajCubicSplineSimple(const ContactCommand::Type & commandType,
+SwingTrajCubicSplineSimple::SwingTrajCubicSplineSimple(const SwingCommand::Type & commandType,
                                                        bool isContact,
                                                        const sva::PTransformd & startPose,
                                                        const sva::PTransformd & endPose,
@@ -73,7 +73,7 @@ SwingTrajCubicSplineSimple::SwingTrajCubicSplineSimple(const ContactCommand::Typ
   TrajColl::BoundaryConstraint<Eigen::Vector3d> zeroAccelBC(TrajColl::BoundaryConstraintType::Acceleration,
                                                             Eigen::Vector3d::Zero());
 
-  if(commandType_ == ContactCommand::Type::Add)
+  if(commandType_ == SwingCommand::Type::Add)
   {
     // Spline to withdraw limb
     // Pos
@@ -144,7 +144,7 @@ SwingTrajCubicSplineSimple::SwingTrajCubicSplineSimple(const ContactCommand::Typ
     // Rot
     rotFunc_->calcCoeff();
   }
-  else // if(commandType_ == ContactCommand::Type::Remove)
+  else // if(commandType_ == SwingCommand::Type::Remove)
   {
     // Spline to withdraw limb
     // Pos
@@ -209,11 +209,11 @@ sva::MotionVecd SwingTrajCubicSplineSimple::accel(double t) const
 
 TaskGain SwingTrajCubicSplineSimple::taskGain(double t) const
 {
-  if(commandType_ == ContactCommand::Type::Add)
+  if(commandType_ == SwingCommand::Type::Add)
   {
     return taskGain_;
   }
-  else // if(commandType_ == ContactCommand::Type::Remove)
+  else // if(commandType_ == SwingCommand::Type::Remove)
   {
     return TaskGain((*stiffnessRatioFunc_)(t)*taskGain_.stiffness);
   }
