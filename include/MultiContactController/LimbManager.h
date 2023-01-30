@@ -212,6 +212,9 @@ protected:
   //! Current contact command
   std::shared_ptr<ContactCommand> currentContact_ = nullptr;
 
+  //! Previous contact command
+  std::shared_ptr<ContactCommand> prevContact_ = nullptr;
+
   //! Target limb pose represented in world frame
   sva::PTransformd targetPose_;
 

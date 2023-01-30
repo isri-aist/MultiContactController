@@ -88,6 +88,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     currentContact_ = std::make_shared<ContactCommand>(ctl().t(), limbTask_->surfacePose(),
                                                        ContactConstraint::makeSharedFromConfig(constraintConfig));
   }
+  prevContact_ = currentContact_;
   contactCommandList_.emplace(ctl().t(), currentContact_);
 }
 
@@ -104,12 +105,13 @@ void LimbManager::update()
       it--;
       if(it != contactCommandList_.begin())
       {
+        prevContact_ = std::prev(it)->second;
         contactCommandList_.erase(contactCommandList_.begin(), it);
       }
     }
   }
 
-  // Complete executing swing command
+  // Remove old swing command
   while(!swingCommandQueue_.empty() && swingCommandQueue_.front()->endTime < ctl().t())
   {
     const auto & completedSwingCommand = swingCommandQueue_.front();
@@ -412,6 +414,7 @@ std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
   auto it = contactCommandList_.upper_bound(t);
   if(it == contactCommandList_.begin())
   {
+    // Past time is given
     return nullptr;
   }
   else
@@ -431,35 +434,36 @@ bool LimbManager::isContact(double t) const
 
 double LimbManager::getContactWeight(double t, double weightTransitDuration) const
 {
-  auto endIt = contactCommandList_.upper_bound(t);
-  if(endIt == contactCommandList_.begin())
+  // Past time is given
+  auto nextIt = contactCommandList_.upper_bound(t);
+  if(nextIt == contactCommandList_.begin())
   {
     return 0;
   }
 
   // Is not contacting
-  auto startIt = endIt;
-  startIt--;
-  if(!startIt->second)
+  auto currentIt = std::prev(nextIt);
+  if(!currentIt->second)
   {
     return 0;
   }
 
-  // t is between startIt->first and endIt->first
-  assert(t - startIt->first >= 0);
-  if(endIt != contactCommandList_.end())
+  // Check time consistency
+  assert(currentIt->first <= t);
+  if(nextIt != contactCommandList_.end())
   {
-    assert(!endIt->second);
-    assert(endIt->first - t >= 0);
+    assert(t <= nextIt->first);
   }
 
-  if(t - startIt->first < weightTransitDuration)
+  const std::shared_ptr<ContactCommand> & prevContact =
+      (currentIt == contactCommandList_.begin() ? prevContact_ : std::prev(currentIt)->second);
+  if(!prevContact && t - currentIt->first < weightTransitDuration)
   {
-    return mc_filter::utils::clamp((t - startIt->first) / weightTransitDuration, 1e-8, 1.0);
+    return mc_filter::utils::clamp((t - currentIt->first) / weightTransitDuration, 1e-8, 1.0);
   }
-  else if(endIt != contactCommandList_.end() && endIt->first - t < weightTransitDuration)
+  else if(nextIt != contactCommandList_.end() && !nextIt->second && nextIt->first - t < weightTransitDuration)
   {
-    return mc_filter::utils::clamp((endIt->first - t) / weightTransitDuration, 1e-8, 1.0);
+    return mc_filter::utils::clamp((nextIt->first - t) / weightTransitDuration, 1e-8, 1.0);
   }
   else
   {
