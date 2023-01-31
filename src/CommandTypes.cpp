@@ -24,10 +24,26 @@ SwingCommand::SwingCommand(const mc_rtc::Configuration & mcRtcConfig)
   }
 }
 
+void SwingCommand::setBaseTime(double baseTime)
+{
+  startTime += baseTime;
+  endTime += baseTime;
+}
+
 ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
 {
   time = mcRtcConfig("time");
   constraint = ContactConstraint::makeSharedFromConfig(mcRtcConfig("constraint"));
+}
+
+void ContactCommand::setBaseTime(double baseTime)
+{
+  time += baseTime;
+}
+
+void GripperCommand::setBaseTime(double baseTime)
+{
+  time += baseTime;
 }
 
 StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
@@ -151,7 +167,43 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
   {
     for(const auto & gripperCommandConfig : mcRtcConfig("gripperCommandList"))
     {
-      gripperCommandList.emplace(gripperCommandConfig("time"), GripperCommand(gripperCommandConfig));
+      gripperCommandList.emplace(gripperCommandConfig("time"), std::make_shared<GripperCommand>(gripperCommandConfig));
     }
+  }
+}
+
+void StepCommand::setBaseTime(double baseTime)
+{
+  if(swingCommand)
+  {
+    swingCommand->setBaseTime(baseTime);
+  }
+
+  {
+    std::map<double, std::shared_ptr<ContactCommand>> newContactCommandList;
+    for(auto & contactCommandKV : contactCommandList)
+    {
+      auto & contactCommand = contactCommandKV.second;
+      if(contactCommand)
+      {
+        contactCommand->setBaseTime(baseTime);
+      }
+      newContactCommandList.emplace(contactCommandKV.first + baseTime, contactCommand);
+    }
+    contactCommandList = newContactCommandList;
+  }
+
+  {
+    std::map<double, std::shared_ptr<GripperCommand>> newGripperCommandList;
+    for(auto & gripperCommandKV : gripperCommandList)
+    {
+      auto & gripperCommand = gripperCommandKV.second;
+      if(gripperCommand)
+      {
+        gripperCommand->setBaseTime(baseTime);
+      }
+      newGripperCommandList.emplace(gripperCommandKV.first + baseTime, gripperCommand);
+    }
+    gripperCommandList = newGripperCommandList;
   }
 }

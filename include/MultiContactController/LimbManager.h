@@ -147,6 +147,12 @@ public:
     return contactCommandList_;
   }
 
+  /** \brief Access gripper command list. */
+  inline const std::map<double, std::shared_ptr<GripperCommand>> & gripperCommandList() const noexcept
+  {
+    return gripperCommandList_;
+  }
+
   /** \brief Get target limb pose at the specified time.
       \param t time
 
@@ -222,7 +228,7 @@ protected:
   std::shared_ptr<ContactCommand> prevContactCommand_ = nullptr;
 
   //! Gripper command list (map of start time and gripper command)
-  std::map<double, GripperCommand> gripperCommandList_;
+  std::map<double, std::shared_ptr<GripperCommand>> gripperCommandList_;
 
   //! Target limb pose represented in world frame
   sva::PTransformd targetPose_;

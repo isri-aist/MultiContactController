@@ -252,7 +252,7 @@ void LimbManager::update()
     auto it = gripperCommandList_.begin();
     const auto & gripperCommand = it->second;
 
-    ctl().robot().gripper(gripperCommand.name).configure(gripperCommand.config);
+    ctl().robot().gripper(gripperCommand->name).configure(gripperCommand->config);
 
     // Remove old gripper command
     gripperCommandList_.erase(it);

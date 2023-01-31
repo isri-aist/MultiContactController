@@ -48,6 +48,13 @@ struct SwingCommand
    */
   SwingCommand(const mc_rtc::Configuration & mcRtcConfig);
 
+  /** \brief Set base time.
+      \param baseTime base time
+
+      Overwrites all times in the command, assuming they are expressed relative to baseTime.
+   */
+  void setBaseTime(double baseTime);
+
   //! Type of swing command
   Type type;
 
@@ -82,6 +89,13 @@ struct ContactCommand
    */
   ContactCommand(const mc_rtc::Configuration & mcRtcConfig);
 
+  /** \brief Set base time.
+      \param baseTime base time
+
+      Overwrites all times in the command, assuming they are expressed relative to baseTime.
+   */
+  void setBaseTime(double baseTime);
+
   //! Time
   double time;
 
@@ -109,6 +123,13 @@ struct GripperCommand
   : GripperCommand(mcRtcConfig("time"), mcRtcConfig("name"), mcRtcConfig("config"))
   {
   }
+
+  /** \brief Set base time.
+      \param baseTime base time
+
+      Overwrites all times in the command, assuming they are expressed relative to baseTime.
+   */
+  void setBaseTime(double baseTime);
 
   //! Time
   double time;
@@ -138,6 +159,13 @@ struct StepCommand
    */
   StepCommand(const mc_rtc::Configuration & mcRtcConfig);
 
+  /** \brief Set base time.
+      \param baseTime base time
+
+      Overwrites all times in the command, assuming they are expressed relative to baseTime.
+   */
+  void setBaseTime(double baseTime);
+
   //! Swing command
   std::shared_ptr<SwingCommand> swingCommand;
 
@@ -145,6 +173,6 @@ struct StepCommand
   std::map<double, std::shared_ptr<ContactCommand>> contactCommandList;
 
   //! Gripper command list
-  std::map<double, GripperCommand> gripperCommandList;
+  std::map<double, std::shared_ptr<GripperCommand>> gripperCommandList;
 };
 } // namespace MCC
