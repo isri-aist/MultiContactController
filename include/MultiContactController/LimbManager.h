@@ -199,20 +199,20 @@ protected:
   //! Swing command queue (sorted by time)
   std::deque<std::shared_ptr<SwingCommand>> swingCommandQueue_;
 
-  //! Swing command currently executing
-  std::shared_ptr<SwingCommand> executingSwingCommand_ = nullptr;
+  //! Current swing command
+  std::shared_ptr<SwingCommand> currentSwingCommand_ = nullptr;
 
   //! Previous swing command pose
-  std::shared_ptr<sva::PTransformd> prevSwingCommandPose_ = nullptr;
+  std::shared_ptr<SwingCommand> prevSwingCommand_ = nullptr;
 
-  //! Contact command list (sorted by time)
+  //! Map of start time and contact command
   std::map<double, std::shared_ptr<ContactCommand>> contactCommandList_;
 
   //! Current contact command
-  std::shared_ptr<ContactCommand> currentContact_ = nullptr;
+  std::shared_ptr<ContactCommand> currentContactCommand_ = nullptr;
 
   //! Previous contact command
-  std::shared_ptr<ContactCommand> prevContact_ = nullptr;
+  std::shared_ptr<ContactCommand> prevContactCommand_ = nullptr;
 
   //! Target limb pose represented in world frame
   sva::PTransformd targetPose_;

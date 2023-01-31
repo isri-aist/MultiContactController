@@ -42,8 +42,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 {
   swingCommandQueue_.clear();
 
-  executingSwingCommand_.reset();
-  prevSwingCommandPose_.reset();
+  currentSwingCommand_.reset();
+  prevSwingCommand_.reset();
 
   targetPose_ = limbTask_->surfacePose();
   targetVel_ = sva::MotionVecd::Zero();
@@ -64,7 +64,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
   if(_constraintConfig.empty())
   {
     ctl().solver().removeTask(limbTask_);
-    currentContact_ = nullptr;
+    currentContactCommand_ = nullptr;
   }
   else
   {
@@ -87,11 +87,11 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     {
       constraintConfig.add("pose", targetPose_);
     }
-    currentContact_ = std::make_shared<ContactCommand>(ctl().t(), limbTask_->surfacePose(),
-                                                       ContactConstraint::makeSharedFromConfig(constraintConfig));
+    currentContactCommand_ = std::make_shared<ContactCommand>(
+        ctl().t(), limbTask_->surfacePose(), ContactConstraint::makeSharedFromConfig(constraintConfig));
   }
-  prevContact_ = currentContact_;
-  contactCommandList_.emplace(ctl().t(), currentContact_);
+  prevContactCommand_ = currentContactCommand_;
+  contactCommandList_.emplace(ctl().t(), currentContactCommand_);
 }
 
 void LimbManager::update()
@@ -107,7 +107,7 @@ void LimbManager::update()
       it--;
       if(it != contactCommandList_.begin())
       {
-        prevContact_ = std::prev(it)->second;
+        prevContactCommand_ = std::prev(it)->second;
         contactCommandList_.erase(contactCommandList_.begin(), it);
       }
     }
@@ -120,6 +120,9 @@ void LimbManager::update()
 
     if(completedSwingCommand->type == SwingCommand::Type::Add)
     {
+      // Update prevSwingCommand_
+      prevSwingCommand_ = completedSwingCommand;
+
       // Update target
       if(!(config_.keepPoseForTouchDownLimb && touchDown_))
       {
@@ -127,8 +130,6 @@ void LimbManager::update()
         targetVel_ = sva::MotionVecd::Zero();
         targetAccel_ = sva::MotionVecd::Zero();
       }
-
-      prevSwingCommandPose_ = std::make_shared<sva::PTransformd>(completedSwingCommand->pose);
 
       taskGain_ = config_.taskGain;
 
@@ -142,8 +143,8 @@ void LimbManager::update()
     // Clear swingTraj_
     swingTraj_.reset();
 
-    // Clear executingSwingCommand_
-    executingSwingCommand_.reset();
+    // Clear currentSwingCommand_
+    currentSwingCommand_.reset();
 
     // Remove swing command from queue
     swingCommandQueue_.pop_front();
@@ -151,28 +152,28 @@ void LimbManager::update()
 
   if(!swingCommandQueue_.empty() && (swingCommandQueue_.front()->startTime <= ctl().t()))
   {
-    if(executingSwingCommand_)
+    if(currentSwingCommand_)
     {
-      // Check if executingSwingCommand_ is consistent
-      if(executingSwingCommand_ != swingCommandQueue_.front())
+      // Check if currentSwingCommand_ is consistent
+      if(currentSwingCommand_ != swingCommandQueue_.front())
       {
         mc_rtc::log::error_and_throw("[LimbManager({})] Swing command is not consistent.", std::to_string(limb_));
       }
     }
     else
     {
-      // Set executingSwingCommand_
-      executingSwingCommand_ = swingCommandQueue_.front();
+      // Set currentSwingCommand_
+      currentSwingCommand_ = swingCommandQueue_.front();
 
       // Enable hold mode to prevent IK target pose from jumping
       // https://github.com/jrl-umi3218/mc_rtc/pull/143
-      if(currentContact_)
+      if(currentContactCommand_)
       {
         limbTask_->hold(true);
       }
 
       // Add limb task
-      if(executingSwingCommand_->type == SwingCommand::Type::Add)
+      if(currentSwingCommand_->type == SwingCommand::Type::Add)
       {
         limbTask_->reset();
         ctl().solver().addTask(limbTask_);
@@ -199,21 +200,21 @@ void LimbManager::update()
               "[LimbManager({})] swingStartPolicy must be ControlRobot, Target, or Compliance, but {} is specified.",
               std::to_string(limb_), config_.swingStartPolicy);
         }
-        sva::PTransformd swingEndPose = executingSwingCommand_->pose;
-        if(config_.overwriteLandingPose && prevSwingCommandPose_)
+        sva::PTransformd swingEndPose = currentSwingCommand_->pose;
+        if(config_.overwriteLandingPose && prevSwingCommand_ && prevSwingCommand_->type == SwingCommand::Type::Add)
         {
-          sva::PTransformd swingRelPose = executingSwingCommand_->pose * prevSwingCommandPose_->inv();
+          sva::PTransformd swingRelPose = currentSwingCommand_->pose * prevSwingCommand_->pose.inv();
           swingEndPose = swingRelPose * swingStartPose;
         }
 
         std::string swingTrajType =
-            executingSwingCommand_->config("type", static_cast<std::string>(config_.defaultSwingTrajType));
+            currentSwingCommand_->config("type", static_cast<std::string>(config_.defaultSwingTrajType));
         if(swingTrajType == "CubicSplineSimple")
         {
           swingTraj_ = std::make_shared<SwingTrajCubicSplineSimple>(
-              executingSwingCommand_->type, static_cast<bool>(currentContact_), swingStartPose, swingEndPose,
-              executingSwingCommand_->startTime, executingSwingCommand_->endTime, config_.taskGain,
-              executingSwingCommand_->config);
+              currentSwingCommand_->type, static_cast<bool>(currentContactCommand_), swingStartPose, swingEndPose,
+              currentSwingCommand_->startTime, currentSwingCommand_->endTime, config_.taskGain,
+              currentSwingCommand_->config);
         }
         else
         {
@@ -227,7 +228,7 @@ void LimbManager::update()
     }
 
     // Update touchDown_
-    if(executingSwingCommand_->type == SwingCommand::Type::Add && !touchDown_ && detectTouchDown())
+    if(currentSwingCommand_->type == SwingCommand::Type::Add && !touchDown_ && detectTouchDown())
     {
       touchDown_ = true;
 
@@ -246,17 +247,17 @@ void LimbManager::update()
     }
   }
 
-  // Update currentContact_ (this should be after setting swingTraj_)
-  currentContact_ = getContactCommand(ctl().t());
+  // Update currentContactCommand_ (this should be after setting swingTraj_)
+  currentContactCommand_ = getContactCommand(ctl().t());
 
   // Update phase_
-  if(executingSwingCommand_)
+  if(currentSwingCommand_)
   {
     phase_ = "Swing (" + swingTraj_->type() + ")" + (touchDown_ ? " [TouchDown]" : "");
   }
-  else if(currentContact_)
+  else if(currentContactCommand_)
   {
-    phase_ = "Contact (" + currentContact_->constraint->type() + ")";
+    phase_ = "Contact (" + currentContactCommand_->constraint->type() + ")";
   }
   else
   {
@@ -276,7 +277,7 @@ void LimbManager::update()
   // Update impGainType_ and requireImpGainUpdate_
   {
     std::string newImpGainType;
-    if(currentContact_)
+    if(currentContactCommand_)
     {
       if(ctl().limbManagerSet_->contactList(ctl().t()).size() == 1)
       {
@@ -440,9 +441,9 @@ double LimbManager::getContactWeight(double t, double weightTransitDuration) con
     assert(t <= nextIt->first);
   }
 
-  const std::shared_ptr<ContactCommand> & prevContact =
-      (currentIt == contactCommandList_.begin() ? prevContact_ : std::prev(currentIt)->second);
-  if(!prevContact && t - currentIt->first < weightTransitDuration)
+  const std::shared_ptr<ContactCommand> & prevContactCommand =
+      (currentIt == contactCommandList_.begin() ? prevContactCommand_ : std::prev(currentIt)->second);
+  if(!prevContactCommand && t - currentIt->first < weightTransitDuration)
   {
     return mc_filter::utils::clamp((t - currentIt->first) / weightTransitDuration, 1e-8, 1.0);
   }
@@ -458,9 +459,9 @@ double LimbManager::getContactWeight(double t, double weightTransitDuration) con
 
 double LimbManager::touchDownRemainingDuration() const
 {
-  if(executingSwingCommand_)
+  if(currentSwingCommand_)
   {
-    return executingSwingCommand_->endTime - ctl().t();
+    return currentSwingCommand_->endTime - ctl().t();
   }
   else
   {
@@ -470,7 +471,7 @@ double LimbManager::touchDownRemainingDuration() const
 
 bool LimbManager::detectTouchDown() const
 {
-  if(!executingSwingCommand_)
+  if(!currentSwingCommand_)
   {
     mc_rtc::log::error_and_throw("[LimbManager({})] detectTouchDown is called, but executingSwingCommand is empty.",
                                  std::to_string(limb_));
