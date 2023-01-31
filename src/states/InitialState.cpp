@@ -42,7 +42,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
 
     // Reset and add tasks
     ctl().comTask_->reset();
-    // ctl().solver().addTask(ctl().comTask_); // \todo temporary
+    ctl().solver().addTask(ctl().comTask_);
     ctl().baseOriTask_->reset();
     ctl().solver().addTask(ctl().baseOriTask_);
     // limb tasks are added in LimbManager
@@ -73,7 +73,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
 
     // Add GUI of managers
-    ctl().limbManagerSet_->addToGUI(*ctl().gui()); // \todo
+    ctl().limbManagerSet_->addToGUI(*ctl().gui());
     ctl().centroidalManager_->addToGUI(*ctl().gui());
   }
   else if(phase_ == 2)

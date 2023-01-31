@@ -162,10 +162,5 @@ void MultiContactController::setDefaultAnchor()
   {
     datastore().remove(anchorName);
   }
-  datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) {
-    // \todo
-    return sva::PTransformd::Identity();
-    // return sva::interpolate(robot.surfacePose(footManager_->surfaceName(Foot::Left)),
-    //                         robot.surfacePose(footManager_->surfaceName(Foot::Right)), 0.5);
-  });
+  datastore().make_call(anchorName, [](const mc_rbdyn::Robot & robot) { return robot.posW(); });
 }
