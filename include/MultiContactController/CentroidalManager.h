@@ -37,11 +37,17 @@ public:
     //! Method
     std::string method = "";
 
+    //! Feedback gain of centroidal pose
+    sva::ImpedanceVecd centroidalGainP = sva::ImpedanceVecd::Zero();
+
+    //! Feedback gain of centroidal velocity
+    sva::ImpedanceVecd centroidalGainD = sva::ImpedanceVecd::Zero();
+
     //! Whether to use actual state for MPC
     bool useActualStateForMpc = false;
 
-    //! Whether to enable DCM feedback
-    bool enableFeedback = true;
+    //! Whether to enable centroidal feedback
+    bool enableCentroidalFeedback = true;
 
     //! Whether to only use foot surfaces to calculate anchor frame
     bool useOnlyFootForAnchorFrame = true;
@@ -56,7 +62,53 @@ public:
     mc_rtc::Configuration wrenchDistConfig;
 
     /** \brief Load mc_rtc configuration. */
-    virtual void load(const mc_rtc::Configuration & mcRtcConfig){}; // \todo
+    virtual void load(const mc_rtc::Configuration & mcRtcConfig);
+
+    /** \brief Add entries to the logger. */
+    virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);
+
+    /** \brief Remove entries from the logger. */
+    virtual void removeFromLogger(mc_rtc::Logger & logger);
+  };
+
+  /** \brief Control data. */
+  struct ControlData
+  {
+    //! Centroidal pose used as the initial state of MPC
+    sva::PTransformd mpcCentroidalPose = sva::PTransformd::Identity();
+
+    //! Planned centroidal pose
+    sva::PTransformd plannedCentroidalPose = sva::PTransformd::Identity();
+
+    //! Actual centroidal pose
+    sva::PTransformd actualCentroidalPose = sva::PTransformd::Identity();
+
+    //! Centroidal velocity used as the initial state of MPC
+    sva::MotionVecd mpcCentroidalVel = sva::MotionVecd::Zero();
+
+    //! Planned centroidal velocity
+    sva::MotionVecd plannedCentroidalVel = sva::MotionVecd::Zero();
+
+    //! Actual centroidal velocity
+    sva::MotionVecd actualCentroidalVel = sva::MotionVecd::Zero();
+
+    //! Planned centroidal acceleration
+    sva::MotionVecd plannedCentroidalAccel = sva::MotionVecd::Zero();
+
+    //! Planned wrench
+    sva::ForceVecd plannedWrench = sva::ForceVecd::Zero();
+
+    //! Control wrench
+    sva::ForceVecd controlWrench = sva::ForceVecd::Zero();
+
+    /** \brief Reset. */
+    void reset();
+
+    /** \brief Add entries to the logger. */
+    virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);
+
+    /** \brief Remove entries from the logger. */
+    virtual void removeFromLogger(mc_rtc::Logger & logger);
   };
 
 public:
@@ -64,41 +116,40 @@ public:
       \param ctlPtr pointer to controller
       \param mcRtcConfig mc_rtc configuration
    */
-  CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {})
-  : ctlPtr_(ctlPtr){};
+  CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
 
   /** \brief Reset.
 
       This method should be called once when controller is reset.
    */
-  virtual void reset(){};
+  virtual void reset();
 
   /** \brief Update.
 
       This method should be called once every control cycle.
    */
-  virtual void update(){};
+  virtual void update();
 
   /** \brief Stop.
 
       This method should be called once when stopping the controller.
   */
-  virtual void stop(){};
+  virtual void stop();
 
   /** \brief Const accessor to the configuration. */
   virtual const Configuration & config() const = 0;
 
   /** \brief Add entries to the GUI. */
-  virtual void addToGUI(mc_rtc::gui::StateBuilder & gui){};
+  virtual void addToGUI(mc_rtc::gui::StateBuilder & gui);
 
   /** \brief Remove entries from the GUI. */
-  virtual void removeFromGUI(mc_rtc::gui::StateBuilder & gui){};
+  virtual void removeFromGUI(mc_rtc::gui::StateBuilder & gui);
 
   /** \brief Add entries to the logger. */
-  virtual void addToLogger(mc_rtc::Logger & logger){};
+  virtual void addToLogger(mc_rtc::Logger & logger);
 
   /** \brief Remove entries from the logger. */
-  virtual void removeFromLogger(mc_rtc::Logger & logger){};
+  virtual void removeFromLogger(mc_rtc::Logger & logger);
 
   /** \brief Set anchor frame. */
   void setAnchorFrame();
@@ -121,7 +172,7 @@ protected:
 
   /** \brief Run MPC to plan centroidal trajectory.
 
-      This method calculates plannedZmp_ and plannedForceZ_ from mpcCom_ and mpcComVel_.
+      This method calculates controlData_.planned* from controlData_.mpc*.
    */
   virtual void runMpc() = 0;
 
@@ -134,14 +185,11 @@ protected:
   //! Pointer to controller
   MultiContactController * ctlPtr_ = nullptr;
 
+  //! Control data
+  ControlData controlData_;
+
   //! Robot mass [kg]
   double robotMass_ = 0;
-
-  //! CoM used as the initial state of MPC
-  Eigen::Vector3d mpcCom_ = Eigen::Vector3d::Zero();
-
-  //! CoM velocity used as the initial state of MPC
-  Eigen::Vector3d mpcComVel_ = Eigen::Vector3d::Zero();
 
   //! Wrench distribution
   std::shared_ptr<ForceColl::WrenchDistribution<Limb>> wrenchDist_;
