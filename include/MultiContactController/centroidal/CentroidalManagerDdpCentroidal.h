@@ -17,7 +17,7 @@ public:
   struct Configuration : public CentroidalManager::Configuration
   {
     /** \brief Load mc_rtc configuration. */
-    virtual void load(const mc_rtc::Configuration & mcRtcConfig) override{};
+    virtual void load(const mc_rtc::Configuration & mcRtcConfig) override{}; // \todo
   };
 
 public:

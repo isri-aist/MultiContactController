@@ -29,14 +29,14 @@ sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robo
   std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
   for(const auto & limbManagerKV : *ctl().limbManagerSet_)
   {
-    if(config_.useOnlyFootForAnchorFrame && limbManagerKV.first.group != Limb::Group::Foot)
+    if(config().useOnlyFootForAnchorFrame && limbManagerKV.first.group != Limb::Group::Foot)
     {
       continue;
     }
 
     double weight = limbManagerKV.second->getContactWeight(ctl().t());
     sva::PTransformd pose;
-    if(config_.useTargetPoseForControlRobotAnchorFrame && isControlRobot)
+    if(config().useTargetPoseForControlRobotAnchorFrame && isControlRobot)
     {
       pose = ctl().limbTasks_.at(limbManagerKV.first)->targetPose(); // target pose
     }

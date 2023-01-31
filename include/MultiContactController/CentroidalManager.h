@@ -131,9 +131,6 @@ protected:
   sva::PTransformd calcAnchorFrame(const mc_rbdyn::Robot & robot) const;
 
 protected:
-  //! Configuration
-  Configuration config_; // \todo this must be removed
-
   //! Pointer to controller
   MultiContactController * ctlPtr_ = nullptr;
 
