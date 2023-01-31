@@ -37,15 +37,22 @@ contacts: []
 states:
   MCC::Initial_:
     base: MCC::Initial
+    configs:
+      gripperCommands:
+        - name: l_gripper
+          opening: 1.0
+        - name: r_gripper
+          opening: 1.0
 
   MCC::ConfigMotion_:
     base: MCC::ConfigMotion
     configs:
+      baseTime: Relative
       stepCommandList:
         - limb: LeftFoot
           type: Add
-          startTime: 8.0
-          endTime: 10.0
+          startTime: 2.0
+          endTime: 4.0
           pose:
             translation: [0.2, 0.1, 0]
           constraint:
@@ -53,31 +60,58 @@ states:
             fricCoeff: 0.5
         - limb: RightFoot
           type: Add
-          startTime: 12.0
-          endTime: 14.0
+          startTime: 6.0
+          endTime: 8.0
           pose:
             translation: [0.4, -0.1, 0]
           constraint:
             type: Surface
             fricCoeff: 0.5
         - limb: LeftHand
-          type: Add
-          startTime: 12.0
-          endTime: 14.0
           pose:
             translation: [0.4, 0.3, 0.75]
             rotation: [3.141592653589793, 0, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
-          swingConfig:
-            withdrawOffset: [0, 0, -0.06]
-            approachOffset: [0, 0, -0.06]
-            swingOffset:  [0, 0, -0.12]
+          swingCommand:
+            type: Add
+            startTime: 6.0
+            endTime: 8.0
+            config:
+              withdrawOffset: [0, 0, -0.06]
+              approachOffset: [0, 0, -0.06]
+              swingOffset:  [0, 0, -0.12]
+          contactCommandList:
+            - time: 6.0
+              constraint: {}
+            - time: 8.0
+              constraint:
+                type: Empty
+            - time: 9.0
+              constraint:
+                type: Surface
+                fricCoeff: 0.5
+          gripperCommandList:
+            - time: 8.0
+              name: l_gripper
+              config:
+                opening: 0.0
+        # - limb: LeftHand
+        #   type: Add
+        #   startTime: 6.0
+        #   endTime: 8.0
+        #   pose:
+        #     translation: [0.4, 0.3, 0.75]
+        #     rotation: [3.141592653589793, 0, 0]
+        #   constraint:
+        #     type: Surface
+        #     fricCoeff: 0.5
+        #   swingConfig:
+        #     withdrawOffset: [0, 0, -0.06]
+        #     approachOffset: [0, 0, -0.06]
+        #     swingOffset:  [0, 0, -0.12]
         - limb: LeftFoot
           type: Add
-          startTime: 16.0
-          endTime: 18.0
+          startTime: 10.0
+          endTime: 12.0
           pose:
             translation: [0.6, 0.1, 0]
           constraint:
@@ -85,21 +119,41 @@ states:
             fricCoeff: 0.5
         - limb: RightFoot
           type: Add
-          startTime: 20.0
-          endTime: 22.0
+          startTime: 14.0
+          endTime: 16.0
           pose:
             translation: [0.8, -0.1, 0]
           constraint:
             type: Surface
             fricCoeff: 0.5
         - limb: LeftHand
-          type: Remove
-          startTime: 20.0
-          endTime: 22.0
-          swingConfig:
-            withdrawOffset: [0, 0, -0.06]
-            approachOffset: [0, 0, -0.06]
-            swingOffset:  [0, 0, -0.12]
+          swingCommand:
+            type: Remove
+            startTime: 14.0
+            endTime: 16.0
+            config:
+              withdrawOffset: [0, 0, -0.06]
+              approachOffset: [0, 0, -0.06]
+              swingOffset:  [0, 0, -0.12]
+          contactCommandList:
+            - time: 13.0
+              constraint:
+                type: Empty
+            - time: 14.0
+              constraint: {}
+          gripperCommandList:
+            - time: 13.0
+              name: l_gripper
+              config:
+                opening: 1.0
+        # - limb: LeftHand
+        #   type: Remove
+        #   startTime: 14.0
+        #   endTime: 16.0
+        #   swingConfig:
+        #     withdrawOffset: [0, 0, -0.06]
+        #     approachOffset: [0, 0, -0.06]
+        #     swingOffset:  [0, 0, -0.12]
 
   MCC::Main_:
     base: Parallel
