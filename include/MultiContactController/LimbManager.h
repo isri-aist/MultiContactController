@@ -147,6 +147,13 @@ public:
     return contactCommandList_;
   }
 
+  /** \brief Get target limb pose at the specified time.
+      \param t time
+
+      \note Returns the end pose of the swing even while the limb is swinging.
+   */
+  sva::PTransformd getLimbPose(double t) const;
+
   /** \brief Get contact command at the specified time.
       \param t time
 

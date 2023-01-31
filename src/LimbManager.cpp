@@ -396,6 +396,29 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
   return true;
 }
 
+sva::PTransformd LimbManager::getLimbPose(double t) const
+{
+  auto it = swingCommandList_.upper_bound(t);
+  if(it == swingCommandList_.begin())
+  {
+    // If swing command is not found, returns the current target pose
+    return targetPose_;
+  }
+  else
+  {
+    it--;
+    if(it->second == currentSwingCommand_)
+    {
+      // If currentSwingCommand_ is found, return end pose of swingTraj_ (reflecting the override)
+      return swingTraj_->endPose_;
+    }
+    else
+    {
+      return it->second->pose;
+    }
+  }
+}
+
 std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
 {
   auto it = contactCommandList_.upper_bound(t);
