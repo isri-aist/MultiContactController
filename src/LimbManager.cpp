@@ -21,6 +21,7 @@ void LimbManager::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
   mcRtcConfig("stopSwingTrajForTouchDownLimb", stopSwingTrajForTouchDownLimb);
   mcRtcConfig("keepPoseForTouchDownLimb", keepPoseForTouchDownLimb);
   mcRtcConfig("enableWrenchDistForTouchDownLimb", enableWrenchDistForTouchDownLimb);
+  mcRtcConfig("weightTransitDuration", weightTransitDuration);
   mcRtcConfig("touchDownRemainingDuration", touchDownRemainingDuration);
   mcRtcConfig("touchDownPosError", touchDownPosError);
   mcRtcConfig("touchDownForceZ", touchDownForceZ);
@@ -493,7 +494,7 @@ std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
   }
 }
 
-double LimbManager::getContactWeight(double t, double weightTransitDuration) const
+double LimbManager::getContactWeight(double t) const
 {
   // Past time is given
   auto nextIt = contactCommandList_.upper_bound(t);
@@ -518,13 +519,13 @@ double LimbManager::getContactWeight(double t, double weightTransitDuration) con
 
   const std::shared_ptr<ContactCommand> & prevContactCommand =
       (currentIt == contactCommandList_.begin() ? prevContactCommand_ : std::prev(currentIt)->second);
-  if(!prevContactCommand && t - currentIt->first < weightTransitDuration)
+  if(!prevContactCommand && t - currentIt->first < config_.weightTransitDuration)
   {
-    return mc_filter::utils::clamp((t - currentIt->first) / weightTransitDuration, 1e-8, 1.0);
+    return mc_filter::utils::clamp((t - currentIt->first) / config_.weightTransitDuration, 1e-8, 1.0);
   }
-  else if(nextIt != contactCommandList_.end() && !nextIt->second && nextIt->first - t < weightTransitDuration)
+  else if(nextIt != contactCommandList_.end() && !nextIt->second && nextIt->first - t < config_.weightTransitDuration)
   {
-    return mc_filter::utils::clamp((nextIt->first - t) / weightTransitDuration, 1e-8, 1.0);
+    return mc_filter::utils::clamp((nextIt->first - t) / config_.weightTransitDuration, 1e-8, 1.0);
   }
   else
   {

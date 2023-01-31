@@ -5,8 +5,10 @@ add_library(${CONTROLLER_NAME} SHARED
   State.cpp
   LimbTypes.cpp
   CommandTypes.cpp
+  MathUtils.cpp
   LimbManager.cpp
   LimbManagerSet.cpp
+  CentroidalManager.cpp
   swing/SwingTrajCubicSplineSimple.cpp
   )
 target_link_libraries(${CONTROLLER_NAME} PUBLIC mc_rtc::mc_control_fsm mc_rtc::mc_rtc_ros)

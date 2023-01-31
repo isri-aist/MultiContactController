@@ -43,6 +43,9 @@ public:
     //! Whether to enable DCM feedback
     bool enableFeedback = true;
 
+    //! Whether to only use foot surfaces to calculate anchor frame
+    bool useOnlyFootForAnchorFrame = true;
+
     //! Whether to use target surface pose for anchor frame of control robot
     bool useTargetPoseForControlRobotAnchorFrame = true;
 
@@ -98,7 +101,7 @@ public:
   virtual void removeFromLogger(mc_rtc::Logger & logger){};
 
   /** \brief Set anchor frame. */
-  void setAnchorFrame(){};
+  void setAnchorFrame();
 
 protected:
   /** \brief Const accessor to the controller. */
@@ -125,12 +128,12 @@ protected:
   /** \brief Calculate anchor frame.
       \param robot robot
    */
-  sva::PTransformd calcAnchorFrame(const mc_rbdyn::Robot & robot) const
-  {
-    return sva::PTransformd::Identity();
-  }; // \todo
+  sva::PTransformd calcAnchorFrame(const mc_rbdyn::Robot & robot) const;
 
 protected:
+  //! Configuration
+  Configuration config_; // \todo this must be removed
+
   //! Pointer to controller
   MultiContactController * ctlPtr_ = nullptr;
 

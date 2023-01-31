@@ -65,6 +65,9 @@ public:
     //! Whether to enable wrench distribution for touch down limb
     bool enableWrenchDistForTouchDownLimb = true;
 
+    //! Duration of weight transition [sec]
+    double weightTransitDuration = 0.1;
+
     //! Thresholds for touch down detection
     //! @{
     double touchDownRemainingDuration = 0.2; // [sec]
@@ -169,9 +172,8 @@ public:
 
   /** \brief Get contact weight at the specified time.
       \param t time
-      \param weightTransitDuration duration of weight transition [sec]
    */
-  double getContactWeight(double t, double weightTransitDuration = 0.1) const;
+  double getContactWeight(double t) const;
 
 protected:
   /** \brief Const accessor to the controller. */
