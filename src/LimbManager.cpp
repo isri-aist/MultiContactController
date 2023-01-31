@@ -87,8 +87,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     {
       constraintConfig.add("pose", targetPose_);
     }
-    currentContactCommand_ = std::make_shared<ContactCommand>(
-        ctl().t(), limbTask_->surfacePose(), ContactConstraint::makeSharedFromConfig(constraintConfig));
+    currentContactCommand_ =
+        std::make_shared<ContactCommand>(ctl().t(), ContactConstraint::makeSharedFromConfig(constraintConfig));
   }
   prevContactCommand_ = currentContactCommand_;
   contactCommandList_.emplace(ctl().t(), currentContactCommand_);

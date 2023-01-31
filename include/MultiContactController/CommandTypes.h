@@ -69,11 +69,10 @@ struct ContactCommand
 {
   /** \brief Constructor.
       \param _time time
-      \param _pose surface pose
       \param _constraint contact constraint
    */
-  ContactCommand(double _time, const sva::PTransformd & _pose, const std::shared_ptr<ContactConstraint> & _constraint)
-  : time(_time), pose(_pose), constraint(_constraint)
+  ContactCommand(double _time, const std::shared_ptr<ContactConstraint> & _constraint)
+  : time(_time), constraint(_constraint)
   {
     assert(constraint);
   }
@@ -85,9 +84,6 @@ struct ContactCommand
 
   //! Time
   double time;
-
-  //! Pose
-  sva::PTransformd pose;
 
   //! Contact constraint
   std::shared_ptr<ContactConstraint> constraint;

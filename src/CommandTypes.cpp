@@ -27,7 +27,6 @@ SwingCommand::SwingCommand(const mc_rtc::Configuration & mcRtcConfig)
 ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
 {
   time = mcRtcConfig("time");
-  pose = mcRtcConfig("pose");
   constraint = ContactConstraint::makeSharedFromConfig(mcRtcConfig("constraint"));
 }
 
@@ -126,10 +125,6 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
         // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
         mc_rtc::Configuration contactCommandConfig;
         contactCommandConfig.load(_contactCommandConfig);
-        if(!contactCommandConfig.has("pose"))
-        {
-          contactCommandConfig.add("pose", mcRtcConfig("pose"));
-        }
 
         mc_rtc::Configuration constraintConfig = contactCommandConfig("constraint");
         if(!constraintConfig.has("name"))
@@ -140,7 +135,7 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
         {
           constraintConfig.add("verticesName", mcRtcConfig("limb"));
         }
-        if(!constraintConfig.has("pose"))
+        if(!constraintConfig.has("pose") && mcRtcConfig.has("pose"))
         {
           constraintConfig.add("pose", mcRtcConfig("pose"));
         }
