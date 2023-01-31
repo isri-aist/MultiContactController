@@ -45,6 +45,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
   currentSwingCommand_.reset();
   prevSwingCommand_.reset();
 
+  gripperCommandList_.clear();
+
   targetPose_ = limbTask_->surfacePose();
   targetVel_ = sva::MotionVecd::Zero();
   targetAccel_ = sva::MotionVecd::Zero();
@@ -150,7 +152,7 @@ void LimbManager::update()
     swingCommandList_.erase(swingCommandList_.begin());
   }
 
-  if(!swingCommandList_.empty() && (swingCommandList_.begin()->second->startTime <= ctl().t()))
+  if(!swingCommandList_.empty() && (swingCommandList_.begin()->first <= ctl().t()))
   {
     if(currentSwingCommand_)
     {
@@ -244,6 +246,18 @@ void LimbManager::update()
     }
   }
 
+  // Send gripper command
+  if(!gripperCommandList_.empty() && (gripperCommandList_.begin()->first <= ctl().t()))
+  {
+    auto it = gripperCommandList_.begin();
+    const auto & gripperCommand = it->second;
+
+    ctl().robot().gripper(gripperCommand.name).configure(gripperCommand.config);
+
+    // Remove old gripper command
+    gripperCommandList_.erase(it);
+  }
+
   // Update currentContactCommand_ (this should be after setting swingTraj_)
   currentContactCommand_ = getContactCommand(ctl().t());
 
@@ -318,6 +332,7 @@ void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                  mc_rtc::gui::Label("surface", [this]() { return limbTask_->surface(); }),
                  mc_rtc::gui::Label("swingCommandListSize", [this]() { return swingCommandList_.size(); }),
                  mc_rtc::gui::Label("contactCommandListSize", [this]() { return contactCommandList_.size(); }),
+                 mc_rtc::gui::Label("gripperCommandListSize", [this]() { return gripperCommandList_.size(); }),
                  mc_rtc::gui::Label("phase", [this]() -> const std::string & { return phase_; }),
                  mc_rtc::gui::Label("impGainType", [this]() -> const std::string & { return impGainType_; }));
 }
@@ -333,6 +348,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
 
   logger.addLogEntry(name + "_swingCommandListSize", this, [this]() { return swingCommandList_.size(); });
   logger.addLogEntry(name + "_contactCommandListSize", this, [this]() { return contactCommandList_.size(); });
+  logger.addLogEntry(name + "_gripperCommandListSize", this, [this]() { return gripperCommandList_.size(); });
   MC_RTC_LOG_HELPER(name + "_phase", phase_);
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
@@ -346,21 +362,25 @@ void LimbManager::removeFromLogger(mc_rtc::Logger & logger)
 bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
 {
   // Check time of swing command
-  if(stepCommand.swingCommand->startTime < ctl().t())
+  if(stepCommand.swingCommand)
   {
-    mc_rtc::log::error("[LimbManager({})] Ignore a new step command with swing command with past time: {} < {}",
-                       std::to_string(limb_), stepCommand.swingCommand->startTime, ctl().t());
-    return false;
-  }
-  if(!swingCommandList_.empty())
-  {
-    const auto & lastSwingCommand = swingCommandList_.rbegin()->second;
-    if(stepCommand.swingCommand->startTime < lastSwingCommand->endTime)
+    double stepCommandStartTime = stepCommand.swingCommand->startTime;
+    if(stepCommandStartTime < ctl().t())
     {
-      mc_rtc::log::error(
-          "[LimbManager({})] Ignore a new step command with swing command earlier than the last swing command: {} < {}",
-          std::to_string(limb_), stepCommand.swingCommand->startTime, lastSwingCommand->endTime);
+      mc_rtc::log::error("[LimbManager({})] Ignore a new step command with swing command with past time: {} < {}",
+                         std::to_string(limb_), stepCommandStartTime, ctl().t());
       return false;
+    }
+    if(!swingCommandList_.empty())
+    {
+      const auto & lastSwingCommand = swingCommandList_.rbegin()->second;
+      if(stepCommandStartTime < lastSwingCommand->endTime)
+      {
+        mc_rtc::log::error("[LimbManager({})] Ignore a new step command with swing command earlier than the last swing "
+                           "command: {} < {}",
+                           std::to_string(limb_), stepCommandStartTime, lastSwingCommand->endTime);
+        return false;
+      }
     }
   }
 
@@ -387,11 +407,46 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
     }
   }
 
+  // Check time of gripper command
+  if(!stepCommand.gripperCommandList.empty())
+  {
+    double gripperCommandTime = stepCommand.gripperCommandList.begin()->first;
+    if(gripperCommandTime < ctl().t())
+    {
+      mc_rtc::log::error("[LimbManager({})] Ignore a new step command with gripper command with past time: {} < {}",
+                         std::to_string(limb_), gripperCommandTime, ctl().t());
+      return false;
+    }
+    if(!gripperCommandList_.empty())
+    {
+      const auto & lastGripperCommandTime = gripperCommandList_.rbegin()->first;
+      if(gripperCommandTime < lastGripperCommandTime)
+      {
+        mc_rtc::log::error("[LimbManager({})] Ignore a new step command with gripper command earlier than the last "
+                           "gripper command: {} < {}",
+                           std::to_string(limb_), gripperCommandTime, lastGripperCommandTime);
+        return false;
+      }
+    }
+  }
+
   // Append swing command
-  swingCommandList_.emplace(stepCommand.swingCommand->startTime, stepCommand.swingCommand);
+  if(stepCommand.swingCommand)
+  {
+    swingCommandList_.emplace(stepCommand.swingCommand->startTime, stepCommand.swingCommand);
+  }
 
   // Append contact command
-  contactCommandList_.insert(stepCommand.contactCommandList.begin(), stepCommand.contactCommandList.end());
+  if(!stepCommand.contactCommandList.empty())
+  {
+    contactCommandList_.insert(stepCommand.contactCommandList.begin(), stepCommand.contactCommandList.end());
+  }
+
+  // Append gripper command
+  if(!stepCommand.gripperCommandList.empty())
+  {
+    gripperCommandList_.insert(stepCommand.gripperCommandList.begin(), stepCommand.gripperCommandList.end());
+  }
 
   return true;
 }

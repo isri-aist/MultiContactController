@@ -89,6 +89,37 @@ struct ContactCommand
   std::shared_ptr<ContactConstraint> constraint;
 };
 
+/** \brief Gripper. */
+struct GripperCommand
+{
+  /** \brief Constructor.
+      \param _time time
+      \param _name gripper name
+      \param _config configuration for gripper command
+   */
+  GripperCommand(double _time, const std::string & _name, const mc_rtc::Configuration & _config)
+  : time(_time), name(_name), config(_config)
+  {
+  }
+
+  /** \brief Constructor.
+      \param mcRtcConfig mc_rtc configuration
+   */
+  GripperCommand(const mc_rtc::Configuration & mcRtcConfig)
+  : GripperCommand(mcRtcConfig("time"), mcRtcConfig("name"), mcRtcConfig("config"))
+  {
+  }
+
+  //! Time
+  double time;
+
+  //! Gripper name
+  std::string name;
+
+  //! Configuration for gripper command
+  mc_rtc::Configuration config;
+};
+
 /** \brief Command for a single contact step. */
 struct StepCommand
 {
@@ -112,5 +143,8 @@ struct StepCommand
 
   //! Contact command list
   std::map<double, std::shared_ptr<ContactCommand>> contactCommandList;
+
+  //! Gripper command list
+  std::map<double, GripperCommand> gripperCommandList;
 };
 } // namespace MCC

@@ -18,6 +18,10 @@ public:
   void teardown(mc_control::fsm::Controller & ctl) override;
 
 protected:
+  /** \brief Check whether state is completed. */
+  bool complete() const;
+
+protected:
   //! Phase
   int phase_ = 0;
 

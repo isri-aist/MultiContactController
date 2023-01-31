@@ -63,6 +63,15 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // Setup anchor frame
     ctl().centroidalManager_->setAnchorFrame();
 
+    // Send commands to gripper
+    if(config_.has("configs") && config_("configs").has("gripperCommands"))
+    {
+      for(const auto & gripperCommandConfig : config_("configs")("gripperCommands"))
+      {
+        ctl().robot().gripper(gripperCommandConfig("name")).configure(gripperCommandConfig);
+      }
+    }
+
     // Add GUI of managers
     ctl().limbManagerSet_->addToGUI(*ctl().gui()); // \todo
     ctl().centroidalManager_->addToGUI(*ctl().gui());
@@ -93,9 +102,35 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
   }
 
-  return (phase_ == 3 && !stiffnessRatioFunc_);
+  return complete();
 }
 
 void InitialState::teardown(mc_control::fsm::Controller &) {}
+
+bool InitialState::complete() const
+{
+  if(phase_ != 3)
+  {
+    return false;
+  }
+
+  if(stiffnessRatioFunc_)
+  {
+    return false;
+  }
+
+  if(config_.has("configs") && config_("configs").has("gripperCommands"))
+  {
+    for(const auto & gripperCommandConfig : config_("configs")("gripperCommands"))
+    {
+      if(!ctl().robot().gripper(gripperCommandConfig("name")).complete())
+      {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
 
 EXPORT_SINGLE_STATE("MCC::Initial", InitialState)

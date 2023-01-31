@@ -203,7 +203,7 @@ protected:
   //! Limb task
   std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> limbTask_;
 
-  //! Swing command list (map of start time and swing command)x
+  //! Swing command list (map of start time and swing command)
   std::map<double, std::shared_ptr<SwingCommand>> swingCommandList_;
 
   //! Current swing command
@@ -220,6 +220,9 @@ protected:
 
   //! Previous contact command
   std::shared_ptr<ContactCommand> prevContactCommand_ = nullptr;
+
+  //! Gripper command list (map of start time and gripper command)
+  std::map<double, GripperCommand> gripperCommandList_;
 
   //! Target limb pose represented in world frame
   sva::PTransformd targetPose_;

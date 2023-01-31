@@ -145,4 +145,13 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
       }
     }
   }
+
+  // Set GripperCommand
+  if(mcRtcConfig.has("gripperCommandList"))
+  {
+    for(const auto & gripperCommandConfig : mcRtcConfig("gripperCommandList"))
+    {
+      gripperCommandList.emplace(gripperCommandConfig("time"), GripperCommand(gripperCommandConfig));
+    }
+  }
 }
