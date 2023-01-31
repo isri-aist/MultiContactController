@@ -1,6 +1,6 @@
 #pragma once
 
-#include <deque>
+#include <map>
 #include <unordered_map>
 
 #include <mc_rtc/constants.h>
@@ -129,16 +129,16 @@ public:
   /** \brief Remove entries from the logger. */
   void removeFromLogger(mc_rtc::Logger & logger);
 
-  /** \brief Append a step command to the queue.
+  /** \brief Append a step command to the command list.
       \param stepCommand step command to append
       \return whether stepCommand is appended
   */
   bool appendStepCommand(const StepCommand & stepCommand);
 
-  /** \brief Access swing command queue. */
-  inline const std::deque<std::shared_ptr<SwingCommand>> & swingCommandQueue() const noexcept
+  /** \brief Access swing command list. */
+  inline const std::map<double, std::shared_ptr<SwingCommand>> & swingCommandList() const noexcept
   {
-    return swingCommandQueue_;
+    return swingCommandList_;
   }
 
   /** \brief Access contact command list. */
@@ -196,8 +196,8 @@ protected:
   //! Limb task
   std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> limbTask_;
 
-  //! Swing command queue (sorted by time)
-  std::deque<std::shared_ptr<SwingCommand>> swingCommandQueue_;
+  //! Swing command list (map of start time and swing command)x
+  std::map<double, std::shared_ptr<SwingCommand>> swingCommandList_;
 
   //! Current swing command
   std::shared_ptr<SwingCommand> currentSwingCommand_ = nullptr;
@@ -205,7 +205,7 @@ protected:
   //! Previous swing command pose
   std::shared_ptr<SwingCommand> prevSwingCommand_ = nullptr;
 
-  //! Map of start time and contact command
+  //! Contact command list (map of start time and contact command)
   std::map<double, std::shared_ptr<ContactCommand>> contactCommandList_;
 
   //! Current contact command

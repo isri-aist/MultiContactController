@@ -40,7 +40,7 @@ LimbManager::LimbManager(MultiContactController * ctlPtr, const Limb & limb, con
 
 void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 {
-  swingCommandQueue_.clear();
+  swingCommandList_.clear();
 
   currentSwingCommand_.reset();
   prevSwingCommand_.reset();
@@ -114,9 +114,9 @@ void LimbManager::update()
   }
 
   // Remove old swing command
-  while(!swingCommandQueue_.empty() && swingCommandQueue_.front()->endTime < ctl().t())
+  while(!swingCommandList_.empty() && swingCommandList_.begin()->second->endTime < ctl().t())
   {
-    const auto & completedSwingCommand = swingCommandQueue_.front();
+    const auto & completedSwingCommand = swingCommandList_.begin()->second;
 
     if(completedSwingCommand->type == SwingCommand::Type::Add)
     {
@@ -146,24 +146,21 @@ void LimbManager::update()
     // Clear currentSwingCommand_
     currentSwingCommand_.reset();
 
-    // Remove swing command from queue
-    swingCommandQueue_.pop_front();
+    // Remove old swing command
+    swingCommandList_.erase(swingCommandList_.begin());
   }
 
-  if(!swingCommandQueue_.empty() && (swingCommandQueue_.front()->startTime <= ctl().t()))
+  if(!swingCommandList_.empty() && (swingCommandList_.begin()->second->startTime <= ctl().t()))
   {
     if(currentSwingCommand_)
     {
       // Check if currentSwingCommand_ is consistent
-      if(currentSwingCommand_ != swingCommandQueue_.front())
-      {
-        mc_rtc::log::error_and_throw("[LimbManager({})] Swing command is not consistent.", std::to_string(limb_));
-      }
+      assert(currentSwingCommand_ == swingCommandList_.begin()->second);
     }
     else
     {
       // Set currentSwingCommand_
-      currentSwingCommand_ = swingCommandQueue_.front();
+      currentSwingCommand_ = swingCommandList_.begin()->second;
 
       // Enable hold mode to prevent IK target pose from jumping
       // https://github.com/jrl-umi3218/mc_rtc/pull/143
@@ -319,7 +316,7 @@ void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.addElement({ctl().name(), config_.name, std::to_string(limb_)},
                  mc_rtc::gui::Label("surface", [this]() { return limbTask_->surface(); }),
-                 mc_rtc::gui::Label("swingCommandQueueSize", [this]() { return swingCommandQueue_.size(); }),
+                 mc_rtc::gui::Label("swingCommandListSize", [this]() { return swingCommandList_.size(); }),
                  mc_rtc::gui::Label("contactCommandListSize", [this]() { return contactCommandList_.size(); }),
                  mc_rtc::gui::Label("phase", [this]() -> const std::string & { return phase_; }),
                  mc_rtc::gui::Label("impGainType", [this]() -> const std::string & { return impGainType_; }));
@@ -334,7 +331,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
 {
   std::string name = config_.name + "_" + std::to_string(limb_);
 
-  logger.addLogEntry(name + "_swingCommandQueueSize", this, [this]() { return swingCommandQueue_.size(); });
+  logger.addLogEntry(name + "_swingCommandListSize", this, [this]() { return swingCommandList_.size(); });
   logger.addLogEntry(name + "_contactCommandListSize", this, [this]() { return contactCommandList_.size(); });
   MC_RTC_LOG_HELPER(name + "_phase", phase_);
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
@@ -355,9 +352,9 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
                        std::to_string(limb_), stepCommand.swingCommand->startTime, ctl().t());
     return false;
   }
-  if(!swingCommandQueue_.empty())
+  if(!swingCommandList_.empty())
   {
-    const auto & lastSwingCommand = swingCommandQueue_.back();
+    const auto & lastSwingCommand = swingCommandList_.rbegin()->second;
     if(stepCommand.swingCommand->startTime < lastSwingCommand->endTime)
     {
       mc_rtc::log::error(
@@ -391,7 +388,7 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
   }
 
   // Append swing command
-  swingCommandQueue_.push_back(stepCommand.swingCommand);
+  swingCommandList_.emplace(stepCommand.swingCommand->startTime, stepCommand.swingCommand);
 
   // Append contact command
   contactCommandList_.insert(stepCommand.contactCommandList.begin(), stepCommand.contactCommandList.end());
