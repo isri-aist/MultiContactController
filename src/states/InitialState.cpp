@@ -47,6 +47,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     ctl().baseOriTask_->reset();
     ctl().solver().addTask(ctl().baseOriTask_);
     ctl().momentumTask_->reset();
+    ctl().momentumTask_->momentum(sva::ForceVecd::Zero());
     ctl().solver().addTask(ctl().momentumTask_);
     // limb tasks are added in LimbManager
 
