@@ -44,9 +44,11 @@ void CentroidalManager::Configuration::removeFromLogger(mc_rtc::Logger & logger)
   logger.removeLogEntries(this);
 }
 
-void CentroidalManager::ControlData::reset()
+void CentroidalManager::ControlData::reset(const MultiContactController * const ctlPtr)
 {
   *this = ControlData();
+  plannedCentroidalPose = sva::PTransformd(ctlPtr->baseOriTask_->orientation(), ctlPtr->comTask_->com());
+  plannedCentroidalVel = sva::MotionVecd(ctlPtr->baseOriTask_->refVel(), ctlPtr->comTask_->refVel());
 }
 
 void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
@@ -76,7 +78,7 @@ CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_r
 
 void CentroidalManager::reset()
 {
-  controlData_.reset();
+  controlData_.reset(ctlPtr_);
 
   robotMass_ = ctl().robot().mass();
 }
@@ -131,24 +133,23 @@ void CentroidalManager::update()
 
   // Set target pose of tasks
   {
-    sva::PTransformd nextPlannedCentroidalPose;
-    nextPlannedCentroidalPose.translation() =
+    controlData_.plannedCentroidalPose.translation() =
         controlData_.mpcCentroidalPose.translation() + ctl().dt() * controlData_.mpcCentroidalVel.linear()
         + 0.5 * std::pow(ctl().dt(), 2) * controlData_.plannedCentroidalAccel.linear();
     constexpr double so3IntegrationPrec = 1e-8;
-    nextPlannedCentroidalPose.rotation() =
+    controlData_.plannedCentroidalPose.rotation() =
         rbd::SO3Integration(Eigen::Quaterniond(controlData_.mpcCentroidalPose.rotation()),
                             controlData_.mpcCentroidalVel.angular(), controlData_.plannedCentroidalAccel.angular(),
                             ctl().dt(), so3IntegrationPrec, so3IntegrationPrec)
             .first.toRotationMatrix();
-    sva::MotionVecd nextPlannedCentroidalVel =
+    controlData_.plannedCentroidalVel =
         controlData_.mpcCentroidalVel + ctl().dt() * controlData_.plannedCentroidalAccel;
 
-    ctl().comTask_->com(nextPlannedCentroidalPose.translation());
-    ctl().comTask_->refVel(nextPlannedCentroidalVel.linear());
+    ctl().comTask_->com(controlData_.plannedCentroidalPose.translation());
+    ctl().comTask_->refVel(controlData_.plannedCentroidalVel.linear());
     ctl().comTask_->refAccel(controlData_.plannedCentroidalAccel.linear());
-    ctl().baseOriTask_->orientation(nextPlannedCentroidalPose.rotation());
-    ctl().baseOriTask_->refVel(nextPlannedCentroidalVel.angular());
+    ctl().baseOriTask_->orientation(controlData_.plannedCentroidalPose.rotation());
+    ctl().baseOriTask_->refVel(controlData_.plannedCentroidalVel.angular());
     ctl().baseOriTask_->refAccel(controlData_.plannedCentroidalAccel.angular());
     ctl().momentumTask_->momentum(controlData_.plannedCentroidalMomentum);
     ctl().momentumTask_->refVel(Eigen::Vector6d::Zero());

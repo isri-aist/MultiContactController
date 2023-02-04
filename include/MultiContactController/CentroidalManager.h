@@ -111,7 +111,7 @@ public:
     sva::ForceVecd controlCentroidalWrench = sva::ForceVecd::Zero();
 
     /** \brief Reset. */
-    void reset();
+    void reset(const MultiContactController * const ctlPtr);
 
     /** \brief Add entries to the logger. */
     virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);
@@ -181,7 +181,8 @@ protected:
 
   /** \brief Run MPC to plan centroidal trajectory.
 
-      This method calculates controlData_.planned* from controlData_.mpc*.
+      This method calculates controlData_.planned(CentroidalAccel|CentroidalMomentum|CentroidalWrench) from
+     controlData_.mpc(mpcCentroidalPose|mpcCentroidalVel|mpcCentroidalMomentum).
    */
   virtual void runMpc() = 0;
 

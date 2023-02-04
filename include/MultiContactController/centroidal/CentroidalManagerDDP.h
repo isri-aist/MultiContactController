@@ -66,7 +66,8 @@ protected:
 
   /** \brief Run MPC to plan centroidal trajectory.
 
-      This method calculates controlData_.planned* from controlData_.mpc*.
+      This method calculates controlData_.planned(CentroidalAccel|CentroidalMomentum|CentroidalWrench) from
+     controlData_.mpc(mpcCentroidalPose|mpcCentroidalVel|mpcCentroidalMomentum).
    */
   virtual void runMpc() override;
 
