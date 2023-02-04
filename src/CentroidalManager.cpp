@@ -261,7 +261,7 @@ sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robo
     }
     else
     {
-      pose = ctl().limbTasks_.at(limbManagerKV.first)->surfacePose(); // control robot pose (i.e., IK result)
+      pose = robot.surfacePose(ctl().limbTasks_.at(limbManagerKV.first)->surface()); // robot surface pose
     }
     weightPoseList.emplace_back(weight, pose);
   }
