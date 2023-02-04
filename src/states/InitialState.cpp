@@ -1,6 +1,7 @@
 #include <mc_rtc/gui/Button.h>
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
+#include <mc_tasks/MomentumTask.h>
 #include <mc_tasks/OrientationTask.h>
 
 #include <MultiContactController/CentroidalManager.h>
@@ -45,11 +46,14 @@ bool InitialState::run(mc_control::fsm::Controller &)
     ctl().solver().addTask(ctl().comTask_);
     ctl().baseOriTask_->reset();
     ctl().solver().addTask(ctl().baseOriTask_);
+    ctl().momentumTask_->reset();
+    ctl().solver().addTask(ctl().momentumTask_);
     // limb tasks are added in LimbManager
 
     // Setup task stiffness interpolation
     comTaskStiffness_ = ctl().comTask_->dimStiffness();
     baseOriTaskStiffness_ = ctl().baseOriTask_->dimStiffness();
+    momentumTaskStiffness_ = ctl().momentumTask_->dimStiffness();
     // limb tasks are added with reset (i.e., the current value is the target value), so we do not interpolate stiffness
     constexpr double stiffnessInterpDuration = 1.0; // [sec]
     stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
@@ -95,6 +99,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
       double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
       ctl().comTask_->stiffness(stiffnessRatio * comTaskStiffness_);
       ctl().baseOriTask_->stiffness(stiffnessRatio * baseOriTaskStiffness_);
+      ctl().momentumTask_->stiffness(stiffnessRatio * momentumTaskStiffness_);
     }
     else
     {

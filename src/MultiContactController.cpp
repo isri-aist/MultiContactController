@@ -3,6 +3,7 @@
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 #include <mc_tasks/MetaTaskLoader.h>
+#include <mc_tasks/MomentumTask.h>
 #include <mc_tasks/OrientationTask.h>
 
 #include <ForceColl/Contact.h>
@@ -41,6 +42,15 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   else
   {
     mc_rtc::log::warning("[MultiContactController] BaseOrientationTask configuration is missing.");
+  }
+  if(config().has("MomentumTask"))
+  {
+    momentumTask_ = mc_tasks::MetaTaskLoader::load<mc_tasks::MomentumTask>(solver(), config()("MomentumTask"));
+    momentumTask_->name("MomentumTask");
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] MomentumTask configuration is missing.");
   }
   if(config().has("LimbTaskList"))
   {
@@ -138,6 +148,7 @@ void MultiContactController::stop()
   // Clean up tasks
   solver().removeTask(comTask_);
   solver().removeTask(baseOriTask_);
+  solver().removeTask(momentumTask_);
   for(const auto & limbTaskKV : limbTasks_)
   {
     solver().removeTask(limbTaskKV.second);

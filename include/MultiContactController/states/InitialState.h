@@ -33,5 +33,8 @@ protected:
 
   //! Stiffness of base link orientation task
   Eigen::Vector3d baseOriTaskStiffness_ = Eigen::Vector3d::Zero();
+
+  //! Stiffness of momentum task
+  Eigen::Vector6d momentumTaskStiffness_ = Eigen::Vector6d::Zero();
 };
 } // namespace MCC

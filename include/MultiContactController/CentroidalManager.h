@@ -95,6 +95,15 @@ public:
     //! Planned centroidal acceleration
     sva::MotionVecd plannedCentroidalAccel = sva::MotionVecd::Zero();
 
+    //! Centroidal momentum used as the initial state of MPC
+    sva::ForceVecd mpcCentroidalMomentum = sva::ForceVecd::Zero();
+
+    //! Planned centroidal momentum
+    sva::ForceVecd plannedCentroidalMomentum = sva::ForceVecd::Zero();
+
+    //! Actual centroidal momentum
+    sva::ForceVecd actualCentroidalMomentum = sva::ForceVecd::Zero();
+
     //! Planned wrench
     sva::ForceVecd plannedWrench = sva::ForceVecd::Zero();
 

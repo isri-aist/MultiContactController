@@ -194,6 +194,11 @@ BaseOrientationTask:
   stiffness: 300.0
   weight: 500.0
 
+MomentumTask:
+  type: momentum
+  stiffness: 1.0
+  weight: 0.0
+
 LimbTaskList:
   - type: firstOrderImpedance
     limb: LeftFoot

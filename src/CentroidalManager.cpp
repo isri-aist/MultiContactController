@@ -1,5 +1,6 @@
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
+#include <mc_tasks/MomentumTask.h>
 #include <mc_tasks/OrientationTask.h>
 #include <RBDyn/NumericalIntegration.h>
 
@@ -56,6 +57,9 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalVel_mpc", mpcCentroidalVel);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalVel_planned", plannedCentroidalVel);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalVel_actual", actualCentroidalVel);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_mpc", mpcCentroidalMomentum);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_planned", plannedCentroidalMomentum);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_actual", actualCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_wrench_planned", plannedWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_wrench_control", controlWrench);
 }
@@ -86,11 +90,14 @@ void CentroidalManager::update()
     controlData_.actualCentroidalPose.rotation() = ctl().realRobot().bodyPosW(baseOriLinkName).rotation();
     controlData_.actualCentroidalVel.linear() = ctl().realRobot().comVelocity();
     controlData_.actualCentroidalVel.angular() = ctl().realRobot().bodyVelW(baseOriLinkName).angular();
+    controlData_.actualCentroidalMomentum =
+        rbd::computeCentroidalMomentum(ctl().realRobot().mb(), ctl().realRobot().mbc(), controlData_.actualCentroidalPose.translation());
   }
   if(config().useActualStateForMpc)
   {
     controlData_.mpcCentroidalPose = controlData_.actualCentroidalPose;
     controlData_.mpcCentroidalVel = controlData_.actualCentroidalVel;
+    controlData_.mpcCentroidalMomentum = controlData_.actualCentroidalMomentum;
   }
   else
   {
@@ -99,6 +106,7 @@ void CentroidalManager::update()
     controlData_.mpcCentroidalPose.rotation() = ctl().baseOriTask_->orientation();
     controlData_.mpcCentroidalVel.linear() = ctl().comTask_->refVel();
     controlData_.mpcCentroidalVel.angular() = ctl().baseOriTask_->refVel();
+    controlData_.mpcCentroidalMomentum = ctl().momentumTask_->momentum();
   }
 
   // Apply DCM feedback
@@ -142,6 +150,9 @@ void CentroidalManager::update()
     ctl().baseOriTask_->orientation(nextPlannedCentroidalPose.rotation());
     ctl().baseOriTask_->refVel(nextPlannedCentroidalVel.angular());
     ctl().baseOriTask_->refAccel(controlData_.plannedCentroidalAccel.angular());
+    ctl().momentumTask_->momentum(controlData_.plannedCentroidalMomentum); // \todo set next momentum
+    // ctl().momentumTask_->refVel(); // \todo
+    // ctl().momentumTask_->refAccel(); // \todo
   }
 
   // Set target wrench of limb tasks

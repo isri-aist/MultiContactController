@@ -8,6 +8,7 @@ namespace mc_tasks
 {
 struct CoMTask;
 struct OrientationTask;
+struct MomentumTask;
 
 namespace force
 {
@@ -72,6 +73,9 @@ public:
 
   //! Base link orientation task
   std::shared_ptr<mc_tasks::OrientationTask> baseOriTask_;
+
+  //! Momentum task
+  std::shared_ptr<mc_tasks::MomentumTask> momentumTask_;
 
   //! Limb tasks
   std::unordered_map<Limb, std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask>> limbTasks_;
