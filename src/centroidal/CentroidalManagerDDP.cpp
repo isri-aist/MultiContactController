@@ -1,5 +1,6 @@
 #include <functional>
 
+#include <CCC/Constants.h>
 #include <CCC/DdpCentroidal.h>
 
 #include <MultiContactController/LimbManagerSet.h>
@@ -86,18 +87,27 @@ void CentroidalManagerDDP::runMpc()
   Eigen::VectorXd plannedForceScales = ddp_->planOnce(
       std::bind(&CentroidalManagerDDP::calcMotionParam, this, std::placeholders::_1),
       std::bind(&CentroidalManagerDDP::calcRefData, this, std::placeholders::_1), initialParam, ctl().t());
-  // \todo set
-  // plannedCentroidalAccel;
-  // plannedCentroidalMomentum;
-  // plannedWrench;
+
+  const auto & motionParam = calcMotionParam(ctl().t());
+  Eigen::Vector6d totalWrench = motionParam.calcTotalWrench(plannedForceScales);
+  controlData_.plannedCentroidalWrench = sva::ForceVecd(totalWrench.tail<3>(), totalWrench.head<3>());
+  controlData_.plannedCentroidalMomentum = sva::ForceVecd(ddp_->ddp_solver_->controlData().x_list[1].segment<3>(6),
+                                                          ddp_->ddp_solver_->controlData().x_list[1].segment<3>(3));
+  controlData_.plannedCentroidalAccel.linear() =
+      controlData_.plannedCentroidalWrench.force() / robotMass_ - Eigen::Vector3d(0.0, 0.0, CCC::constants::g);
+  controlData_.plannedCentroidalAccel.angular().setZero(); // \todo
 }
 
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMotionParam(double t) const
 {
-  return CCC::DdpCentroidal::MotionParam();
+  CCC::DdpCentroidal::MotionParam motionParam;
+  motionParam.vertex_ridge_list; // \todo
+  return motionParam;
 }
 
 CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcRefData(double t) const
 {
-  return CCC::DdpCentroidal::RefData();
+  CCC::DdpCentroidal::RefData refData;
+  refData.pos; // \todo
+  return refData;
 }
