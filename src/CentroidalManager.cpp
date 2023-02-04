@@ -60,8 +60,8 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_mpc", mpcCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_planned", plannedCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_actual", actualCentroidalMomentum);
-  MC_RTC_LOG_HELPER(baseEntry + "_wrench_planned", plannedWrench);
-  MC_RTC_LOG_HELPER(baseEntry + "_wrench_control", controlWrench);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_planned", plannedCentroidalWrench);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_control", controlCentroidalWrench);
 }
 
 void CentroidalManager::ControlData::removeFromLogger(mc_rtc::Logger & logger)
@@ -109,7 +109,7 @@ void CentroidalManager::update()
     controlData_.mpcCentroidalMomentum = ctl().momentumTask_->momentum();
   }
 
-  // Apply DCM feedback
+  // Apply centroidal feedback
   if(config().enableCentroidalFeedback)
   {
     // sva::transformError(A, B) corresponds to (B - A).
@@ -117,7 +117,7 @@ void CentroidalManager::update()
         -1 * config().centroidalGainP
             * sva::transformError(controlData_.plannedCentroidalPose, controlData_.actualCentroidalPose)
         + -1 * config().centroidalGainD * (controlData_.actualCentroidalVel - controlData_.plannedCentroidalVel);
-    controlData_.controlWrench = controlData_.plannedWrench + deltaControlWrench;
+    controlData_.controlCentroidalWrench = controlData_.plannedCentroidalWrench + deltaControlWrench;
   }
 
   // Distribute control wrench
@@ -126,7 +126,7 @@ void CentroidalManager::update()
     wrenchDist_ = std::make_shared<ForceColl::WrenchDistribution<Limb>>(contactList_, config().wrenchDistConfig);
     Eigen::Vector3d comForWrenchDist =
         (config().useActualComForWrenchDist ? ctl().realRobot().com() : ctl().comTask_->com());
-    wrenchDist_->run(controlData_.controlWrench, comForWrenchDist);
+    wrenchDist_->run(controlData_.controlCentroidalWrench, comForWrenchDist);
   }
 
   // Set target pose of tasks
@@ -150,9 +150,9 @@ void CentroidalManager::update()
     ctl().baseOriTask_->orientation(nextPlannedCentroidalPose.rotation());
     ctl().baseOriTask_->refVel(nextPlannedCentroidalVel.angular());
     ctl().baseOriTask_->refAccel(controlData_.plannedCentroidalAccel.angular());
-    ctl().momentumTask_->momentum(controlData_.plannedCentroidalMomentum); // \todo set next momentum
-    // ctl().momentumTask_->refVel(); // \todo
-    // ctl().momentumTask_->refAccel(); // \todo
+    ctl().momentumTask_->momentum(controlData_.plannedCentroidalMomentum);
+    ctl().momentumTask_->refVel(Eigen::Vector6d::Zero());
+    ctl().momentumTask_->refAccel(Eigen::Vector6d::Zero());
   }
 
   // Set target wrench of limb tasks

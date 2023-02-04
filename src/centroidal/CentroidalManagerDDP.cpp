@@ -87,8 +87,6 @@ void CentroidalManagerDDP::runMpc()
       std::bind(&CentroidalManagerDDP::calcMotionParam, this, std::placeholders::_1),
       std::bind(&CentroidalManagerDDP::calcRefData, this, std::placeholders::_1), initialParam, ctl().t());
   // \todo set
-  // plannedCentroidalPose;
-  // plannedCentroidalVel;
   // plannedCentroidalAccel;
   // plannedCentroidalMomentum;
   // plannedWrench;

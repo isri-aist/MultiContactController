@@ -104,11 +104,11 @@ public:
     //! Actual centroidal momentum
     sva::ForceVecd actualCentroidalMomentum = sva::ForceVecd::Zero();
 
-    //! Planned wrench
-    sva::ForceVecd plannedWrench = sva::ForceVecd::Zero();
+    //! Planned centroidal wrench
+    sva::ForceVecd plannedCentroidalWrench = sva::ForceVecd::Zero();
 
-    //! Control wrench
-    sva::ForceVecd controlWrench = sva::ForceVecd::Zero();
+    //! Control centroidal wrench
+    sva::ForceVecd controlCentroidalWrench = sva::ForceVecd::Zero();
 
     /** \brief Reset. */
     void reset();
