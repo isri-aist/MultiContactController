@@ -90,8 +90,8 @@ void CentroidalManager::update()
     controlData_.actualCentroidalPose.rotation() = ctl().realRobot().bodyPosW(baseOriLinkName).rotation();
     controlData_.actualCentroidalVel.linear() = ctl().realRobot().comVelocity();
     controlData_.actualCentroidalVel.angular() = ctl().realRobot().bodyVelW(baseOriLinkName).angular();
-    controlData_.actualCentroidalMomentum =
-        rbd::computeCentroidalMomentum(ctl().realRobot().mb(), ctl().realRobot().mbc(), controlData_.actualCentroidalPose.translation());
+    controlData_.actualCentroidalMomentum = rbd::computeCentroidalMomentum(
+        ctl().realRobot().mb(), ctl().realRobot().mbc(), controlData_.actualCentroidalPose.translation());
   }
   if(config().useActualStateForMpc)
   {

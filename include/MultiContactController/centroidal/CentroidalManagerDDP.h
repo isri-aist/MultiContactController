@@ -10,7 +10,7 @@ namespace MCC
 
     Centroidal manager calculates the target of robot centroidal state through trajectory planning and feedback control.
  */
-class CentroidalManagerDdpCentroidal : public CentroidalManager
+class CentroidalManagerDDP : public CentroidalManager
 {
 public:
   /** \brief Configuration. */
@@ -40,7 +40,7 @@ public:
       \param ctlPtr pointer to controller
       \param mcRtcConfig mc_rtc configuration
    */
-  CentroidalManagerDdpCentroidal(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
+  CentroidalManagerDDP(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
 
   /** \brief Reset.
 

@@ -10,7 +10,7 @@ add_library(${CONTROLLER_NAME} SHARED
   LimbManagerSet.cpp
   CentroidalManager.cpp
   swing/SwingTrajCubicSplineSimple.cpp
-  centroidal/CentroidalManagerDdpCentroidal.cpp
+  centroidal/CentroidalManagerDDP.cpp
   )
 target_link_libraries(${CONTROLLER_NAME} PUBLIC mc_rtc::mc_control_fsm mc_rtc::mc_rtc_ros)
 

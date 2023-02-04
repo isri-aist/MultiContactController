@@ -12,7 +12,7 @@
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
-#include <MultiContactController/centroidal/CentroidalManagerDdpCentroidal.h>
+#include <MultiContactController/centroidal/CentroidalManagerDDP.h>
 #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
 using namespace MCC;
@@ -79,9 +79,9 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   if(config().has("CentroidalManager"))
   {
     std::string centroidalManagerMethod = config()("CentroidalManager")("method", std::string(""));
-    if(centroidalManagerMethod == "DdpCentroidal")
+    if(centroidalManagerMethod == "DDP")
     {
-      centroidalManager_ = std::make_shared<CentroidalManagerDdpCentroidal>(this, config()("CentroidalManager"));
+      centroidalManager_ = std::make_shared<CentroidalManagerDDP>(this, config()("CentroidalManager"));
     }
     else
     {

@@ -4,11 +4,11 @@
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
-#include <MultiContactController/centroidal/CentroidalManagerDdpCentroidal.h>
+#include <MultiContactController/centroidal/CentroidalManagerDDP.h>
 
 using namespace MCC;
 
-void CentroidalManagerDdpCentroidal::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
+void CentroidalManagerDDP::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
 {
   CentroidalManager::Configuration::load(mcRtcConfig);
 
@@ -27,7 +27,7 @@ void CentroidalManagerDdpCentroidal::Configuration::load(const mc_rtc::Configura
   }
 }
 
-void CentroidalManagerDdpCentroidal::Configuration::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
+void CentroidalManagerDDP::Configuration::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
 {
   CentroidalManager::Configuration::addToLogger(baseEntry, logger);
 
@@ -36,14 +36,13 @@ void CentroidalManagerDdpCentroidal::Configuration::addToLogger(const std::strin
   MC_RTC_LOG_HELPER(baseEntry + "_ddpMaxIter", ddpMaxIter);
 }
 
-CentroidalManagerDdpCentroidal::CentroidalManagerDdpCentroidal(MultiContactController * ctlPtr,
-                                                               const mc_rtc::Configuration & mcRtcConfig)
+CentroidalManagerDDP::CentroidalManagerDDP(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
 : CentroidalManager(ctlPtr, mcRtcConfig)
 {
   config_.load(mcRtcConfig);
 }
 
-void CentroidalManagerDdpCentroidal::reset()
+void CentroidalManagerDDP::reset()
 {
   CentroidalManager::reset();
 
@@ -53,7 +52,7 @@ void CentroidalManagerDdpCentroidal::reset()
   ddp_->ddp_solver_->config().max_iter = config_.ddpMaxIter;
 }
 
-void CentroidalManagerDdpCentroidal::addToLogger(mc_rtc::Logger & logger)
+void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)
 {
   CentroidalManager::addToLogger(logger);
 
@@ -64,7 +63,7 @@ void CentroidalManagerDdpCentroidal::addToLogger(mc_rtc::Logger & logger)
   });
 }
 
-void CentroidalManagerDdpCentroidal::runMpc()
+void CentroidalManagerDDP::runMpc()
 {
   CCC::DdpCentroidal::InitialParam initialParam;
   initialParam.pos = controlData_.mpcCentroidalPose.translation();
@@ -85,8 +84,8 @@ void CentroidalManagerDdpCentroidal::runMpc()
   }
 
   Eigen::VectorXd plannedForceScales = ddp_->planOnce(
-      std::bind(&CentroidalManagerDdpCentroidal::calcMotionParam, this, std::placeholders::_1),
-      std::bind(&CentroidalManagerDdpCentroidal::calcRefData, this, std::placeholders::_1), initialParam, ctl().t());
+      std::bind(&CentroidalManagerDDP::calcMotionParam, this, std::placeholders::_1),
+      std::bind(&CentroidalManagerDDP::calcRefData, this, std::placeholders::_1), initialParam, ctl().t());
   // \todo set
   // plannedCentroidalPose;
   // plannedCentroidalVel;
@@ -95,12 +94,12 @@ void CentroidalManagerDdpCentroidal::runMpc()
   // plannedWrench;
 }
 
-CCC::DdpCentroidal::MotionParam CentroidalManagerDdpCentroidal::calcMotionParam(double t) const
+CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMotionParam(double t) const
 {
   return CCC::DdpCentroidal::MotionParam();
 }
 
-CCC::DdpCentroidal::RefData CentroidalManagerDdpCentroidal::calcRefData(double t) const
+CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcRefData(double t) const
 {
   return CCC::DdpCentroidal::RefData();
 }

@@ -300,8 +300,8 @@ CentroidalManager:
     regularWeight: 1e-8
     ridgeForceMinMax: [3, 1000] # [N]
 
-  # DdpCentroidal
-  method: DdpCentroidal
+  # DDP
+  method: DDP
   horizonDuration: 2.0 # [sec]
   horizonDt: 0.005 # [sec]
 
