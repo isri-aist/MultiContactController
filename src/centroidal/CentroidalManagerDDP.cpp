@@ -142,6 +142,11 @@ CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcRefData(double t) const
     std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
     for(const auto & limbManagerKV : *ctl().limbManagerSet_)
     {
+      if(limbManagerKV.first.group != Limb::Group::Foot)
+      {
+        // \todo add option
+        continue;
+      }
       double weight = limbManagerKV.second->getContactWeight(t);
       if(weight < std::numeric_limits<double>::min())
       {
