@@ -172,6 +172,12 @@ void CentroidalManager::update()
       ctl().limbTasks_.at(limbManagerKV.first)->targetWrenchW(targetWrench);
     }
   }
+
+  // Update force visualization
+  {
+    ctl().gui()->removeCategory({ctl().name(), config().name, "ForceMarker"});
+    wrenchDist_->addToGUI(*ctl().gui(), {ctl().name(), config().name, "ForceMarker"});
+  }
 }
 
 void CentroidalManager::stop()
