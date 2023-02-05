@@ -111,6 +111,9 @@ void CentroidalManager::update()
     controlData_.mpcCentroidalMomentum = ctl().momentumTask_->momentum();
   }
 
+  // Run MPC
+  runMpc();
+
   // Apply centroidal feedback
   if(config().enableCentroidalFeedback)
   {

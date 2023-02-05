@@ -1,7 +1,10 @@
 #include <functional>
+#include <limits>
 
 #include <CCC/Constants.h>
 #include <CCC/DdpCentroidal.h>
+
+#include <ForceColl/Contact.h>
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
@@ -101,13 +104,56 @@ void CentroidalManagerDDP::runMpc()
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMotionParam(double t) const
 {
   CCC::DdpCentroidal::MotionParam motionParam;
-  motionParam.vertex_ridge_list; // \todo
+
+  const auto & contactList = ctl().limbManagerSet_->contactList(t);
+  {
+    int colNum = 0;
+    for(const auto & contactKV : contactList)
+    {
+      colNum += static_cast<int>(contactKV.second->graspMat_.cols());
+    }
+    motionParam.vertex_ridge_list.resize(6, colNum);
+  }
+  {
+    int colIdx = 0;
+    for(const auto & contactKV : contactList)
+    {
+      for(const auto & vertexWithRidge : contactKV.second->vertexWithRidgeList_)
+      {
+        motionParam.vertex_ridge_list.topRows<3>().middleCols(colIdx, vertexWithRidge.ridgeList.size()).colwise() =
+            vertexWithRidge.vertex;
+        for(const auto & ridge : vertexWithRidge.ridgeList)
+        {
+          motionParam.vertex_ridge_list.bottomRows<3>().col(colIdx) = ridge;
+          colIdx++;
+        }
+      }
+    }
+  }
+
   return motionParam;
 }
 
 CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcRefData(double t) const
 {
+  Eigen::Vector3d meanPos = Eigen::Vector3d::Zero();
+  {
+    double totalWeight = 0;
+    std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
+    for(const auto & limbManagerKV : *ctl().limbManagerSet_)
+    {
+      double weight = limbManagerKV.second->getContactWeight(t);
+      if(weight < std::numeric_limits<double>::min())
+      {
+        continue;
+      }
+      meanPos += weight * limbManagerKV.second->getLimbPose(t).translation();
+      totalWeight += weight;
+    }
+    meanPos /= totalWeight;
+  }
+
   CCC::DdpCentroidal::RefData refData;
-  refData.pos; // \todo
+  refData.pos = meanPos + Eigen::Vector3d(0, 0, 0.7); // \todo
   return refData;
 }

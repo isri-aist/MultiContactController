@@ -486,6 +486,7 @@ std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
   else
   {
     it--;
+    // \todo need to check if the contact is current one
     if(config_.enableWrenchDistForTouchDownLimb && touchDown_ && !it->second && std::next(it)->second)
     {
       return std::next(it)->second;

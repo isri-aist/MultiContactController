@@ -302,8 +302,8 @@ CentroidalManager:
 
   # DDP
   method: DDP
-  horizonDuration: 2.0 # [sec]
-  horizonDt: 0.005 # [sec]
+  horizonDuration: 3.0 # [sec]
+  horizonDt: 0.03 # [sec]
 
 Contacts:
   Surface:
