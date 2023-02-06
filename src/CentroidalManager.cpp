@@ -17,11 +17,28 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
 {
   mcRtcConfig("name", name);
   mcRtcConfig("method", method);
+  mcRtcConfig("nominalCentroidalPose", nominalCentroidalPose);
+  if(mcRtcConfig.has("limbWeightListForRefData"))
+  {
+    limbWeightListForRefData.clear();
+    for(const auto & limbWeightKV : static_cast<std::map<std::string, double>>(mcRtcConfig("limbWeightListForRefData")))
+    {
+      limbWeightListForRefData.emplace(Limb(limbWeightKV.first), limbWeightKV.second);
+    }
+  }
+  if(mcRtcConfig.has("limbWeightListForAnchorFrame"))
+  {
+    limbWeightListForAnchorFrame.clear();
+    for(const auto & limbWeightKV :
+        static_cast<std::map<std::string, double>>(mcRtcConfig("limbWeightListForAnchorFrame")))
+    {
+      limbWeightListForAnchorFrame.emplace(Limb(limbWeightKV.first), limbWeightKV.second);
+    }
+  }
   mcRtcConfig("centroidalGainP", centroidalGainP);
   mcRtcConfig("centroidalGainD", centroidalGainD);
   mcRtcConfig("useActualStateForMpc", useActualStateForMpc);
   mcRtcConfig("enableCentroidalFeedback", enableCentroidalFeedback);
-  mcRtcConfig("useOnlyFootForAnchorFrame", useOnlyFootForAnchorFrame);
   mcRtcConfig("useTargetPoseForControlRobotAnchorFrame", useTargetPoseForControlRobotAnchorFrame);
   mcRtcConfig("useActualComForWrenchDist", useActualComForWrenchDist);
   mcRtcConfig("wrenchDistConfig", wrenchDistConfig);
@@ -30,11 +47,11 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
 void CentroidalManager::Configuration::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
 {
   MC_RTC_LOG_HELPER(baseEntry + "_method", method);
+  MC_RTC_LOG_HELPER(baseEntry + "_nominalCentroidalPose", nominalCentroidalPose);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainP", centroidalGainP);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainD", centroidalGainD);
   MC_RTC_LOG_HELPER(baseEntry + "_useActualStateForMpc", useActualStateForMpc);
   MC_RTC_LOG_HELPER(baseEntry + "_enableCentroidalFeedback", enableCentroidalFeedback);
-  MC_RTC_LOG_HELPER(baseEntry + "_useOnlyFootForAnchorFrame", useOnlyFootForAnchorFrame);
   MC_RTC_LOG_HELPER(baseEntry + "_useTargetPoseForControlRobotAnchorFrame", useTargetPoseForControlRobotAnchorFrame);
   MC_RTC_LOG_HELPER(baseEntry + "_useActualComForWrenchDist", useActualComForWrenchDist);
 }
@@ -223,9 +240,6 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
           "enableCentroidalFeedback", [this]() { return config().enableCentroidalFeedback; },
           [this]() { config().enableCentroidalFeedback = !config().enableCentroidalFeedback; }),
       mc_rtc::gui::Checkbox(
-          "useOnlyFootForAnchorFrame", [this]() { return config().useOnlyFootForAnchorFrame; },
-          [this]() { config().useOnlyFootForAnchorFrame = !config().useOnlyFootForAnchorFrame; }),
-      mc_rtc::gui::Checkbox(
           "useTargetPoseForControlRobotAnchorFrame",
           [this]() { return config().useTargetPoseForControlRobotAnchorFrame; },
           [this]() {
@@ -273,29 +287,31 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
 {
   RefData refData;
 
-  Eigen::Vector3d meanPos = Eigen::Vector3d::Zero();
+  // Set list of weight and limb pose
+  std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
+  for(const auto & limbManagerKV : *ctl().limbManagerSet_)
   {
-    double totalWeight = 0;
-    std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
-    for(const auto & limbManagerKV : *ctl().limbManagerSet_)
+    if(config().limbWeightListForRefData.count(limbManagerKV.first) == 0)
     {
-      if(limbManagerKV.first.group != Limb::Group::Foot)
-      {
-        // \todo add option
-        continue;
-      }
-      double weight = limbManagerKV.second->getContactWeight(t);
-      if(weight < std::numeric_limits<double>::min())
-      {
-        continue;
-      }
-      meanPos += weight * limbManagerKV.second->getLimbPose(t).translation();
-      totalWeight += weight;
+      continue;
     }
-    meanPos /= totalWeight;
+
+    double weight =
+        config().limbWeightListForRefData.at(limbManagerKV.first) * limbManagerKV.second->getContactWeight(t);
+    if(weight < std::numeric_limits<double>::min())
+    {
+      continue;
+    }
+
+    weightPoseList.emplace_back(weight, limbManagerKV.second->getLimbPose(t));
   }
 
-  refData.centroidalPose.translation() = meanPos + Eigen::Vector3d(0, 0, 0.7); // \todo
+  // Calculate weighted average
+  if(weightPoseList.size() == 0)
+  {
+    mc_rtc::log::error_and_throw("[CentroidalManager] weightPoseList is empty in calcRefData.");
+  }
+  refData.centroidalPose = config().nominalCentroidalPose * calcWeightedAveragePose(weightPoseList);
 
   return refData;
 }
@@ -308,12 +324,18 @@ sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robo
   std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
   for(const auto & limbManagerKV : *ctl().limbManagerSet_)
   {
-    if(config().useOnlyFootForAnchorFrame && limbManagerKV.first.group != Limb::Group::Foot)
+    if(config().limbWeightListForAnchorFrame.count(limbManagerKV.first) == 0)
     {
       continue;
     }
 
-    double weight = limbManagerKV.second->getContactWeight(ctl().t());
+    double weight = config().limbWeightListForAnchorFrame.at(limbManagerKV.first)
+                    * limbManagerKV.second->getContactWeight(ctl().t());
+    if(weight < std::numeric_limits<double>::min())
+    {
+      continue;
+    }
+
     sva::PTransformd pose;
     if(config().useTargetPoseForControlRobotAnchorFrame && isControlRobot)
     {
@@ -329,7 +351,7 @@ sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robo
   // Calculate weighted average
   if(weightPoseList.size() == 0)
   {
-    return sva::PTransformd::Identity();
+    return robot.posW();
   }
   return calcWeightedAveragePose(weightPoseList);
 }

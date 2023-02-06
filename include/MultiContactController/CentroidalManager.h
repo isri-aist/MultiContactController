@@ -37,6 +37,15 @@ public:
     //! Method
     std::string method = "";
 
+    //! Nominal centroidal pose
+    sva::PTransformd nominalCentroidalPose = sva::PTransformd(Eigen::Vector3d(0.0, 0.0, 1.0));
+
+    //! Limb weight list to calculate reference data
+    std::unordered_map<Limb, double> limbWeightListForRefData = {{Limb("LeftFoot"), 1.0}, {Limb("RightFoot"), 1.0}};
+
+    //! Limb weight list to calculate anchor frame
+    std::unordered_map<Limb, double> limbWeightListForAnchorFrame = {{Limb("LeftFoot"), 1.0}, {Limb("RightFoot"), 1.0}};
+
     //! Feedback gain of centroidal pose
     sva::ImpedanceVecd centroidalGainP = sva::ImpedanceVecd::Zero();
 
@@ -48,9 +57,6 @@ public:
 
     //! Whether to enable centroidal feedback
     bool enableCentroidalFeedback = true;
-
-    //! Whether to only use foot surfaces to calculate anchor frame
-    bool useOnlyFootForAnchorFrame = true;
 
     //! Whether to use target surface pose for anchor frame of control robot
     bool useTargetPoseForControlRobotAnchorFrame = true;
