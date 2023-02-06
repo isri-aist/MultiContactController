@@ -135,6 +135,15 @@ public:
     //! Actual centroidal wrench
     sva::ForceVecd actualCentroidalWrench = sva::ForceVecd::Zero();
 
+    // Planned ZMP (calculated from all limb wrench)
+    Eigen::Vector3d plannedZmp = Eigen::Vector3d::Zero();
+
+    // Control ZMP (calculated from all limb wrench)
+    Eigen::Vector3d controlZmp = Eigen::Vector3d::Zero();
+
+    // Actual ZMP (calculated from all limb wrench)
+    Eigen::Vector3d actualZmp = Eigen::Vector3d::Zero();
+
     /** \brief Reset. */
     void reset(const MultiContactController * const ctlPtr);
 

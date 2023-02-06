@@ -82,6 +82,9 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_planned", plannedCentroidalWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_control", controlCentroidalWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_actual", actualCentroidalWrench);
+  MC_RTC_LOG_HELPER(baseEntry + "_zmp_planned", plannedZmp);
+  MC_RTC_LOG_HELPER(baseEntry + "_zmp_control", controlZmp);
+  MC_RTC_LOG_HELPER(baseEntry + "_zmp_actual", actualZmp);
 }
 
 void CentroidalManager::ControlData::removeFromLogger(mc_rtc::Logger & logger)
@@ -213,6 +216,24 @@ void CentroidalManager::update()
       }
       ctl().limbTasks_.at(limbManagerKV.first)->targetWrenchW(targetWrench);
     }
+  }
+
+  // Calculate ZMP
+  {
+    Eigen::Vector3d zmpPlaneOrigin = calcAnchorFrame(ctl().robot()).translation();
+    Eigen::Vector3d zmpPlaneNormal = Eigen::Vector3d::UnitZ();
+    auto calcZmp = [&](const sva::ForceVecd & wrench) -> Eigen::Vector3d {
+      Eigen::Vector3d zmp = zmpPlaneOrigin;
+      if(wrench.force().z() > 0)
+      {
+        Eigen::Vector3d momentInZmpPlane = wrench.moment() - zmpPlaneOrigin.cross(wrench.force());
+        zmp += zmpPlaneNormal.cross(momentInZmpPlane) / wrench.force().z();
+      }
+      return zmp;
+    };
+    controlData_.plannedZmp = calcZmp(controlData_.plannedCentroidalWrench);
+    controlData_.controlZmp = calcZmp(controlData_.controlCentroidalWrench);
+    controlData_.actualZmp = calcZmp(controlData_.actualCentroidalWrench);
   }
 
   // Update force visualization
