@@ -60,6 +60,8 @@ void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)
 {
   CentroidalManager::addToLogger(logger);
 
+  logger.addLogEntry(config_.name + "_ControlData_CoM_ref", this, [this]() { return calcRefData(ctl().t()).pos; });
+
   logger.addLogEntry(config_.name + "_DDP_computationDuration", this,
                      [this]() { return ddp_->ddp_solver_->computationDuration().solve; });
   logger.addLogEntry(config_.name + "_DDP_iter", this, [this]() {
