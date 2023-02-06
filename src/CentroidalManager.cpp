@@ -311,7 +311,7 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
   {
     mc_rtc::log::error_and_throw("[CentroidalManager] weightPoseList is empty in calcRefData.");
   }
-  refData.centroidalPose = config().nominalCentroidalPose * calcWeightedAveragePose(weightPoseList);
+  refData.centroidalPose = config().nominalCentroidalPose * projGround(calcWeightedAveragePose(weightPoseList), false);
 
   return refData;
 }

@@ -1,9 +1,11 @@
 #pragma once
 
-#include <SpaceVecAlg/SpaceVecAlg>
+#include <BaselineWalkingController/MathUtils.h>
 
 namespace MCC
 {
+using BWC::projGround;
+
 /** \brief Calculate weighted average of poses.
     \param weightPoseList list of weight and pose
  */
