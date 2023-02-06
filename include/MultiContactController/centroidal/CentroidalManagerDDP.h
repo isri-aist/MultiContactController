@@ -71,11 +71,15 @@ protected:
    */
   virtual void runMpc() override;
 
-  /** \brief Calculate motion parameter of MPC. */
-  CCC::DdpCentroidal::MotionParam calcMotionParam(double t) const;
+  /** \brief Calculate motion parameter of MPC.
+      \param t time
+   */
+  CCC::DdpCentroidal::MotionParam calcMpcMotionParam(double t) const;
 
-  /** \brief Calculate reference data of MPC. */
-  CCC::DdpCentroidal::RefData calcRefData(double t) const;
+  /** \brief Calculate reference data of MPC.
+      \param t time
+   */
+  CCC::DdpCentroidal::RefData calcMpcRefData(double t) const;
 
 protected:
   //! Configuration

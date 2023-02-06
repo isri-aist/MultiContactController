@@ -71,6 +71,21 @@ void CentroidalManager::ControlData::removeFromLogger(mc_rtc::Logger & logger)
   logger.removeLogEntries(this);
 }
 
+void CentroidalManager::RefData::reset()
+{
+  *this = RefData();
+}
+
+void CentroidalManager::RefData::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
+{
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalPose_ref", centroidalPose);
+}
+
+void CentroidalManager::RefData::removeFromLogger(mc_rtc::Logger & logger)
+{
+  logger.removeLogEntries(this);
+}
+
 CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
 : ctlPtr_(ctlPtr)
 {
@@ -78,6 +93,7 @@ CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_r
 
 void CentroidalManager::reset()
 {
+  refData_.reset();
   controlData_.reset(ctlPtr_);
 
   robotMass_ = ctl().robot().mass();
@@ -85,7 +101,8 @@ void CentroidalManager::reset()
 
 void CentroidalManager::update()
 {
-  // Set control data
+  // Set data
+  refData_ = calcRefData(ctl().t());
   {
     const auto & baseOriLinkName = ctl().baseOriTask_->frame_->body();
     controlData_.actualCentroidalPose.translation() = ctl().realRobot().com();
@@ -227,7 +244,8 @@ void CentroidalManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
 void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
 {
   config().addToLogger(config().name + "_Config", logger);
-  controlData_.addToLogger(config().name + "_ControlData", logger);
+  refData_.addToLogger(config().name + "_Data", logger);
+  controlData_.addToLogger(config().name + "_Data", logger);
 
   // \todo ZMP, support region
 }
@@ -235,6 +253,7 @@ void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
 void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)
 {
   config().removeFromLogger(logger);
+  refData_.removeFromLogger(logger);
   controlData_.removeFromLogger(logger);
 
   logger.removeLogEntries(this);
@@ -248,6 +267,37 @@ void CentroidalManager::setAnchorFrame()
     ctl().datastore().remove(anchorName);
   }
   ctl().datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) { return calcAnchorFrame(robot); });
+}
+
+CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
+{
+  RefData refData;
+
+  Eigen::Vector3d meanPos = Eigen::Vector3d::Zero();
+  {
+    double totalWeight = 0;
+    std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
+    for(const auto & limbManagerKV : *ctl().limbManagerSet_)
+    {
+      if(limbManagerKV.first.group != Limb::Group::Foot)
+      {
+        // \todo add option
+        continue;
+      }
+      double weight = limbManagerKV.second->getContactWeight(t);
+      if(weight < std::numeric_limits<double>::min())
+      {
+        continue;
+      }
+      meanPos += weight * limbManagerKV.second->getLimbPose(t).translation();
+      totalWeight += weight;
+    }
+    meanPos /= totalWeight;
+  }
+
+  refData.centroidalPose.translation() = meanPos + Eigen::Vector3d(0, 0, 0.7); // \todo
+
+  return refData;
 }
 
 sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robot) const

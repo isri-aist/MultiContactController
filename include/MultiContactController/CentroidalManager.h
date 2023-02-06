@@ -71,6 +71,22 @@ public:
     virtual void removeFromLogger(mc_rtc::Logger & logger);
   };
 
+  /** \brief Reference data. */
+  struct RefData
+  {
+    //! Centroidal pose
+    sva::PTransformd centroidalPose = sva::PTransformd::Identity();
+
+    /** \brief Reset. */
+    void reset();
+
+    /** \brief Add entries to the logger. */
+    virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);
+
+    /** \brief Remove entries from the logger. */
+    virtual void removeFromLogger(mc_rtc::Logger & logger);
+  };
+
   /** \brief Control data. */
   struct ControlData
   {
@@ -186,6 +202,11 @@ protected:
    */
   virtual void runMpc() = 0;
 
+  /** \brief Calculate reference data.
+      \param t time
+   */
+  RefData calcRefData(double t) const;
+
   /** \brief Calculate anchor frame.
       \param robot robot
    */
@@ -194,6 +215,9 @@ protected:
 protected:
   //! Pointer to controller
   MultiContactController * ctlPtr_ = nullptr;
+
+  //! Reference data
+  RefData refData_;
 
   //! Control data
   ControlData controlData_;

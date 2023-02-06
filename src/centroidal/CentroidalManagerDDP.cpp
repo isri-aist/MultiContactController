@@ -65,8 +65,6 @@ void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)
 {
   CentroidalManager::addToLogger(logger);
 
-  logger.addLogEntry(config_.name + "_ControlData_CoM_ref", this, [this]() { return calcRefData(ctl().t()).pos; });
-
   logger.addLogEntry(config_.name + "_DDP_computationDuration", this,
                      [this]() { return ddp_->ddp_solver_->computationDuration().solve; });
   logger.addLogEntry(config_.name + "_DDP_iter", this, [this]() {
@@ -95,10 +93,10 @@ void CentroidalManagerDDP::runMpc()
   }
 
   Eigen::VectorXd plannedForceScales = ddp_->planOnce(
-      std::bind(&CentroidalManagerDDP::calcMotionParam, this, std::placeholders::_1),
-      std::bind(&CentroidalManagerDDP::calcRefData, this, std::placeholders::_1), initialParam, ctl().t());
+      std::bind(&CentroidalManagerDDP::calcMpcMotionParam, this, std::placeholders::_1),
+      std::bind(&CentroidalManagerDDP::calcMpcRefData, this, std::placeholders::_1), initialParam, ctl().t());
 
-  const auto & motionParam = calcMotionParam(ctl().t());
+  const auto & motionParam = calcMpcMotionParam(ctl().t());
   Eigen::Vector3d comForWrenchDist =
       (config_.useActualComForWrenchDist ? ctl().realRobot().com() : ctl().comTask_->com());
   Eigen::Vector6d totalWrench = motionParam.calcTotalWrench(plannedForceScales, comForWrenchDist);
@@ -110,7 +108,7 @@ void CentroidalManagerDDP::runMpc()
   controlData_.plannedCentroidalAccel.angular().setZero(); // \todo
 }
 
-CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMotionParam(double t) const
+CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const
 {
   CCC::DdpCentroidal::MotionParam motionParam;
 
@@ -143,31 +141,9 @@ CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMotionParam(double t) 
   return motionParam;
 }
 
-CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcRefData(double t) const
+CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcMpcRefData(double t) const
 {
-  Eigen::Vector3d meanPos = Eigen::Vector3d::Zero();
-  {
-    double totalWeight = 0;
-    std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
-    for(const auto & limbManagerKV : *ctl().limbManagerSet_)
-    {
-      if(limbManagerKV.first.group != Limb::Group::Foot)
-      {
-        // \todo add option
-        continue;
-      }
-      double weight = limbManagerKV.second->getContactWeight(t);
-      if(weight < std::numeric_limits<double>::min())
-      {
-        continue;
-      }
-      meanPos += weight * limbManagerKV.second->getLimbPose(t).translation();
-      totalWeight += weight;
-    }
-    meanPos /= totalWeight;
-  }
-
   CCC::DdpCentroidal::RefData refData;
-  refData.pos = meanPos + Eigen::Vector3d(0, 0, 0.7); // \todo
+  refData.pos = calcRefData(t).centroidalPose.translation();
   return refData;
 }
