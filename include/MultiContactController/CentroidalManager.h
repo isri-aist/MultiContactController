@@ -62,7 +62,7 @@ public:
     bool useTargetPoseForControlRobotAnchorFrame = true;
 
     //! Whether to use actual CoM for wrench distribution
-    bool useActualComForWrenchDist = true;
+    bool useActualComForWrenchDist = false;
 
     //! Configuration for wrench distribution
     mc_rtc::Configuration wrenchDistConfig;
