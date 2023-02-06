@@ -115,6 +115,7 @@ void CentroidalManager::update()
   runMpc();
 
   // Apply centroidal feedback
+  controlData_.controlCentroidalWrench = controlData_.plannedCentroidalWrench;
   if(config().enableCentroidalFeedback)
   {
     // sva::transformError(A, B) corresponds to (B - A).
@@ -122,7 +123,7 @@ void CentroidalManager::update()
         -1 * config().centroidalGainP
             * sva::transformError(controlData_.plannedCentroidalPose, controlData_.actualCentroidalPose)
         + -1 * config().centroidalGainD * (controlData_.actualCentroidalVel - controlData_.plannedCentroidalVel);
-    controlData_.controlCentroidalWrench = controlData_.plannedCentroidalWrench + deltaControlWrench;
+    controlData_.controlCentroidalWrench += deltaControlWrench;
   }
 
   // Distribute control wrench

@@ -19,15 +19,15 @@ void CentroidalManagerDDP::Configuration::load(const mc_rtc::Configuration & mcR
   mcRtcConfig("horizonDuration", horizonDuration);
   mcRtcConfig("horizonDt", horizonDt);
   mcRtcConfig("ddpMaxIter", ddpMaxIter);
-  if(mcRtcConfig.has("weightParam"))
+  if(mcRtcConfig.has("mpcWeightParam"))
   {
-    mcRtcConfig("weightParam")("running_pos", weightParam.running_pos);
-    mcRtcConfig("weightParam")("running_linear_momentum", weightParam.running_linear_momentum);
-    mcRtcConfig("weightParam")("running_angular_momentum", weightParam.running_angular_momentum);
-    mcRtcConfig("weightParam")("running_force", weightParam.running_force);
-    mcRtcConfig("weightParam")("terminal_pos", weightParam.terminal_pos);
-    mcRtcConfig("weightParam")("terminal_linear_momentum", weightParam.terminal_linear_momentum);
-    mcRtcConfig("weightParam")("terminal_angular_momentum", weightParam.terminal_angular_momentum);
+    mcRtcConfig("mpcWeightParam")("runningPos", mpcWeightParam.running_pos);
+    mcRtcConfig("mpcWeightParam")("runningLinearMomentum", mpcWeightParam.running_linear_momentum);
+    mcRtcConfig("mpcWeightParam")("runningAngularMomentum", mpcWeightParam.running_angular_momentum);
+    mcRtcConfig("mpcWeightParam")("runningForce", mpcWeightParam.running_force);
+    mcRtcConfig("mpcWeightParam")("terminalPos", mpcWeightParam.terminal_pos);
+    mcRtcConfig("mpcWeightParam")("terminalLinearMomentum", mpcWeightParam.terminal_linear_momentum);
+    mcRtcConfig("mpcWeightParam")("terminalAngularMomentum", mpcWeightParam.terminal_angular_momentum);
   }
 }
 
@@ -52,8 +52,11 @@ void CentroidalManagerDDP::reset()
 
   ddp_ = std::make_shared<CCC::DdpCentroidal>(robotMass_, config_.horizonDt,
                                               static_cast<int>(std::floor(config_.horizonDuration / config_.horizonDt)),
-                                              config_.weightParam);
+                                              config_.mpcWeightParam);
   ddp_->ddp_solver_->config().max_iter = config_.ddpMaxIter;
+  ddp_->ddp_solver_->config().initial_lambda = 1e-6;
+  ddp_->ddp_solver_->config().lambda_min = 1e-8;
+  ddp_->ddp_solver_->config().lambda_thre = 1e-7;
 }
 
 void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)

@@ -283,14 +283,15 @@ LimbManagerSet:
 
 CentroidalManager:
   name: CentroidalManager
+  centroidalGainP:
+    linear: [0, 0, 0]
+    angular: [0, 0, 0]
+  centroidalGainD:
+    linear: [0, 0, 0]
+    angular: [0, 0, 0]
   useActualStateForMpc: false
-  enableZmpFeedback: true
-  enableComZFeedback: true
-  dcmGainP: 2.0 # It must be greater than 1 to be stable
-  zmpVelGain: 0.02
-  comZGainP: 2000.0
-  comZGainD: 500.0
-  refComZ: 0.825 # [m]
+  enableCentroidalFeedback: false
+  useOnlyFootForAnchorFrame: true
   useTargetPoseForControlRobotAnchorFrame: true
   useActualComForWrenchDist: false
   wrenchDistConfig:
@@ -302,8 +303,17 @@ CentroidalManager:
 
   # DDP
   method: DDP
-  horizonDuration: 3.0 # [sec]
-  horizonDt: 0.03 # [sec]
+  horizonDuration: 2.0 # [sec]
+  horizonDt: 0.05 # [sec]
+  ddpMaxIter: 1
+  mpcWeightParam:
+    runningPos: [10.0, 10.0, 10.0]
+    runningLinearMomentum: [1e-6, 1e-6, 1e-6]
+    runningAngularMomentum: [1e-3, 1e-3, 1e-3]
+    runningForce: 5e-6
+    terminalPos: [10.0, 10.0, 10.0]
+    terminalLinearMomentum: [1e-6, 1e-6, 1e-6]
+    terminalAngularMomentum: [1e-3, 1e-3, 1e-3]
 
 Contacts:
   Surface:

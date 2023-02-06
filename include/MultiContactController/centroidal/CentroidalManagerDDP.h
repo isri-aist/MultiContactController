@@ -25,8 +25,8 @@ public:
     //! DDP maximum iteration
     int ddpMaxIter = 1;
 
-    //! Weight parameter
-    CCC::DdpCentroidal::WeightParam weightParam;
+    //! MPC objective function weight parameter
+    CCC::DdpCentroidal::WeightParam mpcWeightParam;
 
     /** \brief Load mc_rtc configuration. */
     virtual void load(const mc_rtc::Configuration & mcRtcConfig) override;
