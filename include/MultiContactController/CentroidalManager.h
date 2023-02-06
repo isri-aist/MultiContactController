@@ -132,6 +132,9 @@ public:
     //! Control centroidal wrench
     sva::ForceVecd controlCentroidalWrench = sva::ForceVecd::Zero();
 
+    //! Actual centroidal wrench
+    sva::ForceVecd actualCentroidalWrench = sva::ForceVecd::Zero();
+
     /** \brief Reset. */
     void reset(const MultiContactController * const ctlPtr);
 

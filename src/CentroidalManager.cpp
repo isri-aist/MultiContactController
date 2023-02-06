@@ -81,6 +81,7 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_actual", actualCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_planned", plannedCentroidalWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_control", controlCentroidalWrench);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_actual", actualCentroidalWrench);
 }
 
 void CentroidalManager::ControlData::removeFromLogger(mc_rtc::Logger & logger)
@@ -128,6 +129,12 @@ void CentroidalManager::update()
     controlData_.actualCentroidalVel.angular() = ctl().realRobot().bodyVelW(baseOriLinkName).angular();
     controlData_.actualCentroidalMomentum = rbd::computeCentroidalMomentum(
         ctl().realRobot().mb(), ctl().realRobot().mbc(), controlData_.actualCentroidalPose.translation());
+    controlData_.actualCentroidalWrench = sva::ForceVecd::Zero();
+    for(const auto & limbTaskKV : ctl().limbTasks_)
+    {
+      controlData_.actualCentroidalWrench +=
+          ctl().realRobot().surfacePose(limbTaskKV.second->surface()).transMul(limbTaskKV.second->measuredWrench());
+    }
   }
   if(config().useActualStateForMpc)
   {
