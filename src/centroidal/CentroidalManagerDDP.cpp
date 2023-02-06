@@ -4,6 +4,8 @@
 #include <CCC/Constants.h>
 #include <CCC/DdpCentroidal.h>
 
+#include <mc_tasks/CoMTask.h>
+
 #include <ForceColl/Contact.h>
 
 #include <MultiContactController/LimbManagerSet.h>
@@ -97,7 +99,9 @@ void CentroidalManagerDDP::runMpc()
       std::bind(&CentroidalManagerDDP::calcRefData, this, std::placeholders::_1), initialParam, ctl().t());
 
   const auto & motionParam = calcMotionParam(ctl().t());
-  Eigen::Vector6d totalWrench = motionParam.calcTotalWrench(plannedForceScales);
+  Eigen::Vector3d comForWrenchDist =
+      (config_.useActualComForWrenchDist ? ctl().realRobot().com() : ctl().comTask_->com());
+  Eigen::Vector6d totalWrench = motionParam.calcTotalWrench(plannedForceScales, comForWrenchDist);
   controlData_.plannedCentroidalWrench = sva::ForceVecd(totalWrench.tail<3>(), totalWrench.head<3>());
   controlData_.plannedCentroidalMomentum = sva::ForceVecd(ddp_->ddp_solver_->controlData().x_list[1].segment<3>(6),
                                                           ddp_->ddp_solver_->controlData().x_list[1].segment<3>(3));
