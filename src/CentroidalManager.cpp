@@ -85,6 +85,14 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_planned", plannedZmp);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_control", controlZmp);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_actual", actualZmp);
+  logger.addLogEntry(baseEntry + "_surfaceRegion_min", this,
+                     [this]() -> const Eigen::Vector2d & { return surfaceRegionMinMax[0]; });
+  logger.addLogEntry(baseEntry + "_surfaceRegion_max", this,
+                     [this]() -> const Eigen::Vector2d & { return surfaceRegionMinMax[1]; });
+  logger.addLogEntry(baseEntry + "_contactRegion_min", this,
+                     [this]() -> const Eigen::Vector2d & { return contactRegionMinMax[0]; });
+  logger.addLogEntry(baseEntry + "_contactRegion_max", this,
+                     [this]() -> const Eigen::Vector2d & { return contactRegionMinMax[1]; });
 }
 
 void CentroidalManager::ControlData::removeFromLogger(mc_rtc::Logger & logger)
@@ -218,7 +226,7 @@ void CentroidalManager::update()
     }
   }
 
-  // Calculate ZMP
+  // Calculate ZMP and support region
   {
     Eigen::Vector3d zmpPlaneOrigin = calcAnchorFrame(ctl().robot()).translation();
     Eigen::Vector3d zmpPlaneNormal = Eigen::Vector3d::UnitZ();
@@ -234,6 +242,9 @@ void CentroidalManager::update()
     controlData_.plannedZmp = calcZmp(controlData_.plannedCentroidalWrench);
     controlData_.controlZmp = calcZmp(controlData_.controlCentroidalWrench);
     controlData_.actualZmp = calcZmp(controlData_.actualCentroidalWrench);
+
+    controlData_.surfaceRegionMinMax = calcSupportRegionMinMax(true);
+    controlData_.contactRegionMinMax = calcSupportRegionMinMax(false);
   }
 
   // Update force visualization
@@ -288,8 +299,6 @@ void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
   config().addToLogger(config().name + "_Config", logger);
   refData_.addToLogger(config().name + "_Data", logger);
   controlData_.addToLogger(config().name + "_Data", logger);
-
-  // \todo ZMP, support region
 }
 
 void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)
@@ -342,6 +351,41 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
   refData.centroidalPose = config().nominalCentroidalPose * projGround(calcWeightedAveragePose(weightPoseList), false);
 
   return refData;
+}
+
+std::array<Eigen::Vector2d, 2> CentroidalManager::calcSupportRegionMinMax(bool useSurfaceVertices) const
+{
+  if(contactList_.empty())
+  {
+    Eigen::Vector2d pos = ctl().robot().posW().translation().head<2>();
+    return {pos, pos};
+  }
+
+  Eigen::Vector2d minPos = Eigen::Vector2d::Constant(std::numeric_limits<double>::max());
+  Eigen::Vector2d maxPos = Eigen::Vector2d::Constant(std::numeric_limits<double>::lowest());
+  for(const auto & contactKV : contactList_)
+  {
+    if(useSurfaceVertices)
+    {
+      const auto & surface = ctl().robot().surface(ctl().limbTasks_.at(contactKV.first)->surface());
+      for(const auto & pos : calcSurfaceVertexList(surface, ctl().limbTasks_.at(contactKV.first)->targetPose()))
+      {
+        minPos = minPos.cwiseMin(pos.head<2>());
+        maxPos = maxPos.cwiseMax(pos.head<2>());
+      }
+    }
+    else
+    {
+      for(const auto & vertexWithRidge : contactKV.second->vertexWithRidgeList_)
+      {
+        const Eigen::Vector2d & pos = vertexWithRidge.vertex.head<2>();
+        minPos = minPos.cwiseMin(pos);
+        maxPos = maxPos.cwiseMax(pos);
+      }
+    }
+  }
+
+  return {minPos, maxPos};
 }
 
 sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robot) const

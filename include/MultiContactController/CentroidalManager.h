@@ -135,14 +135,20 @@ public:
     //! Actual centroidal wrench
     sva::ForceVecd actualCentroidalWrench = sva::ForceVecd::Zero();
 
-    // Planned ZMP (calculated from all limb wrench)
+    //! Planned ZMP (calculated from all limb wrench)
     Eigen::Vector3d plannedZmp = Eigen::Vector3d::Zero();
 
-    // Control ZMP (calculated from all limb wrench)
+    //! Control ZMP (calculated from all limb wrench)
     Eigen::Vector3d controlZmp = Eigen::Vector3d::Zero();
 
-    // Actual ZMP (calculated from all limb wrench)
+    //! Actual ZMP (calculated from all limb wrench)
     Eigen::Vector3d actualZmp = Eigen::Vector3d::Zero();
+
+    //! Min/max points of surface region
+    std::array<Eigen::Vector2d, 2> surfaceRegionMinMax = {Eigen::Vector2d::Zero(), Eigen::Vector2d::Zero()};
+
+    //! Min/max points of contact region
+    std::array<Eigen::Vector2d, 2> contactRegionMinMax = {Eigen::Vector2d::Zero(), Eigen::Vector2d::Zero()};
 
     /** \brief Reset. */
     void reset(const MultiContactController * const ctlPtr);
@@ -224,6 +230,11 @@ protected:
       \param t time
    */
   RefData calcRefData(double t) const;
+
+  /** \brief Calculate min/max points of support region.
+      \param useSurfacePoints true to use surface vertices, false to use contact vertices
+   */
+  std::array<Eigen::Vector2d, 2> calcSupportRegionMinMax(bool useSurfacePoints) const;
 
   /** \brief Calculate anchor frame.
       \param robot robot
