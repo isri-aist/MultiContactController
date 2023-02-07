@@ -647,18 +647,32 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
-      Enabled: false
+      Enabled: true
       Links:
         All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
+        HandleLeftHand1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         Link Tree Style: Links in Alphabetic Order
+        Root:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        StepRightFoot1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: EnvironmentModel
       Robot Description: control/env_1/robot_description
-      TF Prefix: /control/env_1
+      TF Prefix: control/env_1
       Update Interval: 0
-      Value: false
+      Value: true
       Visual Enabled: true
     - Class: rviz/InteractiveMarkers
       Enable Transparency: true
