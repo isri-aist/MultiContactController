@@ -319,6 +319,33 @@ void LimbManager::update()
 
     limbTask_->gains() = config_.impGains.at(impGainType_);
   }
+
+  // Update contact visualization
+  {
+    ctl().gui()->removeCategory({ctl().name(), config_.name, std::to_string(limb_), "ContactMarker"});
+
+    int contactIdx = 0;
+    for(const auto & contactCommandKV : contactCommandList_)
+    {
+      if(!contactCommandKV.second)
+      {
+        continue;
+      }
+      // Skip current contact as it is visualized in CentroidalManager
+      if(contactCommandKV.second == currentContactCommand_)
+      {
+        continue;
+      }
+
+      contactCommandKV.second->constraint->addToGUI(
+          *ctl().gui(),
+          {ctl().name(), config_.name, std::to_string(limb_), "ContactMarker",
+           contactCommandKV.second->constraint->name_ + "_" + std::to_string(contactIdx)},
+          0.0, 0.0);
+
+      contactIdx++;
+    }
+  }
 }
 
 void LimbManager::stop()
