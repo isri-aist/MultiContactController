@@ -1,0 +1,35 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: radian
+name: SampleField
+rootLink: Root
+links:
+  -
+    name: Root
+    jointType: fixed
+  -
+    name: StepRightFoot1
+    parent: Root
+    jointType: fixed
+    material: Field
+    translation: [ 0.9, -0.15, 0.05 ]
+    rotation: [ 1, 0, 0, -0.3490658503988659 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0, 0, -0.01 ]
+        geometry: { type: Box, size: [ 0.2, 0.2, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: HandleLeftHand1
+    parent: Root
+    jointType: fixed
+    material: Field
+    translation: [ 0.9, 0.5, 0.9 ]
+    rotation: [ 1, 0, 0, -2.356194490192345 ]
+    elements:
+      -
+        type: Shape
+        rotation: [ 0, 0, 1, 1.5707963267948966 ]
+        geometry: { type: Cylinder, radius: 0.015, height: 0.2 }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
