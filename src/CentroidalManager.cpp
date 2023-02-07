@@ -81,9 +81,11 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_actual", actualCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_planned", plannedCentroidalWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_control", controlCentroidalWrench);
+  MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_projectedControl", projectedControlCentroidalWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_actual", actualCentroidalWrench);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_planned", plannedZmp);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_control", controlZmp);
+  MC_RTC_LOG_HELPER(baseEntry + "_zmp_projectedControl", projectedControlZmp);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_actual", actualZmp);
   logger.addLogEntry(baseEntry + "_surfaceRegion_min", this,
                      [this]() -> const Eigen::Vector2d & { return surfaceRegionMinMax[0]; });
@@ -186,6 +188,7 @@ void CentroidalManager::update()
     Eigen::Vector3d comForWrenchDist =
         (config().useActualComForWrenchDist ? controlData_.actualCentroidalPose.translation() : ctl().comTask_->com());
     wrenchDist_->run(controlData_.controlCentroidalWrench, comForWrenchDist);
+    controlData_.projectedControlCentroidalWrench = wrenchDist_->resultTotalWrench_;
   }
 
   // Set target pose of tasks
@@ -244,6 +247,8 @@ void CentroidalManager::update()
         calcZmp(controlData_.plannedCentroidalWrench, controlData_.mpcCentroidalPose.translation());
     controlData_.controlZmp =
         calcZmp(controlData_.controlCentroidalWrench, controlData_.mpcCentroidalPose.translation());
+    controlData_.projectedControlZmp =
+        calcZmp(controlData_.projectedControlCentroidalWrench, controlData_.mpcCentroidalPose.translation());
     controlData_.actualZmp =
         calcZmp(controlData_.actualCentroidalWrench, controlData_.actualCentroidalPose.translation());
 

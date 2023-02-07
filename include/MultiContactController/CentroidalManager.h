@@ -132,6 +132,9 @@ public:
     //! Control centroidal wrench (moment origin is CoM)
     sva::ForceVecd controlCentroidalWrench = sva::ForceVecd::Zero();
 
+    //! Projected control centroidal wrench (moment origin is CoM)
+    sva::ForceVecd projectedControlCentroidalWrench = sva::ForceVecd::Zero();
+
     //! Actual centroidal wrench (moment origin is CoM)
     sva::ForceVecd actualCentroidalWrench = sva::ForceVecd::Zero();
 
@@ -140,6 +143,9 @@ public:
 
     //! Control ZMP (calculated from all limb wrench)
     Eigen::Vector3d controlZmp = Eigen::Vector3d::Zero();
+
+    //! Projected control ZMP (calculated from all limb wrench)
+    Eigen::Vector3d projectedControlZmp = Eigen::Vector3d::Zero();
 
     //! Actual ZMP (calculated from all limb wrench)
     Eigen::Vector3d actualZmp = Eigen::Vector3d::Zero();
