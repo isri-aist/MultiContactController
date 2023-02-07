@@ -1,0 +1,21 @@
+materials:
+  -
+    name: Default
+    roughness: 1.0
+  -
+    name: Floor
+    roughness: 1.0
+  -
+    name: Field
+    roughness: 1.0
+
+contactMaterials:
+  -
+    materials: [ Default, Default ]
+    friction: 0.5
+  -
+    materials: [ Default, Floor ]
+    friction: 0.5
+  -
+    materials: [ Field, Floor ]
+    friction: 0.5
