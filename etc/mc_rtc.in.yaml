@@ -2,5 +2,6 @@ MainRobot: JVRC1
 
 Enabled: MultiContactController
 ControllerModulePaths: ["@CATKIN_DEVEL_PREFIX@/lib/mc_controller/"]
+RobotModulePaths: ["@PROJECT_SOURCE_DIR@/description"]
 
 Timestep: 0.005

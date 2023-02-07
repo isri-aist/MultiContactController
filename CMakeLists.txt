@@ -59,6 +59,8 @@ install(FILES ${CONFIG_OUT} DESTINATION ${MC_RTC_LIBDIR}/mc_controller/etc/)
 
 add_subdirectory(src)
 
+add_subdirectory(description)
+
 if(ENABLE_CNOID)
   add_subdirectory(cnoid)
 endif()
