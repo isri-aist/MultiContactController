@@ -364,10 +364,10 @@ CentroidalManager:
     LeftFoot: 1.0
     RightFoot: 1.0
   centroidalGainP:
-    linear: [1500, 1500, 10000]
+    linear: [1000, 1000, 10000]
     angular: [750, 750, 750]
   centroidalGainD:
-    linear: [300, 300, 300]
+    linear: [200, 200, 200]
     angular: [150, 150, 150]
   useActualStateForMpc: false
   enableCentroidalFeedback: true
@@ -398,9 +398,9 @@ CentroidalManager:
 Contacts:
   Surface:
     - name: LeftFoot
-      vertices: [[-0.08, -0.05, 0.0], [-0.08, 0.05, 0.0], [0.08, 0.05, 0.0], [0.08, -0.05, 0.0]]
+      vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
     - name: RightFoot
-      vertices: [[-0.08, -0.05, 0.0], [-0.08, 0.05, 0.0], [0.08, 0.05, 0.0], [0.08, -0.05, 0.0]]
+      vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
     - name: LeftHand
       vertices: [[0, 0, 0]]
     - name: RightHand
