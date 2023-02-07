@@ -97,9 +97,8 @@ void CentroidalManagerDDP::runMpc()
       std::bind(&CentroidalManagerDDP::calcMpcRefData, this, std::placeholders::_1), initialParam, ctl().t());
 
   const auto & motionParam = calcMpcMotionParam(ctl().t());
-  Eigen::Vector3d comForWrenchDist =
-      (config_.useActualComForWrenchDist ? ctl().realRobot().com() : ctl().comTask_->com());
-  Eigen::Vector6d totalWrench = motionParam.calcTotalWrench(plannedForceScales, comForWrenchDist);
+  Eigen::Vector6d totalWrench =
+      motionParam.calcTotalWrench(plannedForceScales, controlData_.mpcCentroidalPose.translation());
   controlData_.plannedCentroidalWrench = sva::ForceVecd(totalWrench.tail<3>(), totalWrench.head<3>());
   controlData_.plannedCentroidalMomentum = sva::ForceVecd(ddp_->ddp_solver_->controlData().x_list[1].segment<3>(6),
                                                           ddp_->ddp_solver_->controlData().x_list[1].segment<3>(3));

@@ -126,13 +126,13 @@ public:
     //! Actual centroidal momentum
     sva::ForceVecd actualCentroidalMomentum = sva::ForceVecd::Zero();
 
-    //! Planned centroidal wrench
+    //! Planned centroidal wrench (moment origin is CoM)
     sva::ForceVecd plannedCentroidalWrench = sva::ForceVecd::Zero();
 
-    //! Control centroidal wrench
+    //! Control centroidal wrench (moment origin is CoM)
     sva::ForceVecd controlCentroidalWrench = sva::ForceVecd::Zero();
 
-    //! Actual centroidal wrench
+    //! Actual centroidal wrench (moment origin is CoM)
     sva::ForceVecd actualCentroidalWrench = sva::ForceVecd::Zero();
 
     //! Planned ZMP (calculated from all limb wrench)

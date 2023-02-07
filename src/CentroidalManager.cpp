@@ -143,8 +143,9 @@ void CentroidalManager::update()
     controlData_.actualCentroidalWrench = sva::ForceVecd::Zero();
     for(const auto & limbTaskKV : ctl().limbTasks_)
     {
-      controlData_.actualCentroidalWrench +=
-          ctl().realRobot().surfacePose(limbTaskKV.second->surface()).transMul(limbTaskKV.second->measuredWrench());
+      sva::PTransformd surfacePoseFromCom = ctl().realRobot().surfacePose(limbTaskKV.second->surface())
+                                            * sva::PTransformd(controlData_.actualCentroidalPose.translation()).inv();
+      controlData_.actualCentroidalWrench += surfacePoseFromCom.transMul(limbTaskKV.second->measuredWrench());
     }
   }
   if(config().useActualStateForMpc)
@@ -183,7 +184,7 @@ void CentroidalManager::update()
     contactList_ = ctl().limbManagerSet_->contactList(ctl().t());
     wrenchDist_ = std::make_shared<ForceColl::WrenchDistribution<Limb>>(contactList_, config().wrenchDistConfig);
     Eigen::Vector3d comForWrenchDist =
-        (config().useActualComForWrenchDist ? ctl().realRobot().com() : ctl().comTask_->com());
+        (config().useActualComForWrenchDist ? controlData_.actualCentroidalPose.translation() : ctl().comTask_->com());
     wrenchDist_->run(controlData_.controlCentroidalWrench, comForWrenchDist);
   }
 
@@ -230,18 +231,21 @@ void CentroidalManager::update()
   {
     Eigen::Vector3d zmpPlaneOrigin = calcAnchorFrame(ctl().robot()).translation();
     Eigen::Vector3d zmpPlaneNormal = Eigen::Vector3d::UnitZ();
-    auto calcZmp = [&](const sva::ForceVecd & wrench) -> Eigen::Vector3d {
+    auto calcZmp = [&](const sva::ForceVecd & wrench, const Eigen::Vector3d & momentOrigin) -> Eigen::Vector3d {
       Eigen::Vector3d zmp = zmpPlaneOrigin;
       if(wrench.force().z() > 0)
       {
-        Eigen::Vector3d momentInZmpPlane = wrench.moment() - zmpPlaneOrigin.cross(wrench.force());
-        zmp += zmpPlaneNormal.cross(momentInZmpPlane) / wrench.force().z();
+        Eigen::Vector3d momentAroundZmpPlane = wrench.moment() + (momentOrigin - zmpPlaneOrigin).cross(wrench.force());
+        zmp += zmpPlaneNormal.cross(momentAroundZmpPlane) / wrench.force().z();
       }
       return zmp;
     };
-    controlData_.plannedZmp = calcZmp(controlData_.plannedCentroidalWrench);
-    controlData_.controlZmp = calcZmp(controlData_.controlCentroidalWrench);
-    controlData_.actualZmp = calcZmp(controlData_.actualCentroidalWrench);
+    controlData_.plannedZmp =
+        calcZmp(controlData_.plannedCentroidalWrench, controlData_.mpcCentroidalPose.translation());
+    controlData_.controlZmp =
+        calcZmp(controlData_.controlCentroidalWrench, controlData_.mpcCentroidalPose.translation());
+    controlData_.actualZmp =
+        calcZmp(controlData_.actualCentroidalWrench, controlData_.actualCentroidalPose.translation());
 
     controlData_.surfaceRegionMinMax = calcSupportRegionMinMax(true);
     controlData_.contactRegionMinMax = calcSupportRegionMinMax(false);
