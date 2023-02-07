@@ -9,6 +9,8 @@ set(PROJECT_DESCRIPTION "")
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_USE_CMAKE_EXPORT TRUE)
 set(CXX_DISABLE_WERROR ON)
+
+option(ENABLE_CNOID "Install Choreonoid files" ON)
 option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
 
 include(cmake/base.cmake)
@@ -56,6 +58,10 @@ configure_file(etc/MultiContactController.in.yaml "${CONFIG_OUT}" @ONLY)
 install(FILES ${CONFIG_OUT} DESTINATION ${MC_RTC_LIBDIR}/mc_controller/etc/)
 
 add_subdirectory(src)
+
+if(ENABLE_CNOID)
+  add_subdirectory(cnoid)
+endif()
 
 if(BUILD_TESTING OR CATKIN_ENABLE_TESTING)
   add_subdirectory(tests)
