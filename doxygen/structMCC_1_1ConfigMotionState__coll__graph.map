@@ -1,0 +1,7 @@
+<map id="MCC::ConfigMotionState" name="MCC::ConfigMotionState">
+<area shape="rect" id="node1" title="FSM state to send motion from configuration." alt="" coords="63,247,245,273"/>
+<area shape="rect" id="node2" href="$structMCC_1_1State.html" title="FSM State with utility functions." alt="" coords="107,171,201,197"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,81,175,108"/>
+<area shape="rect" id="node4" href="$structMCC_1_1MultiContactController.html" title="Humanoid multi&#45;contact motion controller." alt="" coords="199,81,405,108"/>
+<area shape="rect" id="node5" title=" " alt="" coords="203,5,401,32"/>
+</map>
