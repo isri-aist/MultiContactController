@@ -72,8 +72,76 @@ $(function() {
 <div class="title"><a href="https://github.com/isri-aist/MultiContactController">MultiContactController</a> </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Humanoid multi-contact motion controller </p>
-</div></div><!-- PageDoc -->
+<div class="textblock"><p>Humanoid multi-contact motion controller</p>
+<p><a href="https://github.com/isri-aist/MultiContactController/actions/workflows/ci-standalone.yaml"><object type="image/svg+xml" data="https://github.com/isri-aist/MultiContactController/actions/workflows/ci-standalone.yaml/badge.svg" style="pointer-events: none;">CI</object></a> <a href="https://github.com/isri-aist/MultiContactController/actions/workflows/ci-catkin.yaml"><object type="image/svg+xml" data="https://github.com/isri-aist/MultiContactController/actions/workflows/ci-catkin.yaml/badge.svg" style="pointer-events: none;">CI</object></a> <a href="https://isri-aist.github.io/MultiContactController/"><img src="https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&amp;style=flat" alt="Documentation" class="inline"/></a> <a href="https://github.com/isri-aist/MultiContactController/blob/master/LICENSE"><img src="https://img.shields.io/github/license/isri-aist/MultiContactController" alt="LICENSE" class="inline"/></a></p>
+<h1>Features</h1>
+<ul>
+<li>Completely open source! (controller framework: mc_rtc, simulator: Choreonoid, sample robot model: JVRC1)</li>
+<li>Possible to control bipedal walking and multi-contact motion including surface/grasp contacts in a unified manner.</li>
+<li>Automated management with CI: Dynamics simulation is run on CI to verify multi-contact motion.</li>
+</ul>
+<h1>Install</h1>
+<h2>Requirements</h2>
+<ul>
+<li>Compiler supporting C++17</li>
+<li>Tested with <code>Ubuntu 20.04 / ROS Noetic</code> and <code>Ubuntu 18.04 / ROS Melodic</code></li>
+</ul>
+<h2>Dependencies</h2>
+<p>This package depends on</p><ul>
+<li><a href="https://jrl-umi3218.github.io/mc_rtc">mc_rtc</a></li>
+</ul>
+<p>This package also depends on the following packages. However, manual installation is unnecessary when this package is installed using <code>wstool</code> as described in <a href="#controller-installation">Controller installation</a>.</p><ul>
+<li><a href="https://github.com/isri-aist/QpSolverCollection">QpSolverCollection</a></li>
+<li><a href="https://github.com/isri-aist/ForceControlCollection">ForceControlCollection</a></li>
+<li><a href="https://github.com/isri-aist/TrajectoryCollection">TrajectoryCollection</a></li>
+<li><a href="https://github.com/isri-aist/NMPC">NMPC</a></li>
+<li><a href="https://github.com/isri-aist/CentroidalControlCollection">CentroidalControlCollection</a></li>
+<li><a href="https://github.com/isri-aist/BaselineWalkingController">BaselineWalkingController</a></li>
+</ul>
+<h2>Preparation</h2>
+<ol type="1">
+<li>(Skip if ROS is already installed.) Install ROS. See <a href="http://wiki.ros.org/ROS/Installation">here</a> for details. <div class="fragment"><div class="line">$ export ROS_DISTRO=melodic</div>
+<div class="line">$ sudo sh -c &#39;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;</div>
+<div class="line">$ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -</div>
+<div class="line">$ sudo apt-get update</div>
+<div class="line">$ sudo apt-get install ros-${ROS_DISTRO}-ros-base python-catkin-tools python-rosdep</div>
+</div><!-- fragment --></li>
+<li>(Skip if mc_rtc is already installed.) Install mc_rtc. See <a href="https://jrl-umi3218.github.io/mc_rtc/tutorials/introduction/installation-guide.html">here</a> for details. <div class="fragment"><div class="line">$ curl -1sLf &#39;https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh&#39; | sudo -E bash</div>
+<div class="line">$ sudo apt-get install libmc-rtc-dev mc-rtc-utils mc-state-observation jvrc-choreonoid libcnoid-dev ros-${ROS_DISTRO}-mc-rtc-plugin ros-${ROS_DISTRO}-mc-rtc-rviz-panel libeigen-qld-dev</div>
+</div><!-- fragment --></li>
+</ol>
+<h2>Controller installation</h2>
+<ol type="1">
+<li>Setup catkin workspace. <div class="fragment"><div class="line">$ mkdir -p ~/ros/ws_mcc/src</div>
+<div class="line">$ cd ~/ros/ws_mcc</div>
+<div class="line">$ wstool init src</div>
+<div class="line">$ wstool set -t src isri-aist/MultiContactController https://github.com/isri-aist/MultiContactController --git -y</div>
+<div class="line">$ wstool update -t src isri-aist/MultiContactController</div>
+<div class="line">$ wstool merge -t src src/isri-aist/MultiContactController/depends.rosinstall</div>
+<div class="line">$ wstool update -t src</div>
+</div><!-- fragment --></li>
+<li>Install dependent packages. <div class="fragment"><div class="line">$ source /opt/ros/${ROS_DISTRO}/setup.bash</div>
+<div class="line">$ rosdep install -y -r --from-paths src --ignore-src</div>
+</div><!-- fragment --></li>
+<li>Build a package. <div class="fragment"><div class="line">$ catkin build multi_contact_controller -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_QLD=ON --catkin-make-args all tests</div>
+</div><!-- fragment --></li>
+<li>Setup controller <div class="fragment"><div class="line">$ mkdir -p ~/.config/mc_rtc/controllers</div>
+<div class="line">$ cp ~/ros/ws_mcc/src/isri-aist/MultiContactController/etc/mc_rtc.yaml ~/.config/mc_rtc/mc_rtc.yaml</div>
+</div><!-- fragment --></li>
+</ol>
+<h2>Simulation execution</h2>
+<div class="fragment"><div class="line"># Terminal 1</div>
+<div class="line">$ source ~/ros/ws_mcc/devel/setup.bash</div>
+<div class="line">$ roscore</div>
+<div class="line"># Terminal 2</div>
+<div class="line">$ source ~/ros/ws_mcc/devel/setup.bash</div>
+<div class="line">$ roscd multi_contact_controller/cnoid/project/</div>
+<div class="line">$ /usr/share/hrpsys/samples/JVRC1/clear-omninames.sh</div>
+<div class="line">$ choreonoid MCC_JVRC1_SampleField.cnoid --start-simulation</div>
+<div class="line"># Terminal 3</div>
+<div class="line">$ source ~/ros/ws_mcc/devel/setup.bash</div>
+<div class="line">$ roslaunch multi_contact_controller display.launch</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
