@@ -59,7 +59,7 @@ jobs:
           set -e
           set -x
           curl -1sLf 'https://dl.cloudsmith.io/public/mc-rtc/${{ matrix.mc-rtc-version }}/setup.deb.sh' | sudo -E bash
-          sudo apt install -y -qq libmc-rtc-dev mc-rtc-utils ros-${ROS_DISTRO}-mc-rtc-plugin libeigen-qld-dev
+          sudo apt install -y -qq libmc-rtc-dev mc-rtc-utils mc-state-observation jvrc-choreonoid ros-${ROS_DISTRO}-mc-rtc-plugin libeigen-qld-dev
       - name: Checkout repository code
         uses: actions/checkout@v3
         with:
