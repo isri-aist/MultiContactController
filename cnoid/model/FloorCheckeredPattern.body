@@ -1,0 +1,20 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+name: FloorCheckeredPattern
+links:
+  -
+    name: Floor
+    translation: [ 0, 0, -0.1 ]
+    jointType: fixed
+    material: Floor
+    AMOR: true
+    elements:
+      Shape:
+        geometry: { type: Box, size: [ 100.0, 100.0, 0.2 ] }
+        appearance:
+          texture:
+            url: "texture/CheckeredPattern.png"
+            repeatS: true
+            repeatT: true
+          textureTransform:
+            scale: [ 100.0, 100.0 ]
