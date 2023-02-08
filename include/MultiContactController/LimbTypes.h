@@ -4,7 +4,10 @@
 
 namespace MCC
 {
-/** \brief Limb. */
+/** \brief Limb.
+
+    In this controller, "limb" refers to a contact patch of robot, such as hands, feet, and knees.
+ */
 struct Limb
 {
   /** \brief Limb group.
@@ -24,7 +27,8 @@ struct Limb
       \param _name limb name
       \param _group limb group
 
-      limb group is automatically set if _group is empty and _name contains "Hand" or "Foot" (case-sensitive).
+      Limb group is automatically set if _group is empty and _name contains "Hand" or "Foot" (case-sensitive). Different
+      limbs must have different names; limbs with the same name but different groups are not allowed.
   */
   Limb(const std::string & _name, const std::string & _group = "");
 
