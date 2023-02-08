@@ -18,8 +18,20 @@ StatesFiles:
 VerboseStateFactory: false
 # Additional robots to load
 robots:
+  jvrc1:
+    frames:
+      - name: LeftHandGraspFrame
+        parent: l_wrist
+        X_p_f:
+          translation: [0.0, -0.0085, -0.110]
+      - name: RightHandOpenFrame
+        parent: r_wrist
+        X_p_f:
+          translation: [0.0, 0.0085, -0.1225]
   ground:
     module: env/ground
+  env:
+    module: MCC/SampleField
 # General constraints, always on
 constraints:
   - type: contact
@@ -38,6 +50,7 @@ states:
   MCC::Initial_:
     base: MCC::Initial
     configs:
+      autoStartTime: 2.0
       gripperCommands:
         - name: l_gripper
           opening: 1.0
@@ -49,82 +62,10 @@ states:
     configs:
       baseTime: Relative
       stepCommandList:
-        # - limb: LeftFoot
-        #   type: Add
-        #   startTime: 2.0
-        #   endTime: 3.0
-        #   pose:
-        #     translation: [0.2, 0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: RightFoot
-        #   type: Add
-        #   startTime: 3.5
-        #   endTime: 4.5
-        #   pose:
-        #     translation: [0.4, -0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: LeftFoot
-        #   type: Add
-        #   startTime: 5.0
-        #   endTime: 6.0
-        #   pose:
-        #     translation: [0.6, 0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: RightFoot
-        #   type: Add
-        #   startTime: 6.5
-        #   endTime: 7.5
-        #   pose:
-        #     translation: [0.8, -0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: LeftFoot
-        #   type: Add
-        #   startTime: 8.0
-        #   endTime: 9.0
-        #   pose:
-        #     translation: [1.0, 0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: RightFoot
-        #   type: Add
-        #   startTime: 9.5
-        #   endTime: 10.5
-        #   pose:
-        #     translation: [1.2, -0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: LeftFoot
-        #   type: Add
-        #   startTime: 11.0
-        #   endTime: 12.0
-        #   pose:
-        #     translation: [1.4, 0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        # - limb: RightFoot
-        #   type: Add
-        #   startTime: 12.5
-        #   endTime: 13.5
-        #   pose:
-        #     translation: [1.6, -0.1, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
         - limb: LeftFoot
           type: Add
           startTime: 2.0
-          endTime: 4.0
+          endTime: 3.0
           pose:
             translation: [0.2, 0.1, 0]
           constraint:
@@ -132,58 +73,17 @@ states:
             fricCoeff: 0.5
         - limb: RightFoot
           type: Add
-          startTime: 6.0
-          endTime: 8.0
+          startTime: 3.5
+          endTime: 4.5
           pose:
             translation: [0.4, -0.1, 0]
           constraint:
             type: Surface
             fricCoeff: 0.5
-        - limb: LeftHand
-          pose:
-            translation: [0.4, 0.3, 0.75]
-            rotation: [3.141592653589793, 0, 0]
-          swingCommand:
-            type: Add
-            startTime: 6.0
-            endTime: 8.0
-            config:
-              withdrawOffset: [0, 0, -0.06]
-              approachOffset: [0, 0, -0.06]
-              swingOffset:  [0, 0, -0.12]
-          contactCommandList:
-            - time: 6.0
-              constraint: {}
-            - time: 8.0
-              constraint:
-                type: Empty
-            - time: 9.0
-              constraint:
-                type: Grasp
-                fricCoeff: 0.5
-          gripperCommandList:
-            - time: 8.0
-              name: l_gripper
-              config:
-                opening: 0.0
-        # - limb: LeftHand
-        #   type: Add
-        #   startTime: 6.0
-        #   endTime: 8.0
-        #   pose:
-        #     translation: [0.4, 0.3, 0.75]
-        #     rotation: [3.141592653589793, 0, 0]
-        #   constraint:
-        #     type: Surface
-        #     fricCoeff: 0.5
-        #   swingConfig:
-        #     withdrawOffset: [0, 0, -0.06]
-        #     approachOffset: [0, 0, -0.06]
-        #     swingOffset:  [0, 0, -0.12]
         - limb: LeftFoot
           type: Add
-          startTime: 10.0
-          endTime: 12.0
+          startTime: 5.0
+          endTime: 6.0
           pose:
             translation: [0.6, 0.1, 0]
           constraint:
@@ -191,41 +91,118 @@ states:
             fricCoeff: 0.5
         - limb: RightFoot
           type: Add
-          startTime: 14.0
-          endTime: 16.0
+          startTime: 6.5
+          endTime: 7.5
           pose:
-            translation: [0.8, -0.1, 0]
+            translation: [0.6, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftHand
+          pose:
+            translation: [0.9, 0.5, 0.8]
+            rotation: [0.5235987755982988, 0, 0]
+          swingCommand:
+            type: Add
+            startTime: 7.0
+            endTime: 9.0
+            config:
+              approachOffset: [0, 0, 0.10]
+          contactCommandList:
+            - time: 9.0
+              constraint:
+                type: Empty
+            - time: 10.0
+              constraint:
+                type: Grasp
+                fricCoeff: 0.5
+          gripperCommandList:
+            - time: 9.0
+              name: l_gripper
+              config:
+                opening: 0.0
+        - limb: RightFoot
+          type: Add
+          startTime: 10.5
+          endTime: 11.5
+          pose:
+            translation: [0.9, -0.15, 0.05]
+            rotation: [-0.3490658503988659, 0, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 12.0
+          endTime: 13.5
+          pose:
+            translation: [1.2, 0.1, 0.0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 14.0
+          endTime: 15.0
+          pose:
+            translation: [1.2, -0.1, 0.0]
           constraint:
             type: Surface
             fricCoeff: 0.5
         - limb: LeftHand
           swingCommand:
             type: Remove
-            startTime: 14.0
-            endTime: 16.0
+            startTime: 16.5
+            endTime: 18.5
             config:
-              withdrawOffset: [0, 0, -0.06]
-              approachOffset: [0, 0, -0.06]
-              swingOffset:  [0, 0, -0.12]
+              withdrawOffset: [0, 0, 0.10]
           contactCommandList:
-            - time: 13.0
+            - time: 15.5
               constraint:
                 type: Empty
-            - time: 14.0
+            - time: 16.5
               constraint: {}
           gripperCommandList:
-            - time: 13.0
+            - time: 15.5
               name: l_gripper
               config:
                 opening: 1.0
-        # - limb: LeftHand
-        #   type: Remove
-        #   startTime: 14.0
-        #   endTime: 16.0
-        #   swingConfig:
-        #     withdrawOffset: [0, 0, -0.06]
-        #     approachOffset: [0, 0, -0.06]
-        #     swingOffset:  [0, 0, -0.12]
+        - limb: LeftFoot
+          type: Add
+          startTime: 18.0
+          endTime: 19.0
+          pose:
+            translation: [1.4, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 19.5
+          endTime: 20.5
+          pose:
+            translation: [1.4, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightHand
+          type: Add
+          pose:
+            translation: [1.4, -0.7, 1.0]
+            rotation: [-1.5707963267948966, 0, 0]
+          startTime: 21.0
+          endTime: 23.0
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+          swingConfig:
+            approachOffset: [0, 0, 0.10]
+        - limb: RightHand
+          type: Remove
+          startTime: 26.0
+          endTime: 28.0
+          swingConfig:
+            withdrawOffset: [0, 0, 0.10]
 
   MCC::Main_:
     base: Parallel
@@ -284,12 +261,12 @@ LimbTaskList:
     weight: 1000.0
   - type: firstOrderImpedance
     limb: LeftHand
-    frame: LeftGripper
+    frame: LeftHandGraspFrame
     cutoffPeriod: 0.01
     weight: 1000.0
   - type: firstOrderImpedance
     limb: RightHand
-    frame: RightGripper
+    frame: RightHandOpenFrame
     cutoffPeriod: 0.01
     weight: 1000.0
 
@@ -332,7 +309,7 @@ LimbManagerSet:
       impedanceGains:
         MultiContact:
           damper:
-            linear: [1e3, 1e3, 1e3]
+            linear: [5e4, 5e4, 5e4]
             angular: [100, 100, 100]
           spring:
             linear: [0, 0, 0]
@@ -344,7 +321,7 @@ LimbManagerSet:
       impedanceGains:
         MultiContact:
           damper:
-            linear: [1e3, 1e3, 1e3]
+            linear: [5e4, 5e4, 5e4]
             angular: [100, 100, 100]
           spring:
             linear: [0, 0, 0]
@@ -356,7 +333,7 @@ LimbManagerSet:
 CentroidalManager:
   name: CentroidalManager
   nominalCentroidalPose:
-    translation: [0.0, 0.0, 0.85]
+    translation: [0.0, 0.0, 0.80]
   limbWeightListForRefData:
     LeftFoot: 1.0
     RightFoot: 1.0
@@ -402,21 +379,31 @@ Contacts:
     - name: RightFoot
       vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
     - name: LeftHand
-      vertices: [[0, 0, 0]]
+      vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
     - name: RightHand
-      vertices: [[0, 0, 0]]
+      vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
 
   Grasp:
     - name: LeftHand
       vertices:
-        - translation: [0, 0, -0.05]
-        - translation: [0, 0, 0.05]
-          rotation: [0, 3.141592653589793, 0]
+        - translation: [0.025, 0.015, 0]
+          rotation: [1.5707963267948966, 0, 0]
+        - translation: [-0.025, 0.015, 0]
+          rotation: [1.5707963267948966, 0, 0]
+        - translation: [0.025, -0.015, 0]
+          rotation: [-1.5707963267948966, 0, 0]
+        - translation: [-0.025, -0.015, 0]
+          rotation: [-1.5707963267948966, 0, 0]
     - name: RightHand
       vertices:
-        - translation: [0, 0, -0.05]
-        - translation: [0, 0, 0.05]
-          rotation: [0, 3.141592653589793, 0]
+        - translation: [0.025, 0.015, 0]
+          rotation: [1.5707963267948966, 0, 0]
+        - translation: [-0.025, 0.015, 0]
+          rotation: [1.5707963267948966, 0, 0]
+        - translation: [0.025, -0.015, 0]
+          rotation: [-1.5707963267948966, 0, 0]
+        - translation: [-0.025, -0.015, 0]
+          rotation: [-1.5707963267948966, 0, 0]
 
   Initial:
     LeftFoot:
@@ -427,7 +414,7 @@ Contacts:
       fricCoeff: 0.5
 
 
-OverwriteConfigKeys: [NoSensors]
+# OverwriteConfigKeys: [NoSensors]
 
 OverwriteConfigList:
   NoSensors:
@@ -459,14 +446,9 @@ OverwriteConfigList:
   jvrc1:
     PostureTask:
       jointWeights:
-        WAIST_R: 10
-        WAIST_P: 10
-      # For arm swing
-      jointGains:
-        - jointName: R_SHOULDER_P
-          stiffness: 400
-        - jointName: L_SHOULDER_P
-          stiffness: 400
+        WAIST_R: 100
+        WAIST_P: 100
+        WAIST_Y: 100
 
     CoMTask:
       activeJoints: [
