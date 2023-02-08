@@ -658,6 +658,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        HandleRightHand1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         Link Tree Style: Links in Alphabetic Order
         Root:
           Alpha: 1
@@ -669,8 +674,8 @@ Visualization Manager:
           Show Trail: false
           Value: true
       Name: EnvironmentModel
-      Robot Description: control/env_1/robot_description
-      TF Prefix: control/env_1
+      Robot Description: control/env_2/robot_description
+      TF Prefix: control/env_2
       Update Interval: 0
       Value: true
       Visual Enabled: true
