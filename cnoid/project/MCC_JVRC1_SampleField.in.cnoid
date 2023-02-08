@@ -1,8 +1,9 @@
 items: 
   id: 0
-  name: "Root"
+  name: "RootItem"
   plugin: Base
   class: RootItem
+  is_builtin_item: true
   children: 
     - 
       id: 1
@@ -19,50 +20,55 @@ items:
       plugin: Body
       class: WorldItem
       data: 
-        collisionDetection: false
-        collisionDetector: AISTCollisionDetector
-        materialTableFile: "@PROJECT_SOURCE_DIR@/cnoid/model/MCC_materials.yaml"
+        collision_detection: false
+        collision_detector: AISTCollisionDetector
+        default_material_table_file: "@PROJECT_SOURCE_DIR@/cnoid/model/MCC_materials.yaml"
       children: 
         - 
           id: 3
           name: "JVRC1"
           plugin: Body
           class: BodyItem
+          is_selected: true
+          is_checked: true
           data: 
-            modelFile: "@OPENHRP3_1_PREFIX@/share/OpenHRP-3.1/robot/JVRC1/main.wrl"
+            file: "@OPENHRP3_1_PREFIX@/share/OpenHRP-3.1/robot/JVRC1/main.wrl"
             currentBaseLink: "PELVIS"
+            format: CHOREONOID-BODY
             rootPosition: [ -0.0164712421, -0.00366884734, 0.823007651 ]
             rootAttitude: [ 
               0.999520541, 0.000990316288, -0.030946845, 
               -0.00104419639, 0.999997967, -0.00172494057, 
               0.0309450738, 0.00175642811, 0.999519543 ]
             jointDisplacements: [ 
-              -21.761510, -0.462606, -0.048014,  42.554320,  0.121295, -19.017386, -21.649153,  1.310354, -0.046925,  42.222635, 
-              -1.255809, -18.793188,  0.015642,  7.603837,  0.166100, -0.000401,  0.009855,  0.010886, -2.647695, -9.070266, 
-               0.126165, -29.262043,  0.004927,  0.075287,  0.012834,  0.126624,  0.177674, -0.126108, -0.160657, -0.126108, 
-              -0.160657, -2.660128,  9.131171, -0.108346, -29.278659, -0.004870, -0.065776, -0.012548, -0.127025, -0.173262, 
-               0.118258,  0.155100,  0.118258,  0.155100 ]
+              -21.7615, -0.462606, -0.048014, 42.5543, 0.121295, -19.0174, -21.6492, 1.31035, -0.046925, 42.2226, 
+              -1.25581, -18.7932, 0.015642, 7.60384, 0.1661, -0.000401, 0.009855, 0.010886, -2.6477, -9.07027, 
+              0.126165, -29.262, 0.004927, 0.075287, 0.012834, 0.126624, 0.177674, -0.126108, -0.160657, -0.126108, 
+              -0.160657, -2.66013, 9.13117, -0.108346, -29.2787, -0.00487, -0.065776, -0.012548, -0.127025, -0.173262, 
+              0.118258, 0.1551, 0.118258, 0.1551 ]
             jointPositions: [ 
-              -0.38, -0.01, 0, 0.72, -0.01, -0.33,
-              -0.38, 0.02, 0, 0.72, -0.02, -0.33,
-              0, 0.13, 0, 0, 0, 0,
-              -0.052, -0.17, 0, -0.52, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              -0.052, 0.17, 0, -0.52, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+              -0.37981, -0.008074, -0.000838002, 0.742713, 0.002117, -0.331916, -0.37785, 0.0228699, -0.000818996, 0.736923, 
+              -0.021918, -0.328003, 0.000273004, 0.132712, 0.00289899, -6.99877e-06, 0.000172002, 0.000189997, -0.0462111, -0.158306, 
+              0.00220199, -0.510718, 8.59924e-05, 0.00131401, 0.000223996, 0.00221001, 0.003101, -0.002201, -0.00280399, -0.002201, 
+              -0.00280399, -0.046428, 0.159369, -0.00189099, -0.51101, -8.49975e-05, -0.00114801, -0.000219004, -0.002217, -0.00302399, 
+              0.00206399, 0.00270701, 0.00206399, 0.00270701 ]
             initialRootPosition: [ -0.0164712421, -0.00366884734, 0.823007651 ]
             initialRootAttitude: [ 
-              0.999520541, 0.000990316287, -0.030946845, 
+              0.999520541, 0.000990316286, -0.030946845, 
               -0.00104419639, 0.999997967, -0.00172494057, 
               0.0309450738, 0.00175642811, 0.999519543 ]
             initialJointPositions: [ 
-              -0.38, -0.01, 0, 0.72, -0.01, -0.33,
-              -0.38, 0.02, 0, 0.72, -0.02, -0.33,
-              0, 0.13, 0, 0, 0, 0,
-              -0.052, -0.17, 0, -0.52, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              -0.052, 0.17, 0, -0.52, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            zmp: [ 0, 0, 0 ]
+              -0.37981, -0.008074, -0.000838002, 0.742713, 0.002117, -0.331916, -0.37785, 0.0228699, -0.000818996, 0.736923, 
+              -0.021918, -0.328003, 0.000273004, 0.132712, 0.00289899, -6.99877e-06, 0.000172002, 0.000189997, -0.0462111, -0.158306, 
+              0.00220199, -0.510718, 8.59924e-05, 0.00131401, 0.000223996, 0.00221001, 0.003101, -0.002201, -0.00280399, -0.002201, 
+              -0.00280399, -0.046428, 0.159369, -0.00189099, -0.51101, -8.49975e-05, -0.00114801, -0.000219004, -0.002217, -0.00302399, 
+              0.00206399, 0.00270701, 0.00206399, 0.00270701 ]
+            fix_root: false
             collisionDetection: true
             selfCollisionDetection: false
-            isEditable: true
+            location_editable: true
+            scene_sensitive: true
+            zmp: [ 0, 0, 0 ]
           children: 
             - 
               id: 4
@@ -83,48 +89,66 @@ items:
               id: 5
               name: "SensorVisualizer"
               plugin: Body
-              class: SensorVisualizer
+              class: SensorVisualizerItem
               data: 
-                subItems: 
+                sub_items: 
                   - 
-                    class: ForceSensorVisualizer
+                    class: ForceSensorVisualizerItem
                     name: ForceSensor
-                    visualRatio: 0.002
+                    is_checked: true
+                    ratio: 0.002
+                    threshold: 0.1
+                    offset: [ 0, 0, 0 ]
                   - 
-                    class: PointCloudVisualizer
+                    class: AccelerationSensorVisualizerItem
+                    name: AccelerationSensor
+                    ratio: 0.1
+                    threshold: 0.05
+                    offset: [ 0, 0, -9.8 ]
+                  - 
+                    class: RateGyroSensorVisualizerItem
+                    name: RateGyro
+                    ratio: 0.4
+                    threshold: 0.01
+                    offset: [ 0, 0, 0 ]
+                  - 
+                    class: CameraImageVisualizerItem
+                    name: rcamera
+                  - 
+                    class: CameraImageVisualizerItem
+                    name: lcamera
+                  - 
+                    class: CameraImageVisualizerItem
+                    name: dcamera_Image
+                  - 
+                    class: PointCloudVisualizerItem
                     name: dcamera
                     translation: [ 0, 0, 0 ]
                     rotation: [ 1, 0, 0, 0 ]
-                    renderingMode: Point
-                    pointSize: 0
-                    voxelSize: 0.01
-                    isEditable: false
+                    angle_unit: degree
+                    rendering_mode: Point
+                    point_size: 0
+                    voxel_size: 0.01
+                    is_editable: false
                   - 
-                    class: RangeSensorVisualizer
+                    class: RangeSensorVisualizerItem
                     name: ranger
                     translation: [ 0, 0, 0 ]
                     rotation: [ 1, 0, 0, 0 ]
-                    renderingMode: Point
-                    pointSize: 0
-                    voxelSize: 0.01
-                    isEditable: false
-                  - 
-                    class: CameraImageVisualizer
-                    name: rcamera
-                  - 
-                    class: CameraImageVisualizer
-                    name: lcamera
-                  - 
-                    class: CameraImageVisualizer
-                    name: dcamera_Image
+                    angle_unit: degree
+                    rendering_mode: Point
+                    point_size: 0
+                    voxel_size: 0.01
+                    is_editable: false
         - 
           id: 6
           name: "FloorCheckeredPattern"
           plugin: Body
           class: BodyItem
+          is_checked: true
           data: 
-            modelFile: "@PROJECT_SOURCE_DIR@/cnoid/model/FloorCheckeredPattern.body"
-            currentBaseLink: ""
+            file: "@PROJECT_SOURCE_DIR@/cnoid/model/FloorCheckeredPattern.body"
+            format: CHOREONOID-BODY
             rootPosition: [ 0, 0, -0.1 ]
             rootAttitude: [ 
               1, 0, 0, 
@@ -136,18 +160,22 @@ items:
               1, 0, 0, 
               0, 1, 0, 
               0, 0, 1 ]
-            zmp: [ 0, 0, 0 ]
+            fix_root: true
             collisionDetection: true
             selfCollisionDetection: false
-            isEditable: true
+            location_editable: true
+            scene_sensitive: true
+            zmp: [ 0, 0, 0 ]
         - 
           id: 7
           name: "SampleField"
           plugin: Body
           class: BodyItem
+          is_checked: true
           data: 
-            modelFile: "@PROJECT_SOURCE_DIR@/cnoid/model/SampleField.body"
+            file: "@PROJECT_SOURCE_DIR@/cnoid/model/SampleField.body"
             currentBaseLink: "Root"
+            format: CHOREONOID-BODY
             rootPosition: [ 0, 0, 0 ]
             rootAttitude: [ 
               1, 0, 0, 
@@ -159,30 +187,34 @@ items:
               1, 0, 0, 
               0, 1, 0, 
               0, 0, 1 ]
-            zmp: [ 0, 0, 0 ]
+            fix_root: true
             collisionDetection: true
             selfCollisionDetection: false
-            isEditable: true
+            location_editable: true
+            scene_sensitive: true
+            zmp: [ 0, 0, 0 ]
         - 
-          id: 9
+          id: 8
           name: "AISTSimulator"
           plugin: Body
           class: AISTSimulatorItem
           data: 
-            realtimeSync: true
-            recording: "full"
-            timeRangeMode: "Unlimited"
-            timeLength: 500
-            allLinkPositionOutputMode: true
-            deviceStateOutput: true
-            controllerThreads: true
-            recordCollisionData: false
-            controllerOptions: ""
+            realtime_sync_mode: compensatory
+            recording: full
+            time_range_mode: unlimited
+            time_length: 500
+            is_active_control_time_range_mode: false
+            output_all_link_positions: true
+            output_device_states: true
+            use_controller_threads: true
+            record_collision_data: false
+            controller_options: ""
+            block_scene_view_edit_mode: false
             dynamicsMode: "Forward dynamics"
-            integrationMode: "Runge Kutta"
+            integrationMode: runge-kutta
             gravity: [ 0, 0, -9.80665 ]
-            staticFriction: 0.5
-            dynamicFriction: 0.5
+            min_friction_coefficient: 0
+            max_friction_coefficient: 100
             cullingThresh: 0.01
             contactCullingDepth: 0.05
             errorCriterion: 0.001
@@ -193,16 +225,18 @@ items:
             2Dmode: false
             oldAccelSensorMode: false
         - 
-          id: 10
+          id: 9
           name: "sim_mc.py"
           plugin: PythonSimScript
           class: PythonSimScriptItem
+          is_checked: true
           data: 
             timing: After init.
             delay: 0
             simulationOnly: true
-            backgroundExecution: true
+            background_execution: true
             file: "@HRPSYSBASE_PREFIX@/share/hrpsys/samples/JVRC1/sim_mc.py"
+            format: PYTHON-SCRIPT-FILE
 views: 
   - 
     id: 0
@@ -215,17 +249,24 @@ views:
     class: ItemTreeView
     mounted: true
     state: 
-      selected: [ 3 ]
-      checked: [ 3, [ 5, "ForceSensor" ], 6, 7, 10 ]
-      expanded: [ 2, 3, 4, 7, 9 ]
+      expanded: [ 2, 3, 4, 7, 8 ]
   - 
     id: 2
+    plugin: Base
+    class: LocationView
+    state: 
+      show_rpy: true
+      unique_rpy: false
+      show_quaternion: false
+      show_rotation_matrix: false
+      coordinate: parent
+  - 
+    id: 3
     plugin: Base
     class: MessageView
     mounted: true
   - 
-    id: 3
-    name: "Multi SE3 Seq"
+    id: 4
     plugin: Base
     class: MultiSE3SeqGraphView
     state: 
@@ -249,8 +290,7 @@ views:
       upper: 10
       visibleElements: [ 0, 1, 2 ]
   - 
-    id: 4
-    name: "Multi Value Seq"
+    id: 5
     plugin: Base
     class: MultiValueSeqGraphView
     state: 
@@ -273,105 +313,93 @@ views:
       lower: -10
       upper: 10
   - 
-    id: 5
+    id: 6
     plugin: Base
     class: SceneView
     mounted: true
     state: 
       editMode: false
-      viewpointControlMode: thirdPerson
+      viewpointOperationMode: thirdPerson
+      visible_polygon_elements: [ face ]
+      highlighting: false
       collisionLines: true
-      polygonMode: fill
-      restrictCameraRoll: true
-      verticalAxis: Z
-      lightingMode: full
-      cullingMode: enabled
-      defaultHeadLight: true
-      defaultHeadLightIntensity: 0.75
-      headLightLightingFromBack: false
-      worldLight: true
-      worldLightIntensity: 0.5
-      worldLightAmbient: 0.3
-      additionalLights: true
-      fog: true
-      floorGrid: false
-      floorGridSpan: 10
-      floorGridInterval: 0.5
-      xzGridSpan: 10
-      xzGridInterval: 0.5
-      xzGrid: false
-      yzGridSpan: 10
-      yzGridInterval: 0.5
-      texture: true
-      lineWidth: 1
-      pointSize: 1
-      normalVisualization: false
-      normalLength: 0.01
-      lightweightViewChange: false
-      coordinateAxes: true
-      fpsTestIteration: 1
-      upsideDown: false
       cameras: 
         - 
           camera: [ System, Perspective ]
           isCurrent: true
-          fieldOfView: 0.6978
-          near: 0.01
-          far: 10000
-          eye: [ 1.43584974, -4.44576726, 2.81673074 ]
-          direction: [ -0.00962550675, 0.891516332, -0.452886276 ]
-          up: [ -0.00488942904, 0.452859881, 0.891568293 ]
+          eye: [ 4.50599, 2.27716, 3.22118 ]
+          direction: [ -0.694451, -0.485365, -0.531186 ]
+          up: [ -0.435386, -0.304299, 0.847255 ]
         - 
           camera: [ System, Orthographic ]
           orthoHeight: 20
-          near: 0.01
-          far: 10000
-      backgroundColor: [ 1, 1, 1 ]
-      gridColor: [ 0.899999976, 0.899999976, 0.899999976, 1 ]
-      xzgridColor: [ 0.899999976, 0.899999976, 0.899999976, 1 ]
-      yzgridColor: [ 0.899999976, 0.899999976, 0.899999976, 1 ]
-      dedicatedItemTreeViewChecks: false
+      lighting_mode: normal
+      culling_mode: enabled
+      shading_mode: smooth
+      world_light: true
+      world_light_intensity: 0.5
+      ambient_light: true
+      ambient_light_intensity: 0.3
+      head_light: true
+      head_light_intensity: 0.75
+      world_light_shadow: true
+      shadow_lights: 
+        - { index: 0, enabled: false }
+        - { index: 1, enabled: false }
+      background_color: [ 1, 1, 1 ]
+      line_width: 1
+      point_size: 1
+      field_of_view: 39.981
+      clip_distances: [ 0.01, 10000 ]
+      floorGrid: false
+      floorGridSpan: 10
+      floorGridInterval: 0.5
+      xzGrid: false
+      xzGridSpan: 10
+      xzGridInterval: 0.5
+      yzGrid: false
+      yzGridSpan: 10
+      yzGridInterval: 0.5
+      xy_grid_color: [ 0.9, 0.9, 0.9 ]
+      xz_grid_color: [ 0.9, 0.9, 0.9 ]
+      yz_grid_color: [ 0.9, 0.9, 0.9 ]
   - 
-    id: 6
-    name: "Task"
+    id: 7
     plugin: Base
     class: TaskView
     state: 
       layoutMode: horizontal
       isAutoMode: false
   - 
-    id: 7
-    name: "Text Editor"
+    id: 8
     plugin: Base
     class: TextEditView
   - 
-    id: 8
+    id: 9
     plugin: Body
     class: BodyLinkView
     state: 
       showRotationMatrix: false
   - 
-    id: 9
-    name: "Body State"
+    id: 10
     plugin: Body
     class: BodyStateView
     mounted: true
   - 
-    id: 10
+    id: 11
     plugin: Body
     class: JointDisplacementView
     state: 
-      showSelectedJoints: false
-      showJointIDs: true
-      showJointNames: true
-      overlapJointNames: false
-      showSliders: true
-      showDials: false
-      showPhases: false
-      currentBodyItem: 3
+      show_selected_joints: false
+      show_joint_ids: true
+      show_joint_names: false
+      overlap_joint_names: false
+      show_sliders: true
+      show_dials: false
+      show_phases: true
+      limit_ranges: false
   - 
-    id: 11
-    name: "Joint Trajectories"
+    id: 12
     plugin: Body
     class: JointGraphView
     state: 
@@ -394,32 +422,39 @@ views:
       lower: -10
       upper: 10
   - 
-    id: 12
-    name: "Joint State"
+    id: 13
     plugin: Body
     class: JointStateView
     mounted: true
   - 
-    id: 13
-    plugin: Body
-    class: LinkSelectionView
-    state: 
-      listingMode: "Link List"
-      currentBodyItem: 3
-      bodyItems: 
-        - 
-          id: 3
-          selectedLinks: [ 0 ]
-        - 
-          id: 7
-          selectedLinks: [ 1 ]
-  - 
     id: 14
-    name: "Nameserver"
+    plugin: Body
+    class: LinkDeviceListView
+    state: 
+      element_type: link
+      listing_mode: list
+  - 
+    id: 15
+    plugin: Body
+    class: LinkPositionView
+    state: 
+      coordinate_mode: world
+      preferred_coordinate_mode: base
+      show_rpy: true
+      unique_rpy: false
+      show_quaternion: false
+      show_rotation_matrix: false
+      target_link_type: ik_link
+  - 
+    id: 16
+    plugin: Body
+    class: LinkPropertyView
+  - 
+    id: 17
     plugin: Corba
     class: NameServerView
   - 
-    id: 15
+    id: 18
     plugin: OpenRTM
     class: RTSNameServerView
     state: 
@@ -429,49 +464,27 @@ views:
           host: "localhost"
           port: 2809
   - 
-    id: 16
+    id: 19
     plugin: Python
     class: PythonConsoleView
     mounted: true
 toolbars: 
-  "BodyMotionGenerationBar": 
-    autoGenerationForNewBody: true
-    balancer: false
-    autoGeneration: false
-    timeScaleRatio: 1
-    preInitialDuration: 1
-    postFinalDuration: 1
-    onlyTimeBarRange: false
-    makeNewBodyItem: true
-    stealthyStepMode: true
-    stealthyHeightRatioThresh: 2
-    flatLiftingHeight: 0.005
-    flatLandingHeight: 0.005
-    impactReductionHeight: 0.005
-    impactReductionTime: 0.04
-    autoZmp: true
-    minZmpTransitionTime: 0.1
-    zmpCenteringTimeThresh: 0.03
-    zmpTimeMarginBeforeLiftingSpin: 0
-    zmpMaxDistanceFromCenter: 0.02
-    allLinkPositions: false
-    lipSyncMix: false
   "TimeBar": 
-    minTime: 0
-    maxTime: 60
-    frameRate: 1000
-    playbackFrameRate: 50
-    idleLoopDrivenMode: false
-    currentTime: 0
-    speedScale: 1
-    syncToOngoingUpdates: false
-    autoExpansion: true
-  "BodyBar": 
-    current: 3
+    current_time: 0
+    min_time: 0
+    max_time: 60
+    frame_rate: 1000
+    playback_frame_rate: 50
+    idle_loop_driven_mode: false
+    playback_speed_ratio: 1
+    sync_to_ongoing_updates: true
+    auto_expansion: true
   "LeggedBodyBar": 
     stanceWidth: 0.15
   "KinematicsBar": 
-    mode: IK
+    forward_kinematics: true
+    inverse_kinematics: true
+    preset_kinematics: true
     enablePositionDragger: true
     penetrationBlock: true
     collisionLinkHighlight: false
@@ -479,29 +492,9 @@ toolbars:
     penetrationBlockDepth: 0.0005
     lazyCollisionDetectionMode: true
 Body: 
-  "BodyMotionEngine": 
-    updateJointVelocities: false
   "BodySelectionManager": 
-    currentBodyItem: 3
-    currentLink: "PELVIS"
-  "EditableSceneBody": 
-    editableSceneBodies: 
-      - 
-        bodyItem: 3
-        showCenterOfMass: false
-        showPpcom: false
-        showZmp: false
-      - 
-        bodyItem: 6
-        showCenterOfMass: false
-        showPpcom: false
-        showZmp: false
-      - 
-        bodyItem: 7
-        showCenterOfMass: false
-        showPpcom: false
-        showZmp: false
-    staticModelEditing: false
+    current_body_item: 3
+    current_link: "PELVIS"
   "KinematicFaultChecker": 
     checkJointPositions: true
     angleMargin: 0
@@ -511,6 +504,23 @@ Body:
     targetJoints: all
     checkSelfCollisions: true
     onlyTimeBarRange: false
+  "OperableSceneBody": 
+    scene_bodies: 
+      - 
+        body_item: 3
+        show_cm: false
+        show_cm_projection: false
+        show_zmp: false
+      - 
+        body_item: 6
+        show_cm: false
+        show_cm_projection: false
+        show_zmp: false
+      - 
+        body_item: 7
+        show_cm: false
+        show_cm_projection: false
+        show_zmp: false
   "SplineFilterDialog": 
     isInputFrameRateSpecified: false
     inputFrameRate: 200
@@ -528,34 +538,32 @@ viewAreas:
     contents: 
       type: splitter
       orientation: vertical
-      sizes: [ 1094, 252 ]
+      sizes: [ 1271, 293 ]
       children: 
         - 
           type: splitter
           orientation: horizontal
-          sizes: [ 489, 1959 ]
+          sizes: [ 304, 1216 ]
           children: 
             - 
               type: splitter
               orientation: vertical
-              sizes: [ 499, 589 ]
+              sizes: [ 579, 684 ]
               children: 
                 - 
                   type: pane
-                  views: [ 1, 12 ]
+                  views: [ 1, 13 ]
                   current: 1
                 - 
                   type: pane
                   views: [ 0 ]
-                  current: 0
             - 
               type: pane
-              views: [ 5 ]
-              current: 5
+              views: [ 6 ]
         - 
           type: pane
-          views: [ 2, 16, 9 ]
-          current: 2
+          views: [ 3, 19, 10 ]
+          current: 3
 layoutOfToolBars: 
   rows: 
     - 
