@@ -20,7 +20,7 @@ VerboseStateFactory: false
 robots:
   ground:
     module: env/ground
-  env:
+  sample_field:
     module: MCC/SampleField
 # General constraints, always on
 constraints:
