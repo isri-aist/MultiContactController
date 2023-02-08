@@ -48,7 +48,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 
   gripperCommandList_.clear();
 
-  targetPose_ = limbTask_->surfacePose();
+  targetPose_ = limbTask_->frame().position();
   targetVel_ = sva::MotionVecd::Zero();
   targetAccel_ = sva::MotionVecd::Zero();
   taskGain_ = config_.taskGain;
@@ -184,7 +184,7 @@ void LimbManager::update()
         sva::PTransformd swingStartPose;
         if(config_.swingStartPolicy == "ControlRobot")
         {
-          swingStartPose = limbTask_->surfacePose(); // control robot pose (i.e., IK result)
+          swingStartPose = limbTask_->frame().position(); // control robot pose (i.e., IK result)
         }
         else if(config_.swingStartPolicy == "Target")
         {
@@ -357,7 +357,7 @@ void LimbManager::stop()
 void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.addElement({ctl().name(), config_.name, std::to_string(limb_)},
-                 mc_rtc::gui::Label("surface", [this]() { return limbTask_->surface(); }),
+                 mc_rtc::gui::Label("frame", [this]() { return limbTask_->frame().name(); }),
                  mc_rtc::gui::Label("swingCommandListSize", [this]() { return swingCommandList_.size(); }),
                  mc_rtc::gui::Label("contactCommandListSize", [this]() { return contactCommandList_.size(); }),
                  mc_rtc::gui::Label("gripperCommandListSize", [this]() { return gripperCommandList_.size(); }),

@@ -5,6 +5,4 @@
 namespace MCC
 {
 using BWC::TaskGain;
-
-using BWC::calcSurfaceVertexList;
 } // namespace MCC
