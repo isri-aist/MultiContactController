@@ -32,6 +32,7 @@ jobs:
         os: [ubuntu-20.04, ubuntu-18.04]
         build-type: [RelWithDebInfo, Debug]
         mc-rtc-version: [head, stable]
+        motion-type: [MotionSampleField]
         exclude:
           - build-type: Debug
             mc-rtc-version: stable
@@ -103,58 +104,72 @@ jobs:
       #     set -x
       #     catkin build multi_contact_controller --no-deps --limit-status-rate 0.1 --catkin-make-args run_tests
       #     catkin_test_results --verbose --all build
-      # - name: Run simulation
-      #   # Only run for one configuration
-      #   if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
-      #   # https://github.com/jrl-umi3218/lipm_walking_controller/blob/b564d655388ae6a6725c504e5c74a62192e58c7c/.github/workflows/build.yml#L64-L92
-      #   run: |
-      #     set -e
-      #     set -x
-      #     sudo apt-get install -y -qq mc-state-observation jvrc-choreonoid xvfb ffmpeg mesa-utils fluxbox xserver-xorg xserver-xorg-core xserver-xorg-video-all libwayland-egl1-mesa
-      #     set +x
-      #     . ${GITHUB_WORKSPACE}/catkin_ws/devel/setup.bash
-      #     set -x
-      #     export DISPLAY=":1"
-      #     Xvfb ${DISPLAY} -screen 0 1920x1080x24 &
-      #     sleep 10s
-      #     fluxbox 2> /dev/null &
-      #     mkdir -p ${HOME}/.config/mc_rtc/controllers
-      #     cp ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/etc/mc_rtc.yaml ${HOME}/.config/mc_rtc
-      #     cp ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows/config/WalkingOnPlane.yaml ${HOME}/.config/mc_rtc/controllers/MultiContactController.yaml
-      #     ffmpeg -y -f x11grab -s 1920x1080 -r 30 -i ${DISPLAY} -qscale 0 -vcodec huffyuv /tmp/video.avi > /dev/null 2>&1 < /dev/null &
-      #     FFMPEG_PID=$!
-      #     cd /usr/share/hrpsys/samples/JVRC1
-      #     ./clear-omninames.sh
-      #     choreonoid --start-simulation sim_mc.cnoid &
-      #     CNOID_PID=$!
-      #     sleep 50s
-      #     kill -2 ${CNOID_PID}
-      #     kill -2 ${FFMPEG_PID}
-      #     sleep 1s
-      #     kill -9 ${CNOID_PID} || true
-      #     sleep 10s
-      #     mkdir -p /tmp/results
-      #     ffmpeg -nostats -i /tmp/video.avi /tmp/results/video.mp4
-      #     LOG_PATH=`readlink -f /tmp/mc-control-MultiContactController-latest.bin`
-      #     tar czf /tmp/results/`basename ${LOG_PATH}`.tar.gz -C `dirname ${LOG_PATH}` `basename ${LOG_PATH}`
-      # - name: Upload simulation data
-      #   # Only run for one configuration
-      #   if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: MCC-ci-results
-      #     path: /tmp/results
-      # - name: Check simulation results
-      #   # Only run for one configuration
-      #   if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
-      #   run: |
-      #     set -e
-      #     set -x
-      #     EXPECTED_BASE_POS="1.34 -0.41 0.8"
-      #     python3 ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows/scripts/checkSimulationResults.py `readlink -f /tmp/mc-control-MultiContactController-latest.bin` --expected-base-pos ${EXPECTED_BASE_POS}
+      - name: Run simulation
+        # Only run for one configuration
+        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
+        # https://github.com/jrl-umi3218/lipm_walking_controller/blob/b564d655388ae6a6725c504e5c74a62192e58c7c/.github/workflows/build.yml#L64-L92
+        run: |
+          set -e
+          set -x
+          sudo apt-get install -y -qq xvfb ffmpeg mesa-utils fluxbox xserver-xorg xserver-xorg-core xserver-xorg-video-all libwayland-egl1-mesa
+          set +x
+          . ${GITHUB_WORKSPACE}/catkin_ws/devel/setup.bash
+          set -x
+          export DISPLAY=":1"
+          Xvfb ${DISPLAY} -screen 0 1920x1080x24 &
+          sleep 10s
+          fluxbox 2> /dev/null &
+          mkdir -p ${HOME}/.config/mc_rtc/controllers
+          cp ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/etc/mc_rtc.yaml ${HOME}/.config/mc_rtc
+          cp ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows/config/${{ matrix.motion-type }}.yaml ${HOME}/.config/mc_rtc/controllers/MultiContactController.yaml
+          ffmpeg -y -f x11grab -s 1920x1080 -r 30 -i ${DISPLAY} -qscale 0 -vcodec huffyuv /tmp/video.avi > /dev/null 2>&1 < /dev/null &
+          FFMPEG_PID=$!
+          /usr/share/hrpsys/samples/JVRC1/clear-omninames.sh
+          roscore > /dev/null 2>&1 < /dev/null &
+          ROSCORE_PID=$!
+          sleep 1s
+          roscd multi_contact_controller/cnoid/project
+          if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
+            CNOID_FILE=MCC_JVRC1_SampleField.cnoid
+          fi
+          choreonoid ${CNOID_FILE} --start-simulation &
+          CNOID_PID=$!
+          if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
+            SLEEP_DURATION="100s"
+          fi
+          sleep ${SLEEP_DURATION}
+          kill -2 ${ROSCORE_PID}
+          kill -2 ${CNOID_PID}
+          kill -2 ${FFMPEG_PID}
+          sleep 1s
+          kill -9 ${CNOID_PID} || true
+          sleep 10s
+          mkdir -p /tmp/results
+          ffmpeg -nostats -i /tmp/video.avi /tmp/results/MCC-video-${{ matrix.motion-type }}.mp4
+          LOG_FILENAME=MCC-log-${{ matrix.motion-type }}
+          mv `readlink -f /tmp/mc-control-MultiContactController-latest.bin` /tmp/${LOG_FILENAME}.bin
+          tar czf /tmp/results/${LOG_FILENAME}.tar.gz -C /tmp ${LOG_FILENAME}.bin
+      - name: Upload simulation data
+        # Only run for one configuration
+        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
+        uses: actions/upload-artifact@v3
+        with:
+          name: MCC-ci-results
+          path: /tmp/results
+      - name: Check simulation results
+        # Only run for one configuration
+        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
+        run: |
+          set -e
+          set -x
+          if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
+            EXPECTED_BASE_POS="1.4 0.0 0.75"
+          fi
+          LOG_FILENAME=MCC-log-${{ matrix.motion-type }}
+          python3 ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows/scripts/checkSimulationResults.py /tmp/${LOG_FILENAME}.bin --expected-base-pos ${EXPECTED_BASE_POS}
       - name: Upload documentation
         # Only run for one configuration and on master branch
-        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head' && github.repository_owner == 'isri-aist' && github.ref == 'refs/heads/master'
+        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head' && matrix.motion-type == 'MotionSampleField' && github.repository_owner == 'isri-aist' && github.ref == 'refs/heads/master'
         run: |
           set -e
           set -x
