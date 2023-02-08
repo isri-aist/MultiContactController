@@ -16,6 +16,8 @@ option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
 include(cmake/base.cmake)
 project(multi_contact_controller LANGUAGES CXX)
 
+add_compile_options("-fdiagnostics-color")
+
 # mc_rtc
 add_project_dependency(mc_rtc REQUIRED)
 if(NOT TARGET mc_rtc::mc_rtc_ros)
