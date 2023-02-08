@@ -9,6 +9,8 @@ robots:
         parent: r_wrist
         X_p_f:
           translation: [0.0, 0.0085, -0.1225]
+  sample_field:
+    module: MCC/SampleField
 
 states:
   MCC::Initial_:
