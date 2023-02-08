@@ -171,9 +171,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a681fa84314b44f0d1d20b17f26f77038"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1CentroidalManager_1_1RefData.html">RefData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a681fa84314b44f0d1d20b17f26f77038">calcRefData</a> (double t) const</td></tr>
 <tr class="memdesc:a681fa84314b44f0d1d20b17f26f77038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate reference data.  <a href="classMCC_1_1CentroidalManager.html#a681fa84314b44f0d1d20b17f26f77038">More...</a><br /></td></tr>
 <tr class="separator:a681fa84314b44f0d1d20b17f26f77038"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2155e472237853369d088326e2a4918d"><td class="memItemLeft" align="right" valign="top">std::array&lt; Eigen::Vector2d, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a2155e472237853369d088326e2a4918d">calcSupportRegionMinMax</a> (bool useSurfacePoints) const</td></tr>
-<tr class="memdesc:a2155e472237853369d088326e2a4918d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate min/max points of support region.  <a href="classMCC_1_1CentroidalManager.html#a2155e472237853369d088326e2a4918d">More...</a><br /></td></tr>
-<tr class="separator:a2155e472237853369d088326e2a4918d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="memItemLeft" align="right" valign="top">std::array&lt; Eigen::Vector2d, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7">calcContactRegionMinMax</a> () const</td></tr>
+<tr class="memdesc:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate min/max points of contact region.  <a href="classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7">More...</a><br /></td></tr>
+<tr class="separator:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa411a472855773f2bcbd80c6c88391e1"><td class="memItemLeft" align="right" valign="top">sva::PTransformd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#aa411a472855773f2bcbd80c6c88391e1">calcAnchorFrame</a> (const mc_rbdyn::Robot &amp;robot) const</td></tr>
 <tr class="memdesc:aa411a472855773f2bcbd80c6c88391e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate anchor frame.  <a href="classMCC_1_1CentroidalManager.html#aa411a472855773f2bcbd80c6c88391e1">More...</a><br /></td></tr>
 <tr class="separator:aa411a472855773f2bcbd80c6c88391e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -335,6 +335,33 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0d5eb503b774588f3d16e9ac3fcaf1f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d5eb503b774588f3d16e9ac3fcaf1f7">&#9670;&nbsp;</a></span>calcContactRegionMinMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;Eigen::Vector2d, 2&gt; MCC::CentroidalManager::calcContactRegionMinMax </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate min/max points of contact region. </p>
+
+</div>
+</div>
 <a id="a681fa84314b44f0d1d20b17f26f77038"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a681fa84314b44f0d1d20b17f26f77038">&#9670;&nbsp;</a></span>calcRefData()</h2>
 
@@ -363,40 +390,6 @@ Protected Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t</td><td>time </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a2155e472237853369d088326e2a4918d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2155e472237853369d088326e2a4918d">&#9670;&nbsp;</a></span>calcSupportRegionMinMax()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::array&lt;Eigen::Vector2d, 2&gt; MCC::CentroidalManager::calcSupportRegionMinMax </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useSurfacePoints</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Calculate min/max points of support region. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">useSurfacePoints</td><td>true to use surface vertices, false to use contact vertices </td></tr>
   </table>
   </dd>
 </dl>
@@ -486,7 +479,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00220">220</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00217">217</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -515,7 +508,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00214">214</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00211">211</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -733,7 +726,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Contact list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00267">267</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00262">262</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -759,7 +752,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Control data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00258">258</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00253">253</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -785,7 +778,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00252">252</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00247">247</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -811,7 +804,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reference data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00255">255</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00250">250</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -837,7 +830,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Robot mass [kg]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00261">261</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00256">256</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -863,7 +856,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00264">264</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00259">259</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
