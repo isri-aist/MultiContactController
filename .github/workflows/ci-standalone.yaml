@@ -32,7 +32,7 @@ jobs:
           apt-mirrors:
             mc-rtc:
               cloudsmith: mc-rtc/head
-          apt: cmake libforcecontrolcollection-dev libtrajectorycollection-dev libcentroidalcontrolcollection-dev libmc-rtc-dev
+          apt: cmake libforcecontrolcollection-dev libtrajectorycollection-dev libcentroidalcontrolcollection-dev libmc-rtc-dev jvrc-choreonoid
           ros:
             apt: mc-rtc-plugin
         github: |
