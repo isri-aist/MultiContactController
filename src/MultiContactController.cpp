@@ -85,13 +85,13 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     }
     else
     {
-      mc_rtc::log::error_and_throw("[BaselineWalkingController] Invalid centroidalManagerMethod: {}.",
+      mc_rtc::log::error_and_throw("[MultiContactController] Invalid centroidalManagerMethod: {}.",
                                    centroidalManagerMethod);
     }
   }
   else
   {
-    mc_rtc::log::warning("[BaselineWalkingController] CentroidalManager configuration is missing.");
+    mc_rtc::log::warning("[MultiContactController] CentroidalManager configuration is missing.");
   }
 
   // Load other configurations
