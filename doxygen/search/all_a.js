@@ -8,7 +8,7 @@ var searchData=
   ['limbmanagerset_2eh_94',['LimbManagerSet.h',['../LimbManagerSet_8h.html',1,'']]],
   ['limbmanagerset_5f_95',['limbManagerSet_',['../structMCC_1_1MultiContactController.html#a64c6834b3282b351a350ec8dd030868f',1,'MCC::MultiContactController']]],
   ['limbsfromgroup_96',['limbsFromGroup',['../classMCC_1_1LimbManagerSet.html#a332224be0cdf517028c265c08e80e97c',1,'MCC::LimbManagerSet']]],
-  ['limbtask_5f_97',['limbTask_',['../classMCC_1_1LimbManager.html#a8dc46a7f69a7404b1a9f905b372d265c',1,'MCC::LimbManager']]],
+  ['limbtask_97',['limbTask',['../classMCC_1_1LimbManager.html#a3ea4fac50dd8423874a23404c4cc08ce',1,'MCC::LimbManager']]],
   ['limbtasks_5f_98',['limbTasks_',['../structMCC_1_1MultiContactController.html#a48069fc32019cbb722619b5baf8b5c6a',1,'MCC::MultiContactController']]],
   ['limbtypes_2eh_99',['LimbTypes.h',['../LimbTypes_8h.html',1,'']]],
   ['limbweightlistforanchorframe_100',['limbWeightListForAnchorFrame',['../structMCC_1_1CentroidalManager_1_1Configuration.html#a5bbadb6adaedfbfb42c573366d220cec',1,'MCC::CentroidalManager::Configuration']]],
