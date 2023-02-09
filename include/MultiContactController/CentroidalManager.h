@@ -153,8 +153,15 @@ public:
     //! Min/max points of contact region
     std::array<Eigen::Vector2d, 2> contactRegionMinMax = {Eigen::Vector2d::Zero(), Eigen::Vector2d::Zero()};
 
-    /** \brief Reset. */
+    /** \brief Reset.
+        \param ctlPtr pointer to controller
+     */
     void reset(const MultiContactController * const ctlPtr);
+
+    /** \brief Set centroidal state for MPC.
+        \param whether to use actual state for MPC
+     */
+    void setMpcState(bool useActualStateForMpc);
 
     /** \brief Add entries to the logger. */
     virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);

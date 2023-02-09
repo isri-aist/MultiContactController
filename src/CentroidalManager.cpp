@@ -66,17 +66,22 @@ void CentroidalManager::ControlData::reset(const MultiContactController * const 
   *this = ControlData();
   plannedCentroidalPose = sva::PTransformd(ctlPtr->baseOriTask_->orientation(), ctlPtr->comTask_->com());
   plannedCentroidalVel = sva::MotionVecd(ctlPtr->baseOriTask_->refVel(), ctlPtr->comTask_->refVel());
+  plannedCentroidalMomentum = ctlPtr->momentumTask_->momentum();
+}
+
+void CentroidalManager::ControlData::setMpcState(bool useActualStateForMpc)
+{
+  mpcCentroidalPose = (useActualStateForMpc ? actualCentroidalPose : plannedCentroidalPose);
+  mpcCentroidalVel = (useActualStateForMpc ? actualCentroidalVel : plannedCentroidalVel);
+  mpcCentroidalMomentum = (useActualStateForMpc ? actualCentroidalMomentum : plannedCentroidalMomentum);
 }
 
 void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
 {
-  MC_RTC_LOG_HELPER(baseEntry + "_centroidalPose_mpc", mpcCentroidalPose);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalPose_planned", plannedCentroidalPose);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalPose_actual", actualCentroidalPose);
-  MC_RTC_LOG_HELPER(baseEntry + "_centroidalVel_mpc", mpcCentroidalVel);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalVel_planned", plannedCentroidalVel);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalVel_actual", actualCentroidalVel);
-  MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_mpc", mpcCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_planned", plannedCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalMomentum_actual", actualCentroidalMomentum);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalWrench_planned", plannedCentroidalWrench);
@@ -146,21 +151,7 @@ void CentroidalManager::update()
       controlData_.actualCentroidalWrench += limbPoseFromCom.transMul(limbTaskKV.second->measuredWrench());
     }
   }
-  if(config().useActualStateForMpc)
-  {
-    controlData_.mpcCentroidalPose = controlData_.actualCentroidalPose;
-    controlData_.mpcCentroidalVel = controlData_.actualCentroidalVel;
-    controlData_.mpcCentroidalMomentum = controlData_.actualCentroidalMomentum;
-  }
-  else
-  {
-    // Task targets are the planned state in the previous step
-    controlData_.mpcCentroidalPose.translation() = ctl().comTask_->com();
-    controlData_.mpcCentroidalPose.rotation() = ctl().baseOriTask_->orientation();
-    controlData_.mpcCentroidalVel.linear() = ctl().comTask_->refVel();
-    controlData_.mpcCentroidalVel.angular() = ctl().baseOriTask_->refVel();
-    controlData_.mpcCentroidalMomentum = ctl().momentumTask_->momentum();
-  }
+  controlData_.setMpcState(config().useActualStateForMpc);
 
   // Run MPC
   runMpc();
@@ -182,12 +173,13 @@ void CentroidalManager::update()
     contactList_ = ctl().limbManagerSet_->contactList(ctl().t());
     wrenchDist_ = std::make_shared<ForceColl::WrenchDistribution<Limb>>(contactList_, config().wrenchDistConfig);
     Eigen::Vector3d comForWrenchDist =
-        (config().useActualComForWrenchDist ? controlData_.actualCentroidalPose.translation() : ctl().comTask_->com());
+        (config().useActualComForWrenchDist ? controlData_.actualCentroidalPose.translation()
+                                            : controlData_.plannedCentroidalPose.translation());
     wrenchDist_->run(controlData_.controlCentroidalWrench, comForWrenchDist);
     controlData_.projectedControlCentroidalWrench = wrenchDist_->resultTotalWrench_;
   }
 
-  // Set target pose of tasks
+  // Update planned state for the next time step
   {
     controlData_.plannedCentroidalPose.translation() =
         controlData_.mpcCentroidalPose.translation() + ctl().dt() * controlData_.mpcCentroidalVel.linear()
@@ -200,7 +192,10 @@ void CentroidalManager::update()
             .first.toRotationMatrix();
     controlData_.plannedCentroidalVel =
         controlData_.mpcCentroidalVel + ctl().dt() * controlData_.plannedCentroidalAccel;
+  }
 
+  // Set target state of tasks
+  {
     ctl().comTask_->com(controlData_.plannedCentroidalPose.translation());
     ctl().comTask_->refVel(controlData_.plannedCentroidalVel.linear());
     ctl().comTask_->refAccel(controlData_.plannedCentroidalAccel.linear());
@@ -217,8 +212,12 @@ void CentroidalManager::update()
     const auto & targetWrenchList = wrenchDist_->calcWrenchList();
     for(const auto & limbManagerKV : *ctl().limbManagerSet_)
     {
-      sva::ForceVecd targetWrench = sva::ForceVecd::Zero();
-      if(targetWrenchList.count(limbManagerKV.first))
+      sva::ForceVecd targetWrench;
+      if(targetWrenchList.count(limbManagerKV.first) == 0)
+      {
+        targetWrench = sva::ForceVecd::Zero();
+      }
+      else
       {
         targetWrench = targetWrenchList.at(limbManagerKV.first);
       }
@@ -230,7 +229,7 @@ void CentroidalManager::update()
   {
     Eigen::Vector3d zmpPlaneOrigin = calcAnchorFrame(ctl().robot()).translation();
     Eigen::Vector3d zmpPlaneNormal = Eigen::Vector3d::UnitZ();
-    auto calcZmp = [&](const sva::ForceVecd & wrench, const Eigen::Vector3d & momentOrigin) -> Eigen::Vector3d {
+    auto calcZmp = [&](const sva::ForceVecd & wrench, const Eigen::Vector3d & momentOrigin) {
       Eigen::Vector3d zmp = zmpPlaneOrigin;
       if(wrench.force().z() > 0)
       {
@@ -266,31 +265,32 @@ void CentroidalManager::stop()
 
 void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  gui.addElement(
-      {ctl().name(), config().name, "Config"}, mc_rtc::gui::Label("method", [this]() { return config().method; }),
-      mc_rtc::gui::ArrayInput(
-          "Centroidal P-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
-          [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainP; },
-          [this](const Eigen::Vector6d & v) { config().centroidalGainP = sva::ImpedanceVecd(v); }),
-      mc_rtc::gui::ArrayInput(
-          "Centroidal D-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
-          [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainD; },
-          [this](const Eigen::Vector6d & v) { config().centroidalGainD = sva::ImpedanceVecd(v); }),
-      mc_rtc::gui::Checkbox(
-          "useActualStateForMpc", [this]() { return config().useActualStateForMpc; },
-          [this]() { config().useActualStateForMpc = !config().useActualStateForMpc; }),
-      mc_rtc::gui::Checkbox(
-          "enableCentroidalFeedback", [this]() { return config().enableCentroidalFeedback; },
-          [this]() { config().enableCentroidalFeedback = !config().enableCentroidalFeedback; }),
-      mc_rtc::gui::Checkbox(
-          "useTargetPoseForControlRobotAnchorFrame",
-          [this]() { return config().useTargetPoseForControlRobotAnchorFrame; },
-          [this]() {
-            config().useTargetPoseForControlRobotAnchorFrame = !config().useTargetPoseForControlRobotAnchorFrame;
-          }),
-      mc_rtc::gui::Checkbox(
-          "useActualComForWrenchDist", [this]() { return config().useActualComForWrenchDist; },
-          [this]() { config().useActualComForWrenchDist = !config().useActualComForWrenchDist; }));
+  gui.addElement({ctl().name(), config().name, "Config"},
+                 mc_rtc::gui::Label("method", [this]() -> const std::string & { return config().method; }),
+                 mc_rtc::gui::ArrayInput(
+                     "Centroidal P-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
+                     [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainP; },
+                     [this](const Eigen::Vector6d & v) { config().centroidalGainP = sva::ImpedanceVecd(v); }),
+                 mc_rtc::gui::ArrayInput(
+                     "Centroidal D-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
+                     [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainD; },
+                     [this](const Eigen::Vector6d & v) { config().centroidalGainD = sva::ImpedanceVecd(v); }),
+                 mc_rtc::gui::Checkbox(
+                     "useActualStateForMpc", [this]() { return config().useActualStateForMpc; },
+                     [this]() { config().useActualStateForMpc = !config().useActualStateForMpc; }),
+                 mc_rtc::gui::Checkbox(
+                     "enableCentroidalFeedback", [this]() { return config().enableCentroidalFeedback; },
+                     [this]() { config().enableCentroidalFeedback = !config().enableCentroidalFeedback; }),
+                 mc_rtc::gui::Checkbox(
+                     "useTargetPoseForControlRobotAnchorFrame",
+                     [this]() { return config().useTargetPoseForControlRobotAnchorFrame; },
+                     [this]() {
+                       config().useTargetPoseForControlRobotAnchorFrame =
+                           !config().useTargetPoseForControlRobotAnchorFrame;
+                     }),
+                 mc_rtc::gui::Checkbox(
+                     "useActualComForWrenchDist", [this]() { return config().useActualComForWrenchDist; },
+                     [this]() { config().useActualComForWrenchDist = !config().useActualComForWrenchDist; }));
 }
 
 void CentroidalManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
