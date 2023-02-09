@@ -13,7 +13,6 @@
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/centroidal/CentroidalManagerDDP.h>
-#include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
 using namespace MCC;
 
@@ -100,10 +99,6 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     const auto & contactsConfig = config()("Contacts");
     ForceColl::SurfaceContact::loadVerticesMap(contactsConfig("Surface", mc_rtc::Configuration{}));
     ForceColl::GraspContact::loadVerticesMap(contactsConfig("Grasp", mc_rtc::Configuration{}));
-  }
-  if(config().has("SwingTraj"))
-  {
-    SwingTrajCubicSplineSimple::loadDefaultConfig(config()("SwingTraj")("CubicSplineSimple", mc_rtc::Configuration{}));
   }
 
   // Setup anchor

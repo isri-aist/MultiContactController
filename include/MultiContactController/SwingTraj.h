@@ -42,11 +42,11 @@ public:
             double startTime,
             double endTime,
             const TaskGain & taskGain,
-            const mc_rtc::Configuration & mcRtcConfig = {})
+            const mc_rtc::Configuration & = {} // mcRtcConfig
+            )
   : commandType_(commandType), isContact_(isContact), startPose_(startPose), endPose_(endPose), startTime_(startTime),
     endTime_(endTime), taskGain_(taskGain)
   {
-    config_.load(mcRtcConfig);
   }
 
   /** \brief Get type of limb swing trajectory. */
@@ -85,15 +85,13 @@ public:
   }
 
   /** \brief Const accessor to the configuration. */
-  inline virtual const Configuration & config() const
-  {
-    return config_;
-  }
+  virtual const Configuration & config() const = 0;
+
+protected:
+  /** \brief Accessor to the configuration. */
+  virtual Configuration & config() = 0;
 
 public:
-  //! Configuration
-  Configuration config_;
-
   //! Type of swing command
   SwingCommand::Type commandType_;
 

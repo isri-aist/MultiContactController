@@ -3,6 +3,7 @@
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
 
 using namespace MCC;
 
@@ -15,6 +16,12 @@ LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Co
 : ctlPtr_(ctlPtr)
 {
   config_.load(mcRtcConfig);
+
+  if(mcRtcConfig.has("SwingTraj"))
+  {
+    SwingTrajCubicSplineSimple::loadDefaultConfig(
+        mcRtcConfig("SwingTraj")("CubicSplineSimple", mc_rtc::Configuration{}));
+  }
 
   for(const auto & limbTaskKV : ctl().limbTasks_)
   {
@@ -154,11 +161,15 @@ void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
                          }));
     }
   }
+
+  SwingTrajCubicSplineSimple::addConfigToGUI(gui, {ctl().name(), config_.name, "SwingTraj", "CubicSplineSimple"});
 }
 
 void LimbManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.removeCategory({ctl().name(), config_.name});
+
+  SwingTrajCubicSplineSimple::removeConfigFromGUI(gui, {ctl().name(), config_.name, "SwingTraj", "CubicSplineSimple"});
 
   // GUI of each LimbManager is not removed here (removed via stop method)
 }
@@ -171,7 +182,8 @@ void LimbManagerSet::addToLogger(mc_rtc::Logger & logger)
   }
 }
 
-void LimbManagerSet::removeFromLogger(mc_rtc::Logger & logger)
+void LimbManagerSet::removeFromLogger(mc_rtc::Logger & // logger
+)
 {
   // Log of each LimbManager is not removed here (removed via stop method)
 }

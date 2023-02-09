@@ -109,6 +109,13 @@ LimbTaskList:
 
 LimbManagerSet:
   name: LimbManagerSet
+  SwingTraj:
+    CubicSplineSimple:
+      withdrawDurationRatio: 0.25
+      withdrawOffset: [0, 0, 0.015] # [m]
+      approachDurationRatio: 0.25
+      approachOffset: [0, 0, 0.015] # [m]
+      swingOffset: [0, 0, 0.05] # [m]
   LimbManager:
     default:
       impedanceGains:
