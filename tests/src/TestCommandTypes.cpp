@@ -6,6 +6,53 @@
 
 #include <MultiContactController/CommandTypes.h>
 
+TEST(TestCommandTypes, StepCommandSimpleDescriptionFormat)
+{
+  // Create command
+  const std::string stepCommandYamlStr = R"(
+limb: LeftFoot
+type: Add
+startTime: 2.0
+endTime: 3.0
+pose:
+  translation: [0.2, 0.1, 0]
+constraint:
+  type: Empty
+swingConfig: # swingConfig entry is optional
+  approachOffset: [0.0, 0.0, 0.1]
+)";
+  auto stepCommand = MCC::StepCommand(mc_rtc::Configuration::fromYAMLData(stepCommandYamlStr));
+
+  // Check swing command
+  {
+    EXPECT_EQ(stepCommand.swingCommand->type, MCC::SwingCommand::Type::Add);
+    EXPECT_DOUBLE_EQ(stepCommand.swingCommand->startTime, 2.0);
+    EXPECT_DOUBLE_EQ(stepCommand.swingCommand->endTime, 3.0);
+    EXPECT_LT((stepCommand.swingCommand->pose.translation() - Eigen::Vector3d(0.2, 0.1, 0)).norm(), 1e-10);
+    EXPECT_LT((stepCommand.swingCommand->pose.rotation() - Eigen::Matrix3d::Identity()).norm(), 1e-10);
+    Eigen::Vector3d approachOffset = stepCommand.swingCommand->config("approachOffset");
+    EXPECT_LT((approachOffset - Eigen::Vector3d(0.0, 0.0, 0.1)).norm(), 1e-10);
+  }
+
+  // Check contact command
+  {
+    EXPECT_EQ(stepCommand.contactCommandList.size(), 2);
+    auto contactCommandKV1 = stepCommand.contactCommandList.begin();
+    EXPECT_DOUBLE_EQ(contactCommandKV1->first, 2.0);
+    EXPECT_EQ(contactCommandKV1->second, nullptr);
+    auto contactCommandKV2 = std::next(stepCommand.contactCommandList.begin());
+    EXPECT_DOUBLE_EQ(contactCommandKV2->first, 3.0);
+    EXPECT_DOUBLE_EQ(contactCommandKV2->second->time, 3.0);
+    EXPECT_EQ(contactCommandKV2->second->constraint->name_, "LeftFoot");
+    EXPECT_EQ(contactCommandKV2->second->constraint->type(), "Empty");
+  }
+
+  // Check gripper command
+  {
+    EXPECT_EQ(stepCommand.gripperCommandList.size(), 0);
+  }
+}
+
 TEST(TestCommandTypes, setBaseTime)
 {
   // Create command
