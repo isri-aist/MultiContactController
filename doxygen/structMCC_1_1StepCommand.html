@@ -88,9 +88,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a249fe66e920d09f7257479b4385e60fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1StepCommand.html#a249fe66e920d09f7257479b4385e60fe">StepCommand</a> (const std::shared_ptr&lt; <a class="el" href="structMCC_1_1SwingCommand.html">SwingCommand</a> &gt; &amp;_swingCommand, const std::map&lt; double, std::shared_ptr&lt; <a class="el" href="structMCC_1_1ContactCommand.html">ContactCommand</a> &gt;&gt; &amp;_contactCommandList)</td></tr>
-<tr class="memdesc:a249fe66e920d09f7257479b4385e60fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="structMCC_1_1StepCommand.html#a249fe66e920d09f7257479b4385e60fe">More...</a><br /></td></tr>
-<tr class="separator:a249fe66e920d09f7257479b4385e60fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a169b7e2402f1ef6f56e57b44ade376a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1StepCommand.html#a169b7e2402f1ef6f56e57b44ade376a0">StepCommand</a> (const std::shared_ptr&lt; <a class="el" href="structMCC_1_1SwingCommand.html">SwingCommand</a> &gt; &amp;_swingCommand, const std::map&lt; double, std::shared_ptr&lt; <a class="el" href="structMCC_1_1ContactCommand.html">ContactCommand</a> &gt;&gt; &amp;_contactCommandList, const std::map&lt; double, std::shared_ptr&lt; <a class="el" href="structMCC_1_1GripperCommand.html">GripperCommand</a> &gt;&gt; &amp;_gripperCommandList)</td></tr>
+<tr class="memdesc:a169b7e2402f1ef6f56e57b44ade376a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="structMCC_1_1StepCommand.html#a169b7e2402f1ef6f56e57b44ade376a0">More...</a><br /></td></tr>
+<tr class="separator:a169b7e2402f1ef6f56e57b44ade376a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8629d794643cb4010bc0abb8ae81166"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1StepCommand.html#ae8629d794643cb4010bc0abb8ae81166">StepCommand</a> (const mc_rtc::Configuration &amp;mcRtcConfig)</td></tr>
 <tr class="memdesc:ae8629d794643cb4010bc0abb8ae81166"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="structMCC_1_1StepCommand.html#ae8629d794643cb4010bc0abb8ae81166">More...</a><br /></td></tr>
 <tr class="separator:ae8629d794643cb4010bc0abb8ae81166"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,10 +113,10 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Command for a single contact step. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00145">145</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00172">172</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a249fe66e920d09f7257479b4385e60fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a249fe66e920d09f7257479b4385e60fe">&#9670;&nbsp;</a></span>StepCommand() <span class="overload">[1/2]</span></h2>
+<a id="a169b7e2402f1ef6f56e57b44ade376a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a169b7e2402f1ef6f56e57b44ade376a0">&#9670;&nbsp;</a></span>StepCommand() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -134,7 +134,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::map&lt; double, std::shared_ptr&lt; <a class="el" href="structMCC_1_1ContactCommand.html">ContactCommand</a> &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>_contactCommandList</em>&#160;</td>
+          <td class="paramname"><em>_contactCommandList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::map&lt; double, std::shared_ptr&lt; <a class="el" href="structMCC_1_1GripperCommand.html">GripperCommand</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_gripperCommandList</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -154,11 +160,12 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">_swingCommand</td><td>swing command </td></tr>
     <tr><td class="paramname">_contactCommandList</td><td>contact command list </td></tr>
+    <tr><td class="paramname">_gripperCommandList</td><td>gripper command list </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00151">151</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00179">179</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
@@ -231,7 +238,7 @@ Public Attributes</h2></td></tr>
 
 <p>Contact command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00173">173</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00202">202</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
@@ -249,7 +256,7 @@ Public Attributes</h2></td></tr>
 
 <p>Gripper command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00176">176</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00205">205</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
@@ -267,7 +274,7 @@ Public Attributes</h2></td></tr>
 
 <p>Swing command. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00170">170</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00199">199</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
