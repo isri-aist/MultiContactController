@@ -159,7 +159,7 @@ public:
     void reset(const MultiContactController * const ctlPtr);
 
     /** \brief Set centroidal state for MPC.
-        \param whether to use actual state for MPC
+        \param useActualStateForMpc whether to use actual state for MPC
      */
     void setMpcState(bool useActualStateForMpc);
 

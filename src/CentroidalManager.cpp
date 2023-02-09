@@ -118,7 +118,8 @@ void CentroidalManager::RefData::removeFromLogger(mc_rtc::Logger & logger)
   logger.removeLogEntries(this);
 }
 
-CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
+CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & // mcRtcConfig
+                                     )
 : ctlPtr_(ctlPtr)
 {
 }

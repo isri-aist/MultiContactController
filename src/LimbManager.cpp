@@ -34,7 +34,7 @@ void LimbManager::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
 }
 
 LimbManager::LimbManager(MultiContactController * ctlPtr, const Limb & limb, const mc_rtc::Configuration & mcRtcConfig)
-: ctlPtr_(ctlPtr), limb_(limb), limbTask_(ctlPtr->limbTasks_.at(limb_))
+: ctlPtr_(ctlPtr), limb_(limb)
 {
   config_.load(mcRtcConfig);
 }
@@ -48,7 +48,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 
   gripperCommandList_.clear();
 
-  targetPose_ = limbTask_->frame().position();
+  targetPose_ = limbTask()->frame().position();
   targetVel_ = sva::MotionVecd::Zero();
   targetAccel_ = sva::MotionVecd::Zero();
   taskGain_ = config_.taskGain;
@@ -57,23 +57,26 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 
   touchDown_ = false;
 
-  phase_ = "Uninitialized"; // will be updated in the update method
+  // Following variables will be updated in the update method
+  {
+    phase_ = "Uninitialized";
 
-  impGainType_ = "Uninitialized"; // will be updated in the update method
+    impGainType_ = "Uninitialized";
 
-  requireImpGainUpdate_ = false;
+    requireImpGainUpdate_ = false;
+  }
 
   contactCommandList_.clear();
   if(_constraintConfig.empty())
   {
-    ctl().solver().removeTask(limbTask_);
+    ctl().solver().removeTask(limbTask());
     currentContactCommand_ = nullptr;
   }
   else
   {
-    limbTask_->reset();
-    ctl().solver().addTask(limbTask_);
-    limbTask_->setGains(taskGain_.stiffness, taskGain_.damping);
+    limbTask()->reset();
+    ctl().solver().addTask(limbTask());
+    limbTask()->setGains(taskGain_.stiffness, taskGain_.damping);
 
     // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
     mc_rtc::Configuration constraintConfig;
@@ -100,7 +103,7 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
 void LimbManager::update()
 {
   // Disable hold mode by default
-  limbTask_->hold(false);
+  limbTask()->hold(false);
 
   // Remove old contact command
   {
@@ -111,28 +114,25 @@ void LimbManager::update()
       if(it != contactCommandList_.begin())
       {
         prevContactCommand_ = std::prev(it)->second;
+        // Erase all elements in the range from begin to it (including begin but not including it)
         contactCommandList_.erase(contactCommandList_.begin(), it);
       }
     }
   }
 
-  // Remove old swing command
-  while(!swingCommandList_.empty() && swingCommandList_.begin()->second->endTime < ctl().t())
+  // Finalize completed swing command
+  while(!swingCommandList_.empty() && (swingCommandList_.begin()->second->endTime < ctl().t()))
   {
     const auto & completedSwingCommand = swingCommandList_.begin()->second;
 
     if(completedSwingCommand->type == SwingCommand::Type::Add)
     {
-      // Update prevSwingCommand_
-      prevSwingCommand_ = completedSwingCommand;
-
-      // Update target
       if(!(config_.keepPoseForTouchDownLimb && touchDown_))
       {
         targetPose_ = swingTraj_->endPose_;
-        targetVel_ = sva::MotionVecd::Zero();
-        targetAccel_ = sva::MotionVecd::Zero();
       }
+      targetVel_ = sva::MotionVecd::Zero();
+      targetAccel_ = sva::MotionVecd::Zero();
 
       taskGain_ = config_.taskGain;
 
@@ -140,19 +140,19 @@ void LimbManager::update()
     }
     else // if(completedSwingCommand->type == SwingCommand::Type::Remove)
     {
-      ctl().solver().removeTask(limbTask_);
+      ctl().solver().removeTask(limbTask());
     }
 
-    // Clear swingTraj_
+    // Update variables
     swingTraj_.reset();
-
-    // Clear currentSwingCommand_
     currentSwingCommand_.reset();
+    prevSwingCommand_ = completedSwingCommand;
 
-    // Remove old swing command
+    // Remove completed swing command
     swingCommandList_.erase(swingCommandList_.begin());
   }
 
+  // Process swing command
   if(!swingCommandList_.empty() && (swingCommandList_.begin()->first <= ctl().t()))
   {
     if(currentSwingCommand_)
@@ -169,14 +169,14 @@ void LimbManager::update()
       // https://github.com/jrl-umi3218/mc_rtc/pull/143
       if(currentContactCommand_)
       {
-        limbTask_->hold(true);
+        limbTask()->hold(true);
       }
 
       // Add limb task
       if(currentSwingCommand_->type == SwingCommand::Type::Add)
       {
-        limbTask_->reset();
-        ctl().solver().addTask(limbTask_);
+        limbTask()->reset();
+        ctl().solver().addTask(limbTask());
       }
 
       // Set swingTraj_
@@ -184,21 +184,21 @@ void LimbManager::update()
         sva::PTransformd swingStartPose;
         if(config_.swingStartPolicy == "ControlRobot")
         {
-          swingStartPose = limbTask_->frame().position(); // control robot pose (i.e., IK result)
+          swingStartPose = limbTask()->frame().position(); // control robot pose (i.e., IK result)
         }
         else if(config_.swingStartPolicy == "Target")
         {
-          swingStartPose = limbTask_->targetPose(); // target pose
+          swingStartPose = limbTask()->targetPose(); // target pose
         }
         else if(config_.swingStartPolicy == "Compliance")
         {
-          swingStartPose = limbTask_->compliancePose(); // compliance pose, which is modified by impedance
+          swingStartPose = limbTask()->compliancePose(); // compliance pose, which is modified by impedance
         }
         else
         {
-          mc_rtc::log::error_and_throw(
-              "[LimbManager({})] swingStartPolicy must be ControlRobot, Target, or Compliance, but {} is specified.",
-              std::to_string(limb_), config_.swingStartPolicy);
+          mc_rtc::log::error_and_throw("[LimbManager({})] swingStartPolicy must be \"ControlRobot\", \"Target\", or "
+                                       "\"Compliance\", but \"{}\" is specified.",
+                                       std::to_string(limb_), config_.swingStartPolicy);
         }
         sva::PTransformd swingEndPose = currentSwingCommand_->pose;
         if(config_.overwriteLandingPose && prevSwingCommand_ && prevSwingCommand_->type == SwingCommand::Type::Add)
@@ -223,7 +223,6 @@ void LimbManager::update()
         }
       }
 
-      // Remove contact during adding/removing contact
       touchDown_ = false;
     }
 
@@ -247,15 +246,16 @@ void LimbManager::update()
     }
   }
 
-  // Send gripper command
-  if(!gripperCommandList_.empty() && (gripperCommandList_.begin()->first <= ctl().t()))
+  // Process gripper command
+  while(!gripperCommandList_.empty() && gripperCommandList_.begin()->first <= ctl().t())
   {
     auto it = gripperCommandList_.begin();
     const auto & gripperCommand = it->second;
 
+    // Send gripper command
     ctl().robot().gripper(gripperCommand->name).configure(gripperCommand->config);
 
-    // Remove old gripper command
+    // Remove processed gripper command
     gripperCommandList_.erase(it);
   }
 
@@ -278,12 +278,12 @@ void LimbManager::update()
 
   // Set target of limb task
   {
-    limbTask_->targetPose(targetPose_);
+    limbTask()->targetPose(targetPose_);
     // ImpedanceTask::targetVel receive the velocity represented in the world frame
-    limbTask_->targetVel(targetVel_);
+    limbTask()->targetVel(targetVel_);
     // ImpedanceTask::targetAccel receive the acceleration represented in the world frame
-    limbTask_->targetAccel(targetAccel_);
-    limbTask_->setGains(taskGain_.stiffness, taskGain_.damping);
+    limbTask()->targetAccel(targetAccel_);
+    limbTask()->setGains(taskGain_.stiffness, taskGain_.damping);
   }
 
   // Update impGainType_ and requireImpGainUpdate_
@@ -317,7 +317,7 @@ void LimbManager::update()
   {
     requireImpGainUpdate_ = false;
 
-    limbTask_->gains() = config_.impGains.at(impGainType_);
+    limbTask()->gains() = config_.impGains.at(impGainType_);
   }
 
   // Update contact visualization
@@ -356,8 +356,8 @@ void LimbManager::stop()
 
 void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  gui.addElement({ctl().name(), config_.name, std::to_string(limb_)},
-                 mc_rtc::gui::Label("frame", [this]() { return limbTask_->frame().name(); }),
+  gui.addElement({ctl().name(), config_.name, std::to_string(limb_), "Status"},
+                 mc_rtc::gui::Label("frame", [this]() { return limbTask()->frame().name(); }),
                  mc_rtc::gui::Label("swingCommandListSize", [this]() { return swingCommandList_.size(); }),
                  mc_rtc::gui::Label("contactCommandListSize", [this]() { return contactCommandList_.size(); }),
                  mc_rtc::gui::Label("gripperCommandListSize", [this]() { return gripperCommandList_.size(); }),
@@ -377,6 +377,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
   logger.addLogEntry(name + "_swingCommandListSize", this, [this]() { return swingCommandList_.size(); });
   logger.addLogEntry(name + "_contactCommandListSize", this, [this]() { return contactCommandList_.size(); });
   logger.addLogEntry(name + "_gripperCommandListSize", this, [this]() { return gripperCommandList_.size(); });
+  logger.addLogEntry(name + "_isContact", this, [this]() { return static_cast<bool>(currentContactCommand_); });
   MC_RTC_LOG_HELPER(name + "_phase", phase_);
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
@@ -392,21 +393,21 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
   // Check time of swing command
   if(stepCommand.swingCommand)
   {
-    double stepCommandStartTime = stepCommand.swingCommand->startTime;
-    if(stepCommandStartTime < ctl().t())
+    double swingCommandStartTime = stepCommand.swingCommand->startTime;
+    if(swingCommandStartTime < ctl().t())
     {
       mc_rtc::log::error("[LimbManager({})] Ignore a new step command with swing command with past time: {} < {}",
-                         std::to_string(limb_), stepCommandStartTime, ctl().t());
+                         std::to_string(limb_), swingCommandStartTime, ctl().t());
       return false;
     }
     if(!swingCommandList_.empty())
     {
-      const auto & lastSwingCommand = swingCommandList_.rbegin()->second;
-      if(stepCommandStartTime < lastSwingCommand->endTime)
+      double lastSwingCommandTime = swingCommandList_.rbegin()->second->endTime;
+      if(swingCommandStartTime < lastSwingCommandTime)
       {
         mc_rtc::log::error("[LimbManager({})] Ignore a new step command with swing command earlier than the last swing "
                            "command: {} < {}",
-                           std::to_string(limb_), stepCommandStartTime, lastSwingCommand->endTime);
+                           std::to_string(limb_), swingCommandStartTime, lastSwingCommandTime);
         return false;
       }
     }
@@ -424,7 +425,7 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
     }
     if(!contactCommandList_.empty())
     {
-      const auto & lastContactCommandTime = contactCommandList_.rbegin()->first;
+      double lastContactCommandTime = contactCommandList_.rbegin()->first;
       if(contactCommandTime < lastContactCommandTime)
       {
         mc_rtc::log::error("[LimbManager({})] Ignore a new step command with contact command earlier than the last "
@@ -447,7 +448,7 @@ bool LimbManager::appendStepCommand(const StepCommand & stepCommand)
     }
     if(!gripperCommandList_.empty())
     {
-      const auto & lastGripperCommandTime = gripperCommandList_.rbegin()->first;
+      double lastGripperCommandTime = gripperCommandList_.rbegin()->first;
       if(gripperCommandTime < lastGripperCommandTime)
       {
         mc_rtc::log::error("[LimbManager({})] Ignore a new step command with gripper command earlier than the last "
@@ -484,7 +485,7 @@ sva::PTransformd LimbManager::getLimbPose(double t) const
   auto it = swingCommandList_.upper_bound(t);
   if(it == swingCommandList_.begin())
   {
-    // If swing command is not found, returns the current target pose
+    // Assume that the current target pose is kept since there is no swing command before the specified time
     return targetPose_;
   }
   else
@@ -492,7 +493,8 @@ sva::PTransformd LimbManager::getLimbPose(double t) const
     it--;
     if(it->second == currentSwingCommand_)
     {
-      // If currentSwingCommand_ is found, return end pose of swingTraj_ (reflecting the override)
+      // If the swing command at the specified time is same as currentSwingCommand_, return the end pose of swingTraj_
+      // (reflecting the override)
       return swingTraj_->endPose_;
     }
     else
@@ -507,44 +509,39 @@ std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
   auto it = contactCommandList_.upper_bound(t);
   if(it == contactCommandList_.begin())
   {
-    // Past time is given
-    return nullptr;
+    mc_rtc::log::error_and_throw(
+        "[LimbManager({})] Past time is given in getContactCommand. specified time: {}, current time: {}",
+        std::to_string(limb_), t, ctl().t());
   }
-  else
+
+  it--;
+
+  auto currentIt = contactCommandList_.upper_bound(ctl().t());
+  if(currentIt != contactCommandList_.begin())
   {
-    it--;
-
-    auto currentIt = contactCommandList_.upper_bound(ctl().t());
-    if(currentIt != contactCommandList_.begin())
+    currentIt--;
+    // If the contact at the specified time is same as the current contact and touch down is detected, return the next
+    // contact
+    if(it == currentIt && !it->second && std::next(it)->second && config_.enableWrenchDistForTouchDownLimb
+       && touchDown_)
     {
-      currentIt--;
-      // If current contact is found and touch down is detected, return the next contact
-      if(it == currentIt && !it->second && std::next(it)->second && config_.enableWrenchDistForTouchDownLimb
-         && touchDown_)
-      {
-        return std::next(it)->second;
-      }
+      return std::next(it)->second;
     }
-
-    return it->second;
   }
+
+  return it->second;
 }
 
 double LimbManager::getContactWeight(double t) const
 {
-  // Past time is given
   auto nextIt = contactCommandList_.upper_bound(t);
   if(nextIt == contactCommandList_.begin())
   {
-    return 0;
+    mc_rtc::log::error_and_throw(
+        "[LimbManager({})] Past time is given in getContactWeight. specified time: {}, current time: {}",
+        std::to_string(limb_), t, ctl().t());
   }
-
-  // Is not contacting
   auto currentIt = std::prev(nextIt);
-  if(!currentIt->second)
-  {
-    return 0;
-  }
 
   // Check time consistency
   assert(currentIt->first <= t);
@@ -553,13 +550,19 @@ double LimbManager::getContactWeight(double t) const
     assert(t <= nextIt->first);
   }
 
+  // If not contacted at the specified time, return zero
+  if(!currentIt->second)
+  {
+    return 0;
+  }
+
   const std::shared_ptr<ContactCommand> & prevContactCommand =
       (currentIt == contactCommandList_.begin() ? prevContactCommand_ : std::prev(currentIt)->second);
-  if(!prevContactCommand && t - currentIt->first < config_.weightTransitDuration)
+  if(!prevContactCommand && (t - currentIt->first < config_.weightTransitDuration))
   {
     return mc_filter::utils::clamp((t - currentIt->first) / config_.weightTransitDuration, 1e-8, 1.0);
   }
-  else if(nextIt != contactCommandList_.end() && !nextIt->second && nextIt->first - t < config_.weightTransitDuration)
+  else if(nextIt != contactCommandList_.end() && !nextIt->second && (nextIt->first - t < config_.weightTransitDuration))
   {
     return mc_filter::utils::clamp((nextIt->first - t) / config_.weightTransitDuration, 1e-8, 1.0);
   }
@@ -569,16 +572,9 @@ double LimbManager::getContactWeight(double t) const
   }
 }
 
-double LimbManager::touchDownRemainingDuration() const
+const std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> & LimbManager::limbTask() const
 {
-  if(currentSwingCommand_)
-  {
-    return currentSwingCommand_->endTime - ctl().t();
-  }
-  else
-  {
-    return 0;
-  }
+  return ctl().limbTasks_.at(limb_);
 }
 
 bool LimbManager::detectTouchDown() const
@@ -590,7 +586,7 @@ bool LimbManager::detectTouchDown() const
   }
 
   // False if the remaining duration does not meet the threshold
-  if(touchDownRemainingDuration() > config_.touchDownRemainingDuration)
+  if(swingTraj_->endTime_ - ctl().t() > config_.touchDownRemainingDuration)
   {
     return false;
   }
@@ -603,7 +599,7 @@ bool LimbManager::detectTouchDown() const
   }
 
   // Return false if the normal force does not meet the threshold
-  double fz = limbTask_->measuredWrench().force().z();
+  double fz = limbTask()->measuredWrench().force().z();
   if(fz < config_.touchDownForceZ)
   {
     return false;

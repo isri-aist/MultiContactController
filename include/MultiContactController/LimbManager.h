@@ -96,17 +96,6 @@ public:
       \param constraintConfig mc_rtc configuration for contact constraint
 
       This method should be called once when controller is reset.
-
-      An example of \p constraintConfig is as follows.
-      @code
-      LeftFoot: # limb
-        # configuration for ContactConstraint
-        type: Surface
-        fricCoeff: 0.5
-      RightFoot:
-        type: Surface
-        fricCoeff: 0.5
-      @endcode
   */
   void reset(const mc_rtc::Configuration & constraintConfig);
 
@@ -167,7 +156,7 @@ public:
   /** \brief Get target limb pose at the specified time.
       \param t time
 
-      \note Returns the end pose of the swing even while the limb is swinging.
+      \note Returns the swing end pose even while the limb is swinging.
    */
   sva::PTransformd getLimbPose(double t) const;
 
@@ -175,11 +164,16 @@ public:
       \param t time
 
       If nullptr is returned, the limb is not contacting at the specified time, otherwise it is contacting.
+      If config_.enableWrenchDistForTouchDownLimb is true and touch down is detected during swing, return the next
+     contact.
    */
   std::shared_ptr<ContactCommand> getContactCommand(double t) const;
 
   /** \brief Get contact weight at the specified time.
       \param t time
+
+      Contact weight is 0 for non-contact, 1 for contact. It is linearly interpolated over the duration of
+     config_.weightTransitDuration at the beginning and end of the contact.
    */
   double getContactWeight(double t) const;
 
@@ -196,10 +190,8 @@ protected:
     return *ctlPtr_;
   }
 
-  /** \brief Get the remaining duration for next touch down.
-
-      Returns zero if the limb is not swinging . */
-  double touchDownRemainingDuration() const;
+  /** \brief Accessor to the limb task. */
+  const std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> & limbTask() const;
 
   /** \brief Detect touch down.
       \return true if touch down is detected during swing
@@ -215,9 +207,6 @@ protected:
 
   //! Limb
   Limb limb_;
-
-  //! Limb task
-  std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask> limbTask_;
 
   //! Swing command list (map of start time and swing command)
   std::map<double, std::shared_ptr<SwingCommand>> swingCommandList_;

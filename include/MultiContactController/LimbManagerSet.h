@@ -32,6 +32,17 @@ public:
       \param constraintSetConfig mc_rtc configuration for contact constraint set
 
       This method should be called once when controller is reset.
+
+      An example of \p constraintSetConfig is as follows.
+      @code
+      LeftFoot: # limb
+        # configuration for ContactConstraint
+        type: Surface
+        fricCoeff: 0.5
+      RightFoot:
+        type: Surface
+        fricCoeff: 0.5
+      @endcode
   */
   void reset(const mc_rtc::Configuration & constraintSetConfig);
 
