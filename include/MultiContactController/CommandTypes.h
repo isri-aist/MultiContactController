@@ -185,6 +185,52 @@ struct StepCommand
 
   /** \brief Constructor.
       \param mcRtcConfig mc_rtc configuration
+
+      Two types of formats, simple description and full description, are available for \p mcRtcConfig.
+
+      An example of \p mcRtcConfig with simple description format is as follows.
+      @code
+      limb: LeftFoot
+      type: Add
+      startTime: 2.0
+      endTime: 3.0
+      pose:
+        translation: [0.2, 0.1, 0]
+      constraint:
+        type: Surface
+        fricCoeff: 0.5
+      swingConfig: # swingConfig entry is optional
+        approachOffset: [0.0, 0.0, 0.1]
+      @endcode
+
+      An example of \p mcRtcConfig with full description format is as follows.
+      @code
+      limb: LeftHand
+      pose:
+        translation: [0.0, 0.5, 0.8]
+      swingCommand:
+        type: Add
+        startTime: 2.0
+        endTime: 3.0
+        config:
+          approachOffset: [0.0, 0.0, 0.1]
+      contactCommandList:
+        # Empty contact while gripper is closing
+        - time: 3.0
+          constraint:
+            type: Empty
+        # Grasp contact after the gripper closes
+        - time: 4.0
+          constraint:
+            type: Grasp
+            fricCoeff: 0.5
+      gripperCommandList:
+        # Start closing the gripper when swing is finished
+        - time: 3.0
+          name: l_gripper
+          config:
+            opening: 0.0
+      @endcode
    */
   StepCommand(const mc_rtc::Configuration & mcRtcConfig);
 
