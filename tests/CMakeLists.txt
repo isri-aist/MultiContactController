@@ -15,6 +15,7 @@ endif()
 
 set(MCC_gtest_list
   TestMathUtils
+  TestCommandTypes
   )
 
 foreach(NAME IN LISTS MCC_gtest_list)
