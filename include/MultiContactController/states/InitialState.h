@@ -1,5 +1,7 @@
 #pragma once
 
+#include <TrajColl/CubicInterpolator.h>
+
 #include <MultiContactController/State.h>
 
 namespace MCC

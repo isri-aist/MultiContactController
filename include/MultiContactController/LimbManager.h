@@ -8,9 +8,6 @@
 #include <mc_rtc/log/Logger.h>
 #include <mc_tasks/ImpedanceGains.h>
 
-#include <TrajColl/CubicInterpolator.h>
-#include <TrajColl/CubicSpline.h>
-
 #include <MultiContactController/CommandTypes.h>
 #include <MultiContactController/LimbTypes.h>
 #include <MultiContactController/RobotUtils.h>
@@ -30,7 +27,7 @@ class SwingTraj;
 
 /** \brief Limb manager.
 
-    Limb manager generates a swing limb trajectory from a specified swing command sequence.
+    Limb manager manages limb swing and contact given a command sequence.
 */
 class LimbManager
 {
@@ -53,7 +50,7 @@ public:
     //! Policy for determining the start pose of the swing trajectory
     std::string swingStartPolicy = "ControlRobot";
 
-    //! Whether to overwrite landing pose so that the relative pose from support limb to swing limb is retained
+    //! Whether to overwrite landing pose so that the relative pose from swing start to end is retained
     bool overwriteLandingPose = false;
 
     //! Whether to stop swing trajectory for touch down limb
@@ -99,6 +96,17 @@ public:
       \param constraintConfig mc_rtc configuration for contact constraint
 
       This method should be called once when controller is reset.
+
+      An example of \p constraintConfig is as follows.
+      @code
+      LeftFoot: # limb
+        # configuration for ContactConstraint
+        type: Surface
+        fricCoeff: 0.5
+      RightFoot:
+        type: Surface
+        fricCoeff: 0.5
+      @endcode
   */
   void reset(const mc_rtc::Configuration & constraintConfig);
 
