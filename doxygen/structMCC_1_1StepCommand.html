@@ -188,11 +188,48 @@ Public Attributes</h2></td></tr>
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mcRtcConfig</td><td>mc_rtc configuration </td></tr>
+    <tr><td class="paramname">mcRtcConfig</td><td>mc_rtc configuration</td></tr>
   </table>
   </dd>
 </dl>
-
+<p>Two types of formats, simple description and full description, are available for <code>mcRtcConfig</code>.</p>
+<p>An example of <code>mcRtcConfig</code> with simple description format is as follows. </p><div class="fragment"><div class="line">limb: LeftFoot</div>
+<div class="line">type: Add</div>
+<div class="line">startTime: 2.0</div>
+<div class="line">endTime: 3.0</div>
+<div class="line">pose:</div>
+<div class="line">  translation: [0.2, 0.1, 0]</div>
+<div class="line">constraint:</div>
+<div class="line">  type: Surface</div>
+<div class="line">  fricCoeff: 0.5</div>
+<div class="line">swingConfig: # swingConfig entry is optional</div>
+<div class="line">  approachOffset: [0.0, 0.0, 0.1]</div>
+</div><!-- fragment --><p>An example of <code>mcRtcConfig</code> with full description format is as follows. </p><div class="fragment"><div class="line">limb: LeftHand</div>
+<div class="line">pose:</div>
+<div class="line">  translation: [0.0, 0.5, 0.8]</div>
+<div class="line"><a class="code" href="structMCC_1_1StepCommand.html#ab58c201843d4d94e45b02db496b21de5">swingCommand</a>:</div>
+<div class="line">  type: Add</div>
+<div class="line">  startTime: 2.0</div>
+<div class="line">  endTime: 3.0</div>
+<div class="line">  config:</div>
+<div class="line">    approachOffset: [0.0, 0.0, 0.1]</div>
+<div class="line"><a class="code" href="structMCC_1_1StepCommand.html#ad843b351b21b4dee3f00fc4e52147657">contactCommandList</a>:</div>
+<div class="line"><span class="preprocessor">  # Empty contact while gripper is closing</span></div>
+<div class="line">  - time: 3.0</div>
+<div class="line">    constraint:</div>
+<div class="line">      type: Empty</div>
+<div class="line"><span class="preprocessor">  # Grasp contact after the gripper closes</span></div>
+<div class="line">  - time: 4.0</div>
+<div class="line">    constraint:</div>
+<div class="line">      type: Grasp</div>
+<div class="line">      fricCoeff: 0.5</div>
+<div class="line">gripperCommandList:</div>
+<div class="line"><span class="preprocessor">  # Start closing the gripper when swing is finished</span></div>
+<div class="line">  - time: 3.0</div>
+<div class="line">    name: l_gripper</div>
+<div class="line">    config:</div>
+<div class="line">      opening: 0.0</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -238,7 +275,7 @@ Public Attributes</h2></td></tr>
 
 <p>Contact command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00202">202</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00248">248</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
@@ -256,7 +293,7 @@ Public Attributes</h2></td></tr>
 
 <p>Gripper command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00205">205</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00251">251</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
@@ -274,7 +311,7 @@ Public Attributes</h2></td></tr>
 
 <p>Swing command. </p>
 
-<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00199">199</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CommandTypes_8h_source.html#l00245">245</a> of file <a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a>.</p>
 
 </div>
 </div>
@@ -282,6 +319,8 @@ Public Attributes</h2></td></tr>
 <li>/home/runner/work/MultiContactController/MultiContactController/catkin_ws/src/isri-aist/MultiContactController/include/MultiContactController/<a class="el" href="CommandTypes_8h_source.html">CommandTypes.h</a></li>
 </ul>
 </div><!-- contents -->
+<div class="ttc" id="astructMCC_1_1StepCommand_html_ab58c201843d4d94e45b02db496b21de5"><div class="ttname"><a href="structMCC_1_1StepCommand.html#ab58c201843d4d94e45b02db496b21de5">MCC::StepCommand::swingCommand</a></div><div class="ttdeci">std::shared_ptr&lt; SwingCommand &gt; swingCommand</div><div class="ttdoc">Swing command.</div><div class="ttdef"><b>Definition:</b> <a href="CommandTypes_8h_source.html#l00245">CommandTypes.h:245</a></div></div>
+<div class="ttc" id="astructMCC_1_1StepCommand_html_ad843b351b21b4dee3f00fc4e52147657"><div class="ttname"><a href="structMCC_1_1StepCommand.html#ad843b351b21b4dee3f00fc4e52147657">MCC::StepCommand::contactCommandList</a></div><div class="ttdeci">std::map&lt; double, std::shared_ptr&lt; ContactCommand &gt; &gt; contactCommandList</div><div class="ttdoc">Contact command list.</div><div class="ttdef"><b>Definition:</b> <a href="CommandTypes_8h_source.html#l00248">CommandTypes.h:248</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
