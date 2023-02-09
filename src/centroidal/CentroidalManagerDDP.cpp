@@ -4,8 +4,6 @@
 #include <CCC/Constants.h>
 #include <CCC/DdpCentroidal.h>
 
-#include <mc_tasks/CoMTask.h>
-
 #include <ForceColl/Contact.h>
 
 #include <MultiContactController/LimbManagerSet.h>
@@ -104,7 +102,9 @@ void CentroidalManagerDDP::runMpc()
                                                           ddp_->ddp_solver_->controlData().x_list[1].segment<3>(3));
   controlData_.plannedCentroidalAccel.linear() =
       controlData_.plannedCentroidalWrench.force() / robotMass_ - Eigen::Vector3d(0.0, 0.0, CCC::constants::g);
-  controlData_.plannedCentroidalAccel.angular().setZero(); // \todo
+  // \todo DdpCentroidal does not explicitly handle orientation (instead it only handles angular momentum) and cannot
+  // calculate angular acceleration
+  controlData_.plannedCentroidalAccel.angular().setZero();
 }
 
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const
@@ -143,6 +143,8 @@ CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double 
 CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcMpcRefData(double t) const
 {
   CCC::DdpCentroidal::RefData refData;
+
   refData.pos = calcRefData(t).centroidalPose.translation();
+
   return refData;
 }
