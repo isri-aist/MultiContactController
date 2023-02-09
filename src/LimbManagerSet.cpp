@@ -23,6 +23,7 @@ LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Co
     if(mcRtcConfig.has("LimbManager"))
     {
       limbManagerConfig.load(mcRtcConfig("LimbManager")("default", mc_rtc::Configuration{}));
+      limbManagerConfig.load(mcRtcConfig("LimbManager")(limbTaskKV.first.group, mc_rtc::Configuration{}));
       limbManagerConfig.load(mcRtcConfig("LimbManager")(std::to_string(limbTaskKV.first), mc_rtc::Configuration{}));
     }
     this->emplace(limbTaskKV.first, std::make_shared<LimbManager>(ctlPtr, limbTaskKV.first, limbManagerConfig));
@@ -49,6 +50,9 @@ void LimbManagerSet::update()
 
 void LimbManagerSet::stop()
 {
+  removeFromGUI(*ctl().gui());
+  removeFromLogger(ctl().logger());
+
   for(const auto & limbManagerKV : *this)
   {
     limbManagerKV.second->stop();
@@ -152,10 +156,22 @@ void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
   }
 }
 
+void LimbManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
+{
+  gui.removeCategory({ctl().name(), config_.name});
+
+  // GUI of each LimbManager is not removed here (removed via stop method)
+}
+
 void LimbManagerSet::addToLogger(mc_rtc::Logger & logger)
 {
   for(const auto & limbManagerKV : *this)
   {
     limbManagerKV.second->addToLogger(logger);
   }
+}
+
+void LimbManagerSet::removeFromLogger(mc_rtc::Logger & logger)
+{
+  // Log of each LimbManager is not removed here (removed via stop method)
 }

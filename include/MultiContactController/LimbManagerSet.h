@@ -25,6 +25,23 @@ public:
   /** \brief Constructor.
       \param ctlPtr pointer to controller
       \param mcRtcConfig mc_rtc configuration
+
+      mcRtcConfig has the configuration of LimbManagerSet in the root entry and the configuration of each LimbManager
+     under the "LimbManager" entry. Each LimbManager configuration is overwritten in the order of default, limb group,
+     limb name.
+
+      An example of \p mcRtcConfig is as follows.
+      @code
+      LimbManager:
+        default:
+          entryA: commonValueA
+          entryB: commonValueB
+          entryC: commonValueC
+        Hand:
+          entryB: groupSpecificValueB
+        LeftHand:
+          entryC: limbSpacificValueC
+      @endcode
   */
   LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
 
@@ -67,8 +84,14 @@ public:
   /** \brief Add entries to the GUI. */
   void addToGUI(mc_rtc::gui::StateBuilder & gui);
 
+  /** \brief Remove entries from the GUI. */
+  void removeFromGUI(mc_rtc::gui::StateBuilder & gui);
+
   /** \brief Add entries to the logger. */
   void addToLogger(mc_rtc::Logger & logger);
+
+  /** \brief Remove entries from the logger. */
+  void removeFromLogger(mc_rtc::Logger & logger);
 
   /** \brief Get contact constraint list at the specified time.
       \param t time
@@ -106,7 +129,7 @@ protected:
   //! Pointer to controller
   MultiContactController * ctlPtr_ = nullptr;
 
-  //! Map from limb group to limb
+  //! Map from limb group to limbs
   std::unordered_map<std::string, std::unordered_set<Limb>> groupLimbsMap_;
 };
 } // namespace MCC

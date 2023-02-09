@@ -142,19 +142,7 @@ LimbManagerSet:
           wrench:
             linear: [0, 0, 0]
             angular: [0, 0, 0]
-    LeftHand:
-      impedanceGains:
-        MultiContact:
-          damper:
-            linear: [5e4, 5e4, 5e4]
-            angular: [100, 100, 100]
-          spring:
-            linear: [0, 0, 0]
-            angular: [0, 0, 2000]
-          wrench:
-            linear: [1, 1, 1]
-            angular: [1, 1, 0]
-    RightHand:
+    Hand:
       impedanceGains:
         MultiContact:
           damper:
