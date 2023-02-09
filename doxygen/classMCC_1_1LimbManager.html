@@ -244,9 +244,9 @@ Friends</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> manager. </p>
-<p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> manager generates a swing limb trajectory from a specified swing command sequence. </p>
+<p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> manager manages limb swing and contact given a command sequence. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00035">35</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00032">32</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad2f940d2dd9ee4ec01312a4fbf39dc88"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad2f940d2dd9ee4ec01312a4fbf39dc88">&#9670;&nbsp;</a></span>LimbManager()</h2>
@@ -385,7 +385,7 @@ Friends</h2></td></tr>
 
 <p>Const accessor to the configuration. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00118">118</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00126">126</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -414,7 +414,7 @@ Friends</h2></td></tr>
 
 <p>Access contact command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00148">148</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00156">156</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -443,7 +443,7 @@ Friends</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00186">186</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00194">194</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -472,7 +472,7 @@ Friends</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00180">180</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00188">188</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -609,7 +609,7 @@ Friends</h2></td></tr>
 
 <p>Access gripper command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00154">154</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00162">162</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -676,8 +676,15 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This method should be called once when controller is reset. </p>
-
+<p>This method should be called once when controller is reset.</p>
+<p>An example of <code>constraintConfig</code> is as follows. </p><div class="fragment"><div class="line">LeftFoot: # limb</div>
+<div class="line"><span class="preprocessor">  # configuration for ContactConstraint</span></div>
+<div class="line">  type: Surface</div>
+<div class="line">  fricCoeff: 0.5</div>
+<div class="line">RightFoot:</div>
+<div class="line">  type: Surface</div>
+<div class="line">  fricCoeff: 0.5</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="ab56f85170ef0d9acc649fe9d23d2748e"></a>
@@ -725,7 +732,7 @@ Friends</h2></td></tr>
 
 <p>Access swing command list. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00142">142</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00150">150</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -798,7 +805,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00038">38</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00035">35</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -825,7 +832,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1LimbManager_1_1Configuration.html" title="Configuration.">Configuration</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00203">203</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00211">211</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -851,7 +858,7 @@ Friends</h2></td></tr>
 
 <p>Contact command list (map of start time and contact command) </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00224">224</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00232">232</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -877,7 +884,7 @@ Friends</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00206">206</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00214">214</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -903,7 +910,7 @@ Friends</h2></td></tr>
 
 <p>Current contact command. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00227">227</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00235">235</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -929,7 +936,7 @@ Friends</h2></td></tr>
 
 <p>Current swing command. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00218">218</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00226">226</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -955,7 +962,7 @@ Friends</h2></td></tr>
 
 <p>Gripper command list (map of start time and gripper command) </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00233">233</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00241">241</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -981,7 +988,7 @@ Friends</h2></td></tr>
 
 <p>Type of impedance gains. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00257">257</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00265">265</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1007,7 +1014,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00209">209</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00217">217</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1033,7 +1040,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> task. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00212">212</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00220">220</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1059,7 +1066,7 @@ Friends</h2></td></tr>
 
 <p>Phase. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00254">254</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00262">262</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1085,7 +1092,7 @@ Friends</h2></td></tr>
 
 <p>Previous contact command. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00230">230</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00238">238</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1111,7 +1118,7 @@ Friends</h2></td></tr>
 
 <p>Previous swing command pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00221">221</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00229">229</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1137,7 +1144,7 @@ Friends</h2></td></tr>
 
 <p>Whether to require updating impedance gains for limb tasks. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00260">260</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00268">268</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1163,7 +1170,7 @@ Friends</h2></td></tr>
 
 <p>Swing command list (map of start time and swing command) </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00215">215</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00223">223</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1189,7 +1196,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> swing trajectory. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00248">248</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00256">256</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1215,7 +1222,7 @@ Friends</h2></td></tr>
 
 <p>Target limb acceleration represented in world frame. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00242">242</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00250">250</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1241,7 +1248,7 @@ Friends</h2></td></tr>
 
 <p>Target limb pose represented in world frame. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00236">236</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00244">244</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1267,7 +1274,7 @@ Friends</h2></td></tr>
 
 <p>Target limb velocity represented in world frame. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00239">239</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00247">247</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1293,7 +1300,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> task gain. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00245">245</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00253">253</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
@@ -1319,7 +1326,7 @@ Friends</h2></td></tr>
 
 <p>Whether touch down is detected during swing. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00251">251</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManager_8h_source.html#l00259">259</a> of file <a class="el" href="LimbManager_8h_source.html">LimbManager.h</a>.</p>
 
 </div>
 </div>
