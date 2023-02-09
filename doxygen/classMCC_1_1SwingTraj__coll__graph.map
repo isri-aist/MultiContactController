@@ -1,5 +1,4 @@
 <map id="MCC::SwingTraj" name="MCC::SwingTraj">
-<area shape="rect" id="node1" title="Limb swing trajectory." alt="" coords="140,95,263,121"/>
-<area shape="rect" id="node2" href="$structMCC_1_1SwingTraj_1_1Configuration.html" title="Configuration." alt="" coords="5,5,224,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="249,5,330,32"/>
+<area shape="rect" id="node1" title="Limb swing trajectory." alt="" coords="5,95,128,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="26,5,107,32"/>
 </map>

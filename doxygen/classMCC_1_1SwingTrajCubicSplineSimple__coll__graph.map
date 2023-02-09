@@ -1,7 +1,7 @@
 <map id="MCC::SwingTrajCubicSplineSimple" name="MCC::SwingTrajCubicSplineSimple">
-<area shape="rect" id="node1" title="Simple limb swing trajectory with cubic spline." alt="" coords="109,213,307,255"/>
-<area shape="rect" id="node2" href="$classMCC_1_1SwingTraj.html" title="Limb swing trajectory." alt="" coords="231,102,353,129"/>
-<area shape="rect" id="node3" href="$structMCC_1_1SwingTraj_1_1Configuration.html" title="Configuration." alt="" coords="5,5,224,32"/>
-<area shape="rect" id="node5" href="$structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html" title="Configuration." alt="" coords="7,95,206,136"/>
-<area shape="rect" id="node4" title=" " alt="" coords="251,5,333,32"/>
+<area shape="rect" id="node1" title="Simple limb swing trajectory with cubic spline." alt="" coords="59,213,258,255"/>
+<area shape="rect" id="node2" href="$classMCC_1_1SwingTraj.html" title="Limb swing trajectory." alt="" coords="5,102,128,129"/>
+<area shape="rect" id="node3" title=" " alt="" coords="26,5,107,32"/>
+<area shape="rect" id="node4" href="$structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html" title="Configuration." alt="" coords="153,95,351,136"/>
+<area shape="rect" id="node5" href="$structMCC_1_1SwingTraj_1_1Configuration.html" title="Configuration." alt="" coords="143,5,361,32"/>
 </map>

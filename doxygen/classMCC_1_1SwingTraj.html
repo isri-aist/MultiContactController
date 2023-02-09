@@ -76,6 +76,7 @@ $(function() {
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classMCC_1_1SwingTraj-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -101,9 +102,8 @@ Collaboration diagram for MCC::SwingTraj:</div>
 <div class="dyncontent">
 <div class="center"><img src="classMCC_1_1SwingTraj__coll__graph.png" border="0" usemap="#MCC_1_1SwingTraj_coll__map" alt="Collaboration graph"/></div>
 <map name="MCC_1_1SwingTraj_coll__map" id="MCC_1_1SwingTraj_coll__map">
-<area shape="rect" title="Limb swing trajectory." alt="" coords="140,95,263,121"/>
-<area shape="rect" href="structMCC_1_1SwingTraj_1_1Configuration.html" title="Configuration." alt="" coords="5,5,224,32"/>
-<area shape="rect" title=" " alt="" coords="249,5,330,32"/>
+<area shape="rect" title="Limb swing trajectory." alt="" coords="5,95,128,121"/>
+<area shape="rect" title=" " alt="" coords="26,5,107,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -115,9 +115,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abf3e3153b2e95af897753e9c8d2d40ba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#abf3e3153b2e95af897753e9c8d2d40ba">SwingTraj</a> (const <a class="el" href="structMCC_1_1SwingCommand.html#a56325f4c373b4d557a41a76636bc20e8">SwingCommand::Type</a> &amp;commandType, bool isContact, const sva::PTransformd &amp;startPose, const sva::PTransformd &amp;endPose, double startTime, double endTime, const TaskGain &amp;<a class="el" href="classMCC_1_1SwingTraj.html#add75f3597fd4ea1466d1c3bb15fb4a2f">taskGain</a>, const mc_rtc::Configuration &amp;mcRtcConfig={})</td></tr>
-<tr class="memdesc:abf3e3153b2e95af897753e9c8d2d40ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classMCC_1_1SwingTraj.html#abf3e3153b2e95af897753e9c8d2d40ba">More...</a><br /></td></tr>
-<tr class="separator:abf3e3153b2e95af897753e9c8d2d40ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0d006f1d0cdbd259d863eb41ffeba6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#aed0d006f1d0cdbd259d863eb41ffeba6">SwingTraj</a> (const <a class="el" href="structMCC_1_1SwingCommand.html#a56325f4c373b4d557a41a76636bc20e8">SwingCommand::Type</a> &amp;commandType, bool isContact, const sva::PTransformd &amp;startPose, const sva::PTransformd &amp;endPose, double startTime, double endTime, const TaskGain &amp;<a class="el" href="classMCC_1_1SwingTraj.html#add75f3597fd4ea1466d1c3bb15fb4a2f">taskGain</a>, const mc_rtc::Configuration &amp;={})</td></tr>
+<tr class="memdesc:aed0d006f1d0cdbd259d863eb41ffeba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classMCC_1_1SwingTraj.html#aed0d006f1d0cdbd259d863eb41ffeba6">More...</a><br /></td></tr>
+<tr class="separator:aed0d006f1d0cdbd259d863eb41ffeba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb260ccbfdd440116592abbaeb39c6e4"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#adb260ccbfdd440116592abbaeb39c6e4">type</a> () const =0</td></tr>
 <tr class="memdesc:adb260ccbfdd440116592abbaeb39c6e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get type of limb swing trajectory.  <a href="classMCC_1_1SwingTraj.html#adb260ccbfdd440116592abbaeb39c6e4">More...</a><br /></td></tr>
 <tr class="separator:adb260ccbfdd440116592abbaeb39c6e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,15 +136,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7a41b00b58b34a86014ab5b3832180e7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#a7a41b00b58b34a86014ab5b3832180e7">touchDown</a> (double t)</td></tr>
 <tr class="memdesc:a7a41b00b58b34a86014ab5b3832180e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify touch down detection.  <a href="classMCC_1_1SwingTraj.html#a7a41b00b58b34a86014ab5b3832180e7">More...</a><br /></td></tr>
 <tr class="separator:a7a41b00b58b34a86014ab5b3832180e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59e4926f9c69f533301dadaf7a8d8c13"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#a59e4926f9c69f533301dadaf7a8d8c13">config</a> () const</td></tr>
-<tr class="memdesc:a59e4926f9c69f533301dadaf7a8d8c13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const accessor to the configuration.  <a href="classMCC_1_1SwingTraj.html#a59e4926f9c69f533301dadaf7a8d8c13">More...</a><br /></td></tr>
-<tr class="separator:a59e4926f9c69f533301dadaf7a8d8c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a600e702f17906fdcf664d344983fb92e"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#a600e702f17906fdcf664d344983fb92e">config</a> () const =0</td></tr>
+<tr class="memdesc:a600e702f17906fdcf664d344983fb92e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const accessor to the configuration.  <a href="classMCC_1_1SwingTraj.html#a600e702f17906fdcf664d344983fb92e">More...</a><br /></td></tr>
+<tr class="separator:a600e702f17906fdcf664d344983fb92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa24ab86c8b40b16f73c454d9999b9d12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html">Configuration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#aa24ab86c8b40b16f73c454d9999b9d12">config_</a></td></tr>
-<tr class="memdesc:aa24ab86c8b40b16f73c454d9999b9d12"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html" title="Configuration.">Configuration</a>.  <a href="classMCC_1_1SwingTraj.html#aa24ab86c8b40b16f73c454d9999b9d12">More...</a><br /></td></tr>
-<tr class="separator:aa24ab86c8b40b16f73c454d9999b9d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7968d958aaad8e2757ac6f2c22928626"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1SwingCommand.html#a56325f4c373b4d557a41a76636bc20e8">SwingCommand::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#a7968d958aaad8e2757ac6f2c22928626">commandType_</a></td></tr>
 <tr class="memdesc:a7968d958aaad8e2757ac6f2c22928626"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of swing command.  <a href="classMCC_1_1SwingTraj.html#a7968d958aaad8e2757ac6f2c22928626">More...</a><br /></td></tr>
 <tr class="separator:a7968d958aaad8e2757ac6f2c22928626"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +164,12 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a0f7a7429a0673c8d0fbc76835596e1fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">IK task gain.  <a href="classMCC_1_1SwingTraj.html#a0f7a7429a0673c8d0fbc76835596e1fb">More...</a><br /></td></tr>
 <tr class="separator:a0f7a7429a0673c8d0fbc76835596e1fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ae772344557f18d9b84d726c42fd432a5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#ae772344557f18d9b84d726c42fd432a5">config</a> ()=0</td></tr>
+<tr class="memdesc:ae772344557f18d9b84d726c42fd432a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor to the configuration.  <a href="classMCC_1_1SwingTraj.html#ae772344557f18d9b84d726c42fd432a5">More...</a><br /></td></tr>
+<tr class="separator:ae772344557f18d9b84d726c42fd432a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:ad15ddf47c52a69f338c9521f89851197"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1SwingTraj.html#ad15ddf47c52a69f338c9521f89851197">touchDownTime_</a> = -1</td></tr>
@@ -178,8 +181,8 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00012">12</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abf3e3153b2e95af897753e9c8d2d40ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf3e3153b2e95af897753e9c8d2d40ba">&#9670;&nbsp;</a></span>SwingTraj()</h2>
+<a id="aed0d006f1d0cdbd259d863eb41ffeba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0d006f1d0cdbd259d863eb41ffeba6">&#9670;&nbsp;</a></span>SwingTraj()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -233,7 +236,7 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const mc_rtc::Configuration &amp;&#160;</td>
-          <td class="paramname"><em>mcRtcConfig</em> = <code>{}</code>&#160;</td>
+          <td class="paramname"> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -304,8 +307,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a59e4926f9c69f533301dadaf7a8d8c13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59e4926f9c69f533301dadaf7a8d8c13">&#9670;&nbsp;</a></span>config()</h2>
+<a id="a600e702f17906fdcf664d344983fb92e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a600e702f17906fdcf664d344983fb92e">&#9670;&nbsp;</a></span>config() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -322,16 +325,43 @@ Protected Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Const accessor to the configuration. </p>
 
-<p>Reimplemented in <a class="el" href="classMCC_1_1SwingTrajCubicSplineSimple.html#a594a18386b6b5a7af56cffe76f5c1867">MCC::SwingTrajCubicSplineSimple</a>.</p>
+<p>Implemented in <a class="el" href="classMCC_1_1SwingTrajCubicSplineSimple.html#a594a18386b6b5a7af56cffe76f5c1867">MCC::SwingTrajCubicSplineSimple</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00088">88</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+</div>
+</div>
+<a id="ae772344557f18d9b84d726c42fd432a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae772344557f18d9b84d726c42fd432a5">&#9670;&nbsp;</a></span>config() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html">Configuration</a>&amp; MCC::SwingTraj::config </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor to the configuration. </p>
+
+<p>Implemented in <a class="el" href="classMCC_1_1SwingTrajCubicSplineSimple.html#a12570ec1396e0ed00e1729510923b1b0">MCC::SwingTrajCubicSplineSimple</a>.</p>
 
 </div>
 </div>
@@ -525,25 +555,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Type of swing command. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00098">98</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
-
-</div>
-</div>
-<a id="aa24ab86c8b40b16f73c454d9999b9d12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa24ab86c8b40b16f73c454d9999b9d12">&#9670;&nbsp;</a></span>config_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html">Configuration</a> MCC::SwingTraj::config_</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p><a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html" title="Configuration.">Configuration</a>. </p>
-
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00095">95</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00096">96</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -561,7 +573,7 @@ Protected Attributes</h2></td></tr>
 
 <p>End pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00107">107</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00105">105</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -579,7 +591,7 @@ Protected Attributes</h2></td></tr>
 
 <p>End time [sec]. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00113">113</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00111">111</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -597,7 +609,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Whether the limb is contacting. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00101">101</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00099">99</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -615,7 +627,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Start pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00104">104</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00102">102</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -633,7 +645,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Start time [sec]. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00110">110</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00108">108</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -651,7 +663,7 @@ Protected Attributes</h2></td></tr>
 
 <p>IK task gain. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00116">116</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00114">114</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>
@@ -677,7 +689,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Time when touch down is detected (-1 if not detected) </p>
 
-<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00120">120</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwingTraj_8h_source.html#l00118">118</a> of file <a class="el" href="SwingTraj_8h_source.html">SwingTraj.h</a>.</p>
 
 </div>
 </div>

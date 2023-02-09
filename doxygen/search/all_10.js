@@ -21,7 +21,7 @@ var searchData=
   ['swingcommandlist_5f_168',['swingCommandList_',['../classMCC_1_1LimbManager.html#a89b8d2656d7712986427c853b05ba309',1,'MCC::LimbManager']]],
   ['swingoffset_169',['swingOffset',['../structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a34ee54d32d505cdb514e6292a9e23374',1,'MCC::SwingTrajCubicSplineSimple::Configuration']]],
   ['swingstartpolicy_170',['swingStartPolicy',['../structMCC_1_1LimbManager_1_1Configuration.html#a88b0a0aee5273a813b23adf47bb5d043',1,'MCC::LimbManager::Configuration']]],
-  ['swingtraj_171',['SwingTraj',['../classMCC_1_1SwingTraj.html',1,'MCC::SwingTraj'],['../classMCC_1_1SwingTraj.html#abf3e3153b2e95af897753e9c8d2d40ba',1,'MCC::SwingTraj::SwingTraj()']]],
+  ['swingtraj_171',['SwingTraj',['../classMCC_1_1SwingTraj.html',1,'MCC::SwingTraj'],['../classMCC_1_1SwingTraj.html#aed0d006f1d0cdbd259d863eb41ffeba6',1,'MCC::SwingTraj::SwingTraj()']]],
   ['swingtraj_2eh_172',['SwingTraj.h',['../SwingTraj_8h.html',1,'']]],
   ['swingtraj_5f_173',['swingTraj_',['../classMCC_1_1LimbManager.html#a198ed4799e9ab49122abe1c7f5cf3d9f',1,'MCC::LimbManager']]],
   ['swingtrajcubicsplinesimple_174',['SwingTrajCubicSplineSimple',['../classMCC_1_1SwingTrajCubicSplineSimple.html',1,'MCC::SwingTrajCubicSplineSimple'],['../classMCC_1_1SwingTrajCubicSplineSimple.html#a25db0dc8caaa8120ee1df24bada5369b',1,'MCC::SwingTrajCubicSplineSimple::SwingTrajCubicSplineSimple()']]],
