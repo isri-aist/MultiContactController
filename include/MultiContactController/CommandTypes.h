@@ -45,6 +45,17 @@ struct SwingCommand
 
   /** \brief Constructor.
       \param mcRtcConfig mc_rtc configuration
+
+      An example of \p mcRtcConfig is as follows.
+      @code
+      type: Add
+      startTime: 2.0
+      endTime: 5.0
+      pose:
+        translation: [1.0, 0.0, 0.0]
+      config:
+        approachOffset: [0.0, 0.0, 0.1]
+      @endcode
    */
   SwingCommand(const mc_rtc::Configuration & mcRtcConfig);
 
@@ -76,16 +87,24 @@ struct ContactCommand
 {
   /** \brief Constructor.
       \param _time time
-      \param _constraint contact constraint
+      \param _constraint contact constraint (nullptr is not allowed)
    */
-  ContactCommand(double _time, const std::shared_ptr<ContactConstraint> & _constraint)
-  : time(_time), constraint(_constraint)
-  {
-    assert(constraint);
-  }
+  ContactCommand(double _time, const std::shared_ptr<ContactConstraint> & _constraint);
 
   /** \brief Constructor.
       \param mcRtcConfig mc_rtc configuration
+
+      An example of \p mcRtcConfig is as follows.
+      @code
+      time: 2.0
+      constraint:
+        type: Surface
+        name: ContactName
+        fricCoeff: 1.0
+        verticesName: VerticesName
+        pose:
+          translation: [1.0, 0.0, 0.0]
+      @endcode
    */
   ContactCommand(const mc_rtc::Configuration & mcRtcConfig);
 
@@ -103,7 +122,7 @@ struct ContactCommand
   std::shared_ptr<ContactConstraint> constraint;
 };
 
-/** \brief Gripper. */
+/** \brief Gripper command. */
 struct GripperCommand
 {
   /** \brief Constructor.
@@ -118,6 +137,14 @@ struct GripperCommand
 
   /** \brief Constructor.
       \param mcRtcConfig mc_rtc configuration
+
+      An example of \p mcRtcConfig is as follows.
+      @code
+      time: 2.0
+      name: l_gripper
+      config:
+        opening: 0.0 # Close gripper
+      @endcode
    */
   GripperCommand(const mc_rtc::Configuration & mcRtcConfig)
   : GripperCommand(mcRtcConfig("time"), mcRtcConfig("name"), mcRtcConfig("config"))
@@ -147,10 +174,12 @@ struct StepCommand
   /** \brief Constructor.
       \param _swingCommand swing command
       \param _contactCommandList contact command list
+      \param _gripperCommandList gripper command list
    */
   StepCommand(const std::shared_ptr<SwingCommand> & _swingCommand,
-              const std::map<double, std::shared_ptr<ContactCommand>> & _contactCommandList)
-  : swingCommand(_swingCommand), contactCommandList(_contactCommandList)
+              const std::map<double, std::shared_ptr<ContactCommand>> & _contactCommandList,
+              const std::map<double, std::shared_ptr<GripperCommand>> & _gripperCommandList)
+  : swingCommand(_swingCommand), contactCommandList(_contactCommandList), gripperCommandList(_gripperCommandList)
   {
   }
 

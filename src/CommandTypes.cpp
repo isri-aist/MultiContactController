@@ -9,19 +9,13 @@ using namespace MCC;
 SwingCommand::SwingCommand(const mc_rtc::Configuration & mcRtcConfig)
 {
   type = strToType.at(mcRtcConfig("type"));
+  startTime = mcRtcConfig("startTime");
+  endTime = mcRtcConfig("endTime");
   if(type == Type::Add)
   {
-    startTime = mcRtcConfig("startTime");
-    endTime = mcRtcConfig("endTime");
     pose = mcRtcConfig("pose");
-    mcRtcConfig("config", config);
   }
-  else // if(type == Type::Remove)
-  {
-    startTime = mcRtcConfig("startTime");
-    endTime = mcRtcConfig("endTime");
-    mcRtcConfig("config", config);
-  }
+  mcRtcConfig("config", config);
 }
 
 void SwingCommand::setBaseTime(double baseTime)
@@ -30,10 +24,15 @@ void SwingCommand::setBaseTime(double baseTime)
   endTime += baseTime;
 }
 
-ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
+ContactCommand::ContactCommand(double _time, const std::shared_ptr<ContactConstraint> & _constraint)
+: time(_time), constraint(_constraint)
 {
-  time = mcRtcConfig("time");
-  constraint = ContactConstraint::makeSharedFromConfig(mcRtcConfig("constraint"));
+  assert(constraint);
+}
+
+ContactCommand::ContactCommand(const mc_rtc::Configuration & mcRtcConfig)
+: ContactCommand(mcRtcConfig("time"), ContactConstraint::makeSharedFromConfig(mcRtcConfig("constraint")))
+{
 }
 
 void ContactCommand::setBaseTime(double baseTime)
@@ -48,13 +47,13 @@ void GripperCommand::setBaseTime(double baseTime)
 
 StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
 {
-  // Parse the simple configuration format
+  // Parse according to simple/full description format
   mc_rtc::Configuration mcRtcConfig;
-  if(_mcRtcConfig.has("swingCommand") || _mcRtcConfig.has("contactCommandList"))
+  if(_mcRtcConfig.has("swingCommand") || _mcRtcConfig.has("contactCommandList")) // full description format
   {
     mcRtcConfig = _mcRtcConfig;
   }
-  else
+  else // simple description format
   {
     const auto & type = SwingCommand::strToType.at(_mcRtcConfig("type"));
     mcRtcConfig.add("limb", _mcRtcConfig("limb"));
@@ -107,8 +106,11 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
   // Set SwingCommand
   if(mcRtcConfig.has("swingCommand"))
   {
+    // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
     mc_rtc::Configuration swingCommandConfig;
     swingCommandConfig.load(mcRtcConfig("swingCommand"));
+
+    // "pose" entry is automatically set
     const auto & type = SwingCommand::strToType.at(swingCommandConfig("type"));
     if(type == SwingCommand::Type::Add)
     {
@@ -124,6 +126,7 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
         mc_rtc::log::error("[StepCommand] pose entry is not used in the remove type command.");
       }
     }
+
     swingCommand = std::make_shared<SwingCommand>(swingCommandConfig);
   }
 
@@ -143,6 +146,7 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
         contactCommandConfig.load(_contactCommandConfig);
 
         mc_rtc::Configuration constraintConfig = contactCommandConfig("constraint");
+        // "name", "verticesName", and "pose" entries are automatically set
         if(!constraintConfig.has("name"))
         {
           constraintConfig.add("name", mcRtcConfig("limb"));
