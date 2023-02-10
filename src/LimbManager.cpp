@@ -556,15 +556,16 @@ double LimbManager::getContactWeight(double t) const
     return 0;
   }
 
+  constexpr double minWeight = 1e-8;
   const std::shared_ptr<ContactCommand> & prevContactCommand =
       (currentIt == contactCommandList_.begin() ? prevContactCommand_ : std::prev(currentIt)->second);
   if(!prevContactCommand && (t - currentIt->first < config_.weightTransitDuration))
   {
-    return mc_filter::utils::clamp((t - currentIt->first) / config_.weightTransitDuration, 1e-8, 1.0);
+    return mc_filter::utils::clamp((t - currentIt->first) / config_.weightTransitDuration, minWeight, 1.0);
   }
   else if(nextIt != contactCommandList_.end() && !nextIt->second && (nextIt->first - t < config_.weightTransitDuration))
   {
-    return mc_filter::utils::clamp((nextIt->first - t) / config_.weightTransitDuration, 1e-8, 1.0);
+    return mc_filter::utils::clamp((nextIt->first - t) / config_.weightTransitDuration, minWeight, 1.0);
   }
   else
   {
