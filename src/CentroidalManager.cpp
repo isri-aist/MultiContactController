@@ -23,6 +23,11 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
     limbWeightListForRefData.clear();
     for(const auto & limbWeightKV : static_cast<std::map<std::string, double>>(mcRtcConfig("limbWeightListForRefData")))
     {
+      if(limbWeightKV.second <= 0.0)
+      {
+        mc_rtc::log::error_and_throw(
+            "[CentroidalManager] Zero or negative weight found in limbWeightListForRefData, which should be excluded.");
+      }
       limbWeightListForRefData.emplace(Limb(limbWeightKV.first), limbWeightKV.second);
     }
   }
@@ -32,6 +37,11 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
     for(const auto & limbWeightKV :
         static_cast<std::map<std::string, double>>(mcRtcConfig("limbWeightListForAnchorFrame")))
     {
+      if(limbWeightKV.second <= 0.0)
+      {
+        mc_rtc::log::error_and_throw("[CentroidalManager] Zero or negative weight found in "
+                                     "limbWeightListForAnchorFrame, which should be excluded.");
+      }
       limbWeightListForAnchorFrame.emplace(Limb(limbWeightKV.first), limbWeightKV.second);
     }
   }
@@ -351,6 +361,7 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
   // Calculate weighted average
   if(weightPoseList.size() == 0)
   {
+    // \todo Support no contact phase (e.g., jumping)
     mc_rtc::log::error_and_throw("[CentroidalManager] weightPoseList is empty in calcRefData.");
   }
   refData.centroidalPose = config().nominalCentroidalPose * projGround(calcWeightedAveragePose(weightPoseList), false);
