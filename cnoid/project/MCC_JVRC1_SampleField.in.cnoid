@@ -22,7 +22,7 @@ items:
       data: 
         collision_detection: false
         collision_detector: AISTCollisionDetector
-        default_material_table_file: "@PROJECT_SOURCE_DIR@/cnoid/model/MCC_materials.yaml"
+        default_material_table_file: "@MCC_MODEL_DIR@/MCC_materials.yaml"
       children: 
         - 
           id: 3
@@ -147,7 +147,7 @@ items:
           class: BodyItem
           is_checked: true
           data: 
-            file: "@PROJECT_SOURCE_DIR@/cnoid/model/FloorCheckeredPattern.body"
+            file: "@MCC_MODEL_DIR@/FloorCheckeredPattern.body"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, -0.1 ]
             rootAttitude: [ 
@@ -173,7 +173,7 @@ items:
           class: BodyItem
           is_checked: true
           data: 
-            file: "@PROJECT_SOURCE_DIR@/cnoid/model/SampleField.body"
+            file: "@MCC_MODEL_DIR@/SampleField.body"
             currentBaseLink: "Root"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, 0 ]

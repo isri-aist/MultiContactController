@@ -12,4 +12,12 @@ if(NOT DEFINED HRPSYSBASE_PREFIX)
 endif()
 message("-- HRPSYSBASE_PREFIX: ${HRPSYSBASE_PREFIX}")
 
+# choreonoid
+find_package(choreonoid)
+if(choreonoid_FOUND)
+  set(CHOREONOID_FULL_SHARE_DIR "${CHOREONOID_ROOT_DIR}/${CHOREONOID_SHARE_SUBDIR}")
+  message("-- CHOREONOID_FULL_SHARE_DIR ${CHOREONOID_FULL_SHARE_DIR}")
+  install(DIRECTORY model/ DESTINATION ${CHOREONOID_FULL_SHARE_DIR}/model/environment/MCC)
+endif()
+
 add_subdirectory(project)
