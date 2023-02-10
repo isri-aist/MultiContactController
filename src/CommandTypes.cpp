@@ -106,9 +106,8 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
   // Set SwingCommand
   if(mcRtcConfig.has("swingCommand"))
   {
-    // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
     mc_rtc::Configuration swingCommandConfig;
-    swingCommandConfig.load(mcRtcConfig("swingCommand"));
+    swingCommandConfig.load(mcRtcConfig("swingCommand")); // deep copy
 
     // "pose" entry is automatically set
     const auto & type = SwingCommand::strToType.at(swingCommandConfig("type"));
@@ -141,9 +140,8 @@ StepCommand::StepCommand(const mc_rtc::Configuration & _mcRtcConfig)
       }
       else
       {
-        // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
         mc_rtc::Configuration contactCommandConfig;
-        contactCommandConfig.load(_contactCommandConfig);
+        contactCommandConfig.load(_contactCommandConfig); // deep copy
 
         mc_rtc::Configuration constraintConfig = contactCommandConfig("constraint");
         // "name", "verticesName", and "pose" entries are automatically set

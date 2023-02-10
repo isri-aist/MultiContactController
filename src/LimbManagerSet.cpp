@@ -28,11 +28,10 @@ LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Co
 
   for(const auto & limbTaskKV : ctl().limbTasks_)
   {
-    // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
     mc_rtc::Configuration limbManagerConfig;
     if(mcRtcConfig.has("LimbManager"))
     {
-      limbManagerConfig.load(mcRtcConfig("LimbManager")("default", mc_rtc::Configuration{}));
+      limbManagerConfig.load(mcRtcConfig("LimbManager")("default", mc_rtc::Configuration{})); // deep copy
       limbManagerConfig.load(mcRtcConfig("LimbManager")(limbTaskKV.first.group, mc_rtc::Configuration{}));
       limbManagerConfig.load(mcRtcConfig("LimbManager")(std::to_string(limbTaskKV.first), mc_rtc::Configuration{}));
     }

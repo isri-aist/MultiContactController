@@ -46,9 +46,8 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
   {
     for(const auto & _taskConfig : config_("configs")("taskConfigList"))
     {
-      // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
       mc_rtc::Configuration taskConfig;
-      taskConfig.load(_taskConfig);
+      taskConfig.load(_taskConfig); // deep copy
       if(!std::isnan(baseTime))
       {
         taskConfig.add("time", static_cast<double>(taskConfig("time")) + baseTime);

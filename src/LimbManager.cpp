@@ -80,9 +80,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     ctl().solver().addTask(limbTask());
     limbTask()->setGains(taskGain_.stiffness, taskGain_.damping);
 
-    // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
     mc_rtc::Configuration constraintConfig;
-    constraintConfig.load(_constraintConfig);
+    constraintConfig.load(_constraintConfig); // deep copy
     if(!constraintConfig.has("name"))
     {
       constraintConfig.add("name", std::to_string(limb_));
