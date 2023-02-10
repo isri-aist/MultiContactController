@@ -397,7 +397,7 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
 
   constexpr bool enableDebugLog = false;
-  if constexpr(enableDebugLog)
+  if(enableDebugLog)
   {
     logger.addLogEntry(name + "_closestContactTimes", this, [this]() { return getClosestContactTimes(ctl().t()); });
   }

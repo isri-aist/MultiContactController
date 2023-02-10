@@ -185,7 +185,7 @@ void LimbManagerSet::addToLogger(mc_rtc::Logger & logger)
   }
 
   constexpr bool enableDebugLog = false;
-  if constexpr(enableDebugLog)
+  if(enableDebugLog)
   {
     logger.addLogEntry(config_.name + "_closestContactTimes", this, [this]() {
       std::unordered_set<Limb> limbs;
