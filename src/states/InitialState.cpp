@@ -60,7 +60,12 @@ bool InitialState::run(mc_control::fsm::Controller &)
         std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
 
     // Reset managers
-    ctl().limbManagerSet_->reset(ctl().config()("Contacts")("Initial", mc_rtc::Configuration{}));
+    mc_rtc::Configuration initialContactsConfig;
+    if(config_.has("configs") && config_("configs").has("initialContacts"))
+    {
+      initialContactsConfig = config_("configs")("initialContacts");
+    }
+    ctl().limbManagerSet_->reset(initialContactsConfig);
     ctl().centroidalManager_->reset();
     ctl().enableManagerUpdate_ = true;
 

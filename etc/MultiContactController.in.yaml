@@ -37,6 +37,14 @@ contacts: []
 states:
   MCC::Initial_:
     base: MCC::Initial
+    configs:
+      initialContacts:
+        LeftFoot:
+          type: Surface
+          fricCoeff: 0.5
+        RightFoot:
+          type: Surface
+          fricCoeff: 0.5
 
   MCC::ConfigMotion_:
     base: MCC::ConfigMotion
@@ -202,14 +210,6 @@ Contacts:
       vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
 
   Grasp: {}
-
-  Initial:
-    LeftFoot:
-      type: Surface
-      fricCoeff: 0.5
-    RightFoot:
-      type: Surface
-      fricCoeff: 0.5
 
 
 # OverwriteConfigKeys: [NoSensors]
