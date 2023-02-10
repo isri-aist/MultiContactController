@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include <MultiContactController/State.h>
 
 namespace MCC
@@ -16,5 +18,9 @@ public:
 
   /** \brief Teardown. */
   void teardown(mc_control::fsm::Controller & ctl) override;
+
+protected:
+  //! Task configuration list
+  std::multimap<double, mc_rtc::Configuration> taskConfigList_;
 };
 } // namespace MCC

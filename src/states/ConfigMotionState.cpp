@@ -1,3 +1,6 @@
+#include <cmath>
+#include <limits>
+
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/states/ConfigMotionState.h>
@@ -8,26 +11,27 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
 {
   State::start(_ctl);
 
+  // Set baseTime
+  double baseTime = std::numeric_limits<double>::quiet_NaN();
+  if(config_.has("configs") && config_("configs").has("baseTime"))
+  {
+    if(config_("configs")("baseTime") == "Relative")
+    {
+      baseTime = ctl().t();
+    }
+    else
+    {
+      baseTime = static_cast<double>(config_("configs")("baseTime"));
+    }
+  }
+
   // Send step command
   if(config_.has("configs") && config_("configs").has("stepCommandList"))
   {
-    double baseTime = 0.0;
-    if(config_("configs").has("baseTime"))
-    {
-      if(config_("configs")("baseTime") == "Relative")
-      {
-        baseTime = ctl().t();
-      }
-      else
-      {
-        baseTime = static_cast<double>(config_("configs")("baseTime"));
-      }
-    }
-
     for(const auto & stepCommandConfig : config_("configs")("stepCommandList"))
     {
       StepCommand stepCommand = StepCommand(stepCommandConfig);
-      if(baseTime != 0.0)
+      if(!std::isnan(baseTime))
       {
         stepCommand.setBaseTime(baseTime);
       }
@@ -36,12 +40,61 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
     }
   }
 
+  // Set task configuration list
+  taskConfigList_.clear();
+  if(config_.has("configs") && config_("configs").has("taskConfigList"))
+  {
+    for(const auto & _taskConfig : config_("configs")("taskConfigList"))
+    {
+      // Make deep copy. See https://github.com/jrl-umi3218/mc_rtc/issues/195
+      mc_rtc::Configuration taskConfig;
+      taskConfig.load(_taskConfig);
+      if(!std::isnan(baseTime))
+      {
+        taskConfig.add("time", static_cast<double>(taskConfig("time")) + baseTime);
+      }
+      taskConfigList_.emplace(static_cast<double>(taskConfig("time")), taskConfig);
+    }
+  }
+
   output("OK");
 }
 
 bool ConfigMotionState::run(mc_control::fsm::Controller &)
 {
-  return !ctl().limbManagerSet_->contactCommandStacked();
+  // Process task configuration
+  {
+    auto it = taskConfigList_.begin();
+    while(it != taskConfigList_.end())
+    {
+      if(it->first <= ctl().t())
+      {
+        const auto & taskConfig = it->second;
+        bool taskFound = false;
+        for(const auto & task : ctl().solver().tasks())
+        {
+          if(task->name() == static_cast<std::string>(taskConfig("name")))
+          {
+            taskFound = true;
+            task->load(ctl().solver(), taskConfig);
+            break;
+          }
+        }
+        if(!taskFound)
+        {
+          mc_rtc::log::error("[ConfigMotionState] Task named \"{}\" not found.",
+                             static_cast<std::string>(taskConfig("name")));
+        }
+        it = taskConfigList_.erase(it);
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+
+  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty();
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
