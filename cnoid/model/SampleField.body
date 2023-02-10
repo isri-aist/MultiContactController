@@ -38,7 +38,7 @@ links:
     parent: Root
     jointType: fixed
     material: Field
-    translation: [ 1.4, -0.7, 1.0 ]
+    translation: [ 1.8, -0.7, 1.0 ]
     rotation: [ 1, 0, 0, -1.5707963267948966 ]
     elements:
       -

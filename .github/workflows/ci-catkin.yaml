@@ -163,7 +163,7 @@ jobs:
           set -e
           set -x
           if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
-            EXPECTED_BASE_POS="1.4 0.0 0.75"
+            EXPECTED_BASE_POS="1.8 0.0 0.75"
           fi
           LOG_FILENAME=MCC-log-${{ matrix.motion-type }}
           python3 ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows/scripts/checkSimulationResults.py /tmp/${LOG_FILENAME}.bin --expected-base-pos ${EXPECTED_BASE_POS}

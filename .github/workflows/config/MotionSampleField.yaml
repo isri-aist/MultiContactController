@@ -147,17 +147,35 @@ states:
           startTime: 19.5
           endTime: 20.5
           pose:
-            translation: [1.4, -0.1, 0]
+            translation: [1.6, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 21.0
+          endTime: 22.0
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 22.5
+          endTime: 23.5
+          pose:
+            translation: [1.8, -0.1, 0]
           constraint:
             type: Surface
             fricCoeff: 0.5
         - limb: RightHand
           type: Add
           pose:
-            translation: [1.4, -0.7, 1.0]
+            translation: [1.8, -0.7, 1.0]
             rotation: [-1.5707963267948966, 0, 0]
-          startTime: 21.0
-          endTime: 23.0
+          startTime: 24.0
+          endTime: 26.0
           constraint:
             type: Surface
             fricCoeff: 0.5
@@ -165,10 +183,70 @@ states:
             approachOffset: [0, 0, 0.10]
         - limb: RightHand
           type: Remove
-          startTime: 26.0
-          endTime: 28.0
+          startTime: 29.0
+          endTime: 31.0
           swingConfig:
             withdrawOffset: [0, 0, 0.10]
+        - limb: LeftFoot
+          type: Add
+          startTime: 35.0
+          endTime: 35.3
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 35.0
+          endTime: 35.3
+          pose:
+            translation: [1.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 35.6
+          endTime: 35.9
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 35.6
+          endTime: 35.9
+          pose:
+            translation: [1.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 36.2
+          endTime: 36.5
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 36.2
+          endTime: 36.5
+          pose:
+            translation: [1.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+      taskConfigList:
+        - time: 33.0
+          name: MomentumTask
+          stiffness: 100.0
+          weight: 1000.0
+          dimWeight: [1, 1, 1, 0, 0, 0]
 
 LimbTaskList:
   - type: firstOrderImpedance
