@@ -168,9 +168,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:acac72348bb39f953b96755a2eb037ccb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#acac72348bb39f953b96755a2eb037ccb">runMpc</a> ()=0</td></tr>
 <tr class="memdesc:acac72348bb39f953b96755a2eb037ccb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run MPC to plan centroidal trajectory.  <a href="classMCC_1_1CentroidalManager.html#acac72348bb39f953b96755a2eb037ccb">More...</a><br /></td></tr>
 <tr class="separator:acac72348bb39f953b96755a2eb037ccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a681fa84314b44f0d1d20b17f26f77038"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1CentroidalManager_1_1RefData.html">RefData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a681fa84314b44f0d1d20b17f26f77038">calcRefData</a> (double t) const</td></tr>
-<tr class="memdesc:a681fa84314b44f0d1d20b17f26f77038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate reference data.  <a href="classMCC_1_1CentroidalManager.html#a681fa84314b44f0d1d20b17f26f77038">More...</a><br /></td></tr>
-<tr class="separator:a681fa84314b44f0d1d20b17f26f77038"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682a7784c2783358a55e7bd0d7ba5d7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1CentroidalManager_1_1RefData.html">RefData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a682a7784c2783358a55e7bd0d7ba5d7e">calcRefData</a> (double t, bool recursive=false) const</td></tr>
+<tr class="memdesc:a682a7784c2783358a55e7bd0d7ba5d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate reference data.  <a href="classMCC_1_1CentroidalManager.html#a682a7784c2783358a55e7bd0d7ba5d7e">More...</a><br /></td></tr>
+<tr class="separator:a682a7784c2783358a55e7bd0d7ba5d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="memItemLeft" align="right" valign="top">std::array&lt; Eigen::Vector2d, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7">calcContactRegionMinMax</a> () const</td></tr>
 <tr class="memdesc:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate min/max points of contact region.  <a href="classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7">More...</a><br /></td></tr>
 <tr class="separator:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -362,8 +362,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a681fa84314b44f0d1d20b17f26f77038"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a681fa84314b44f0d1d20b17f26f77038">&#9670;&nbsp;</a></span>calcRefData()</h2>
+<a id="a682a7784c2783358a55e7bd0d7ba5d7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a682a7784c2783358a55e7bd0d7ba5d7e">&#9670;&nbsp;</a></span>calcRefData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -375,8 +375,18 @@ Protected Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="structMCC_1_1CentroidalManager_1_1RefData.html">RefData</a> MCC::CentroidalManager::calcRefData </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>recursive</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -390,6 +400,7 @@ Protected Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t</td><td>time </td></tr>
+    <tr><td class="paramname">recursive</td><td>whether it is called recursively </td></tr>
   </table>
   </dd>
 </dl>
@@ -726,7 +737,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Contact list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00269">269</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00270">270</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -752,7 +763,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Control data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00260">260</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00261">261</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -778,7 +789,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00254">254</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00255">255</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -804,7 +815,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reference data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00257">257</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00258">258</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -830,7 +841,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Robot mass [kg]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00263">263</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00264">264</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -856,7 +867,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00266">266</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00267">267</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>

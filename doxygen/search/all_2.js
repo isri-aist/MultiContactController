@@ -4,7 +4,7 @@ var searchData=
   ['calccontactregionminmax_16',['calcContactRegionMinMax',['../classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7',1,'MCC::CentroidalManager']]],
   ['calcmpcmotionparam_17',['calcMpcMotionParam',['../classMCC_1_1CentroidalManagerDDP.html#a88cecf8ea25cfa89727741ad62d667d6',1,'MCC::CentroidalManagerDDP']]],
   ['calcmpcrefdata_18',['calcMpcRefData',['../classMCC_1_1CentroidalManagerDDP.html#a79b2deb2360c89e1d86bcb7459c968c8',1,'MCC::CentroidalManagerDDP']]],
-  ['calcrefdata_19',['calcRefData',['../classMCC_1_1CentroidalManager.html#a681fa84314b44f0d1d20b17f26f77038',1,'MCC::CentroidalManager']]],
+  ['calcrefdata_19',['calcRefData',['../classMCC_1_1CentroidalManager.html#a682a7784c2783358a55e7bd0d7ba5d7e',1,'MCC::CentroidalManager']]],
   ['calcweightedaveragepose_20',['calcWeightedAveragePose',['../namespaceMCC.html#a081b3c3826d158c4fa659355867bd9f0',1,'MCC']]],
   ['centroidalgaind_21',['centroidalGainD',['../structMCC_1_1CentroidalManager_1_1Configuration.html#aaf332aac31506a0011c2cc91e428a9af',1,'MCC::CentroidalManager::Configuration']]],
   ['centroidalgainp_22',['centroidalGainP',['../structMCC_1_1CentroidalManager_1_1Configuration.html#ade01bb0595d83fc0c408efc1ac2cfb21',1,'MCC::CentroidalManager::Configuration']]],

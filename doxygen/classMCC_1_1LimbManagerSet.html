@@ -147,6 +147,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a332224be0cdf517028c265c08e80e97c"><td class="memItemLeft" align="right" valign="top">const std::unordered_set&lt; <a class="el" href="structMCC_1_1Limb.html">Limb</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1LimbManagerSet.html#a332224be0cdf517028c265c08e80e97c">limbsFromGroup</a> (const std::string &amp;group) const</td></tr>
 <tr class="memdesc:a332224be0cdf517028c265c08e80e97c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get limbs of the specified group.  <a href="classMCC_1_1LimbManagerSet.html#a332224be0cdf517028c265c08e80e97c">More...</a><br /></td></tr>
 <tr class="separator:a332224be0cdf517028c265c08e80e97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c1fc4aa9604cd0aac2147b4c72989f8"><td class="memItemLeft" align="right" valign="top">std::array&lt; double, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1LimbManagerSet.html#a3c1fc4aa9604cd0aac2147b4c72989f8">getClosestContactTimes</a> (double t, const std::unordered_set&lt; <a class="el" href="structMCC_1_1Limb.html">Limb</a> &gt; &amp;limbs) const</td></tr>
+<tr class="memdesc:a3c1fc4aa9604cd0aac2147b4c72989f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the closest contact times to the specified time.  <a href="classMCC_1_1LimbManagerSet.html#a3c1fc4aa9604cd0aac2147b4c72989f8">More...</a><br /></td></tr>
+<tr class="separator:a3c1fc4aa9604cd0aac2147b4c72989f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -361,7 +364,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00120">120</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00127">127</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -390,7 +393,45 @@ Protected Attributes</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00114">114</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00121">121</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
+
+</div>
+</div>
+<a id="a3c1fc4aa9604cd0aac2147b4c72989f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c1fc4aa9604cd0aac2147b4c72989f8">&#9670;&nbsp;</a></span>getClosestContactTimes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;double, 2&gt; MCC::LimbManagerSet::getClosestContactTimes </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unordered_set&lt; <a class="el" href="structMCC_1_1Limb.html">Limb</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>limbs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the closest contact times to the specified time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>time </td></tr>
+    <tr><td class="paramname">limbs</td><td>limbs to check contact </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>array consisting of the closest times before and after the specified time </dd></dl>
 
 </div>
 </div>
@@ -567,7 +608,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Configuration. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00127">127</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00134">134</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -593,7 +634,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00130">130</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00137">137</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -619,7 +660,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Map from limb group to limbs. </p>
 
-<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00133">133</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="LimbManagerSet_8h_source.html#l00140">140</a> of file <a class="el" href="LimbManagerSet_8h_source.html">LimbManagerSet.h</a>.</p>
 
 </div>
 </div>
