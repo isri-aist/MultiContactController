@@ -96,16 +96,6 @@ LimbTaskList:
     frame: RightFootCenter
     cutoffPeriod: 0.01
     weight: 1000.0
-  - type: firstOrderImpedance
-    limb: LeftHand
-    frame: LeftHandGraspFrame
-    cutoffPeriod: 0.01
-    weight: 1000.0
-  - type: firstOrderImpedance
-    limb: RightHand
-    frame: RightHandOpenFrame
-    cutoffPeriod: 0.01
-    weight: 1000.0
 
 LimbManagerSet:
   name: LimbManagerSet
@@ -118,6 +108,19 @@ LimbManagerSet:
       swingOffset: [0, 0, 0.1] # [m]
   LimbManager:
     default:
+      name: LimbManager
+      taskGain:
+        stiffness: 1000.0
+      defaultSwingTrajType: CubicSplineSimple
+      swingStartPolicy: ControlRobot
+      overwriteLandingPose: false
+      stopSwingTrajForTouchDownLimb: true
+      keepPoseForTouchDownLimb: false
+      enableWrenchDistForTouchDownLimb: true
+      weightTransitDuration: 0.1 # [sec]
+      touchDownRemainingDuration: 0.2 # [sec]
+      touchDownPosError: 0.05 # [m]
+      touchDownForceZ: 50 # [N]
       impedanceGains:
         SingleContact:
           damper:
@@ -149,23 +152,11 @@ LimbManagerSet:
           wrench:
             linear: [0, 0, 0]
             angular: [0, 0, 0]
-    Hand:
-      impedanceGains:
-        MultiContact:
-          damper:
-            linear: [5e4, 5e4, 5e4]
-            angular: [100, 100, 100]
-          spring:
-            linear: [0, 0, 0]
-            angular: [0, 0, 2000]
-          wrench:
-            linear: [1, 1, 1]
-            angular: [1, 1, 0]
 
 CentroidalManager:
   name: CentroidalManager
   nominalCentroidalPose:
-    translation: [0.0, 0.0, 0.80]
+    translation: [0.0, 0.0, 1.0]
   limbWeightListForRefData:
     LeftFoot: 1.0
     RightFoot: 1.0
@@ -173,14 +164,13 @@ CentroidalManager:
     LeftFoot: 1.0
     RightFoot: 1.0
   centroidalGainP:
-    linear: [1000, 1000, 10000]
+    linear: [750, 750, 10000]
     angular: [750, 750, 750]
   centroidalGainD:
-    linear: [200, 200, 200]
+    linear: [150, 150, 150]
     angular: [150, 150, 150]
   useActualStateForMpc: false
   enableCentroidalFeedback: true
-  useOnlyFootForAnchorFrame: true
   useTargetPoseForControlRobotAnchorFrame: true
   useActualComForWrenchDist: false
   wrenchDistConfig:
@@ -210,32 +200,8 @@ Contacts:
       vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
     - name: RightFoot
       vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
-    - name: LeftHand
-      vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
-    - name: RightHand
-      vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
 
-  Grasp:
-    - name: LeftHand
-      vertices:
-        - translation: [0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [-0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-        - translation: [-0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-    - name: RightHand
-      vertices:
-        - translation: [0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [-0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-        - translation: [-0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
+  Grasp: {}
 
   Initial:
     LeftFoot:
@@ -262,18 +228,15 @@ OverwriteConfigList:
               wrench:
                 linear: [0, 0, 0]
                 angular: [0, 0, 0]
-        LeftHand:
-          impedanceGains:
-            MultiContact:
+            Swing:
               wrench:
                 linear: [0, 0, 0]
                 angular: [0, 0, 0]
-        RightHand:
-          impedanceGains:
-            MultiContact:
-              wrench:
-                linear: [0, 0, 0]
-                angular: [0, 0, 0]
+
+    CentroidalManager:
+      useActualStateForMpc: false
+      enableCentroidalFeedback: false
+      useActualComForWrenchDist: false
 
   jvrc1:
     PostureTask:

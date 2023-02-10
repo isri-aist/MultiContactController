@@ -20,7 +20,7 @@ public:
     double horizonDuration = 2.0;
 
     //! Horizon dt [sec]
-    double horizonDt = 0.02;
+    double horizonDt = 0.05;
 
     //! DDP maximum iteration
     int ddpMaxIter = 1;
