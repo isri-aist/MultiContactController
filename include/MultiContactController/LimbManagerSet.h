@@ -109,6 +109,13 @@ public:
     return groupLimbsMap_.at(group);
   }
 
+  /** \brief Get the closest contact times to the specified time.
+      \param t time
+      \param limbs limbs to check contact
+      \return array consisting of the closest times before and after the specified time
+   */
+  std::array<double, 2> getClosestContactTimes(double t, const std::unordered_set<Limb> & limbs) const;
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const MultiContactController & ctl() const

@@ -1,3 +1,5 @@
+#include <limits>
+
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 
 #include <ForceColl/Contact.h>
@@ -96,7 +98,6 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     currentContactCommand_ =
         std::make_shared<ContactCommand>(ctl().t(), ContactConstraint::makeSharedFromConfig(constraintConfig));
   }
-  prevContactCommand_ = currentContactCommand_;
   contactCommandList_.emplace(ctl().t(), currentContactCommand_);
 }
 
@@ -111,12 +112,25 @@ void LimbManager::update()
     if(it != contactCommandList_.begin())
     {
       it--;
+      bool currentContact = static_cast<bool>(it->second);
+
+      // Always keep up to one previous command
       if(it != contactCommandList_.begin())
       {
-        prevContactCommand_ = std::prev(it)->second;
-        // Erase all elements in the range from begin to it (including begin but not including it)
-        contactCommandList_.erase(contactCommandList_.begin(), it);
+        it--;
       }
+
+      // Find the most recent command with contact and hold up to it
+      if(!currentContact)
+      {
+        while(!it->second && it != contactCommandList_.begin())
+        {
+          it--;
+        }
+      }
+
+      // Erase all elements in the range from begin to it (including begin but not including it)
+      contactCommandList_.erase(contactCommandList_.begin(), it);
     }
   }
 
@@ -381,6 +395,12 @@ void LimbManager::addToLogger(mc_rtc::Logger & logger)
   MC_RTC_LOG_HELPER(name + "_phase", phase_);
   MC_RTC_LOG_HELPER(name + "_impGainType", impGainType_);
   logger.addLogEntry(name + "_contactWeight", this, [this]() { return getContactWeight(ctl().t()); });
+
+  constexpr bool enableDebugLog = false;
+  if constexpr(enableDebugLog)
+  {
+    logger.addLogEntry(name + "_closestContactTimes", this, [this]() { return getClosestContactTimes(ctl().t()); });
+  }
 }
 
 void LimbManager::removeFromLogger(mc_rtc::Logger & logger)
@@ -485,8 +505,22 @@ sva::PTransformd LimbManager::getLimbPose(double t) const
   auto it = swingCommandList_.upper_bound(t);
   if(it == swingCommandList_.begin())
   {
-    // Assume that the current target pose is kept since there is no swing command before the specified time
-    return targetPose_;
+    // If there is no swing command before the specified time, get pose based on some assumptions
+    if(swingTraj_)
+    {
+      // Assume that the start pose of the current swing trajectory is kept
+      return swingTraj_->startPose_;
+    }
+    else if(prevSwingCommand_ && prevSwingCommand_->type == SwingCommand::Type::Add)
+    {
+      // Assume that the pose of the previous swing command is kept
+      return prevSwingCommand_->pose;
+    }
+    else
+    {
+      // Assume that the current target pose is kept
+      return targetPose_;
+    }
   }
   else
   {
@@ -510,20 +544,25 @@ std::shared_ptr<ContactCommand> LimbManager::getContactCommand(double t) const
   if(it == contactCommandList_.begin())
   {
     mc_rtc::log::error_and_throw(
-        "[LimbManager({})] Past time is given in getContactCommand. specified time: {}, current time: {}",
+        "[LimbManager({})] Past time is specified in getContactCommand. specified time: {}, current time: {}",
         std::to_string(limb_), t, ctl().t());
   }
-
   it--;
 
   auto currentIt = contactCommandList_.upper_bound(ctl().t());
   if(currentIt != contactCommandList_.begin())
   {
     currentIt--;
-    // If the contact at the specified time is same as the current contact and touch down is detected, return the next
-    // contact
-    if(it == currentIt && !it->second && std::next(it)->second && config_.enableWrenchDistForTouchDownLimb
-       && touchDown_)
+    // If the current command without contact is found and touch down is detected, return the next contact
+    // clang-format off
+    if(it == currentIt
+       && !it->second
+       && std::next(it) != contactCommandList_.end()
+       && std::next(it)->second
+       && config_.enableWrenchDistForTouchDownLimb
+       && touchDown_
+       )
+    // clang-format on
     {
       return std::next(it)->second;
     }
@@ -538,7 +577,7 @@ double LimbManager::getContactWeight(double t) const
   if(nextIt == contactCommandList_.begin())
   {
     mc_rtc::log::error_and_throw(
-        "[LimbManager({})] Past time is given in getContactWeight. specified time: {}, current time: {}",
+        "[LimbManager({})] Past time is specified in getContactWeight. specified time: {}, current time: {}",
         std::to_string(limb_), t, ctl().t());
   }
   auto currentIt = std::prev(nextIt);
@@ -550,26 +589,77 @@ double LimbManager::getContactWeight(double t) const
     assert(t <= nextIt->first);
   }
 
-  // If not contacted at the specified time, return zero
-  if(!currentIt->second)
+  if(currentIt->second)
   {
-    return 0;
-  }
+    constexpr double minWeight = 1e-8;
 
-  constexpr double minWeight = 1e-8;
-  const std::shared_ptr<ContactCommand> & prevContactCommand =
-      (currentIt == contactCommandList_.begin() ? prevContactCommand_ : std::prev(currentIt)->second);
-  if(!prevContactCommand && (t - currentIt->first < config_.weightTransitDuration))
-  {
-    return mc_filter::utils::clamp((t - currentIt->first) / config_.weightTransitDuration, minWeight, 1.0);
-  }
-  else if(nextIt != contactCommandList_.end() && !nextIt->second && (nextIt->first - t < config_.weightTransitDuration))
-  {
-    return mc_filter::utils::clamp((nextIt->first - t) / config_.weightTransitDuration, minWeight, 1.0);
+    // Check whether it is the beginning of contact
+    if(currentIt != contactCommandList_.begin())
+    {
+      auto prevIt = std::prev(currentIt);
+      if(!prevIt->second && (t - currentIt->first < config_.weightTransitDuration))
+      {
+        return mc_filter::utils::clamp((t - currentIt->first) / config_.weightTransitDuration, minWeight, 1.0);
+      }
+    }
+
+    // Check whether it is the end of contact
+    if(nextIt != contactCommandList_.end())
+    {
+      if(!nextIt->second && (nextIt->first - t < config_.weightTransitDuration))
+      {
+        return mc_filter::utils::clamp((nextIt->first - t) / config_.weightTransitDuration, minWeight, 1.0);
+      }
+    }
+
+    // If contacted at the specified time, return 1
+    return 1;
   }
   else
   {
-    return 1;
+    // If not contacted at the specified time, return 0
+    return 0;
+  }
+}
+
+std::array<double, 2> LimbManager::getClosestContactTimes(double t) const
+{
+  auto it = contactCommandList_.upper_bound(t);
+  if(it == contactCommandList_.begin())
+  {
+    mc_rtc::log::error_and_throw(
+        "[LimbManager({})] Past time is specified in getClosestContactTimes. specified time: {}, current time: {}",
+        std::to_string(limb_), t, ctl().t());
+  }
+  it--;
+
+  if(it->second)
+  {
+    return std::array<double, 2>{t, t};
+  }
+  else
+  {
+    std::array<double, 2> closestContactTimes = {std::numeric_limits<double>::quiet_NaN(),
+                                                 std::numeric_limits<double>::quiet_NaN()};
+    using ConstReverseIterator = std::map<double, std::shared_ptr<ContactCommand>>::const_reverse_iterator;
+    for(auto backwardIt = ConstReverseIterator(it); backwardIt != contactCommandList_.rend(); backwardIt++)
+    {
+      constexpr double epsDuration = 1e-10;
+      if(backwardIt->second)
+      {
+        closestContactTimes[0] = std::prev(backwardIt)->first - epsDuration;
+        break;
+      }
+    }
+    for(auto forwardIt = it; forwardIt != contactCommandList_.end(); forwardIt++)
+    {
+      if(forwardIt->second)
+      {
+        closestContactTimes[1] = forwardIt->first;
+        break;
+      }
+    }
+    return closestContactTimes;
   }
 }
 

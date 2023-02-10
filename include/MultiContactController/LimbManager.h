@@ -177,6 +177,12 @@ public:
    */
   double getContactWeight(double t) const;
 
+  /** \brief Get the closest contact times to the specified time.
+      \param t time
+      \return array consisting of the closest times before and after the specified time
+   */
+  std::array<double, 2> getClosestContactTimes(double t) const;
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const MultiContactController & ctl() const
@@ -222,9 +228,6 @@ protected:
 
   //! Current contact command
   std::shared_ptr<ContactCommand> currentContactCommand_ = nullptr;
-
-  //! Previous contact command
-  std::shared_ptr<ContactCommand> prevContactCommand_ = nullptr;
 
   //! Gripper command list (map of start time and gripper command)
   std::map<double, std::shared_ptr<GripperCommand>> gripperCommandList_;

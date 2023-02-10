@@ -1,3 +1,6 @@
+#include <cmath>
+#include <limits>
+
 #include <mc_rtc/gui/ArrayInput.h>
 #include <mc_rtc/gui/Label.h>
 
@@ -180,10 +183,48 @@ void LimbManagerSet::addToLogger(mc_rtc::Logger & logger)
   {
     limbManagerKV.second->addToLogger(logger);
   }
+
+  constexpr bool enableDebugLog = false;
+  if constexpr(enableDebugLog)
+  {
+    logger.addLogEntry(config_.name + "_closestContactTimes", this, [this]() {
+      std::unordered_set<Limb> limbs;
+      for(const auto & limbManagerKV : *this)
+      {
+        limbs.insert(limbManagerKV.first);
+      }
+      return getClosestContactTimes(ctl().t(), limbs);
+    });
+  }
 }
 
 void LimbManagerSet::removeFromLogger(mc_rtc::Logger & // logger
 )
 {
   // Log of each LimbManager is not removed here (removed via stop method)
+}
+
+std::array<double, 2> LimbManagerSet::getClosestContactTimes(double t, const std::unordered_set<Limb> & limbs) const
+{
+  std::array<double, 2> closestContactTimes = {std::numeric_limits<double>::quiet_NaN(),
+                                               std::numeric_limits<double>::quiet_NaN()};
+  for(const auto & limb : limbs)
+  {
+    const auto & closestContactTimesLimb = this->at(limb)->getClosestContactTimes(t);
+    if(!std::isnan(closestContactTimesLimb[0]))
+    {
+      if(std::isnan(closestContactTimes[0]) || (closestContactTimesLimb[0] > closestContactTimes[0]))
+      {
+        closestContactTimes[0] = closestContactTimesLimb[0];
+      }
+    }
+    if(!std::isnan(closestContactTimesLimb[1]))
+    {
+      if(std::isnan(closestContactTimes[1]) || (closestContactTimesLimb[1] < closestContactTimes[1]))
+      {
+        closestContactTimes[1] = closestContactTimesLimb[1];
+      }
+    }
+  }
+  return closestContactTimes;
 }

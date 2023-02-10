@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 #include <mc_tasks/MomentumTask.h>
@@ -335,11 +337,11 @@ void CentroidalManager::setAnchorFrame()
   ctl().datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) { return calcAnchorFrame(robot); });
 }
 
-CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
+CentroidalManager::RefData CentroidalManager::calcRefData(double t, bool recursive) const
 {
   RefData refData;
 
-  // Set list of weight and limb pose
+  // Set weightPoseList
   std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
   for(const auto & limbManagerKV : *ctl().limbManagerSet_)
   {
@@ -358,13 +360,37 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
     weightPoseList.emplace_back(weight, limbManagerKV.second->getLimbPose(t));
   }
 
-  // Calculate weighted average
-  if(weightPoseList.size() == 0)
+  // Calculate centroidalPose
+  if(weightPoseList.size() > 0)
   {
-    // \todo Support no contact phase (e.g., jumping)
-    mc_rtc::log::error_and_throw("[CentroidalManager] weightPoseList is empty in calcRefData.");
+    refData.centroidalPose =
+        config().nominalCentroidalPose * projGround(calcWeightedAveragePose(weightPoseList), false);
   }
-  refData.centroidalPose = config().nominalCentroidalPose * projGround(calcWeightedAveragePose(weightPoseList), false);
+  else
+  {
+    if(recursive)
+    {
+      mc_rtc::log::error_and_throw(
+          "[CentroidalManager] weightPoseList should not be empty in recursive call of calcRefData.");
+    }
+
+    std::unordered_set<Limb> limbs;
+    for(const auto & weightKV : config().limbWeightListForRefData)
+    {
+      limbs.insert(weightKV.first);
+    }
+    const auto & closestContactTimes = ctl().limbManagerSet_->getClosestContactTimes(t, limbs);
+    std::array<RefData, 2> closestRefData;
+    for(int i = 0; i < 2; i++)
+    {
+      if(std::isnan(closestContactTimes[i]))
+      {
+        mc_rtc::log::error_and_throw("[CentroidalManager] closestContactTimes[{}] is NaN in calcRefData.", i);
+      }
+      closestRefData[i] = calcRefData(closestContactTimes[i], true);
+    }
+    refData.centroidalPose = sva::interpolate(closestRefData[0].centroidalPose, closestRefData[1].centroidalPose, 0.5);
+  }
 
   return refData;
 }

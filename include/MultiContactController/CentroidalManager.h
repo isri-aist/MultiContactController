@@ -238,8 +238,9 @@ protected:
 
   /** \brief Calculate reference data.
       \param t time
+      \param recursive whether it is called recursively
    */
-  RefData calcRefData(double t) const;
+  RefData calcRefData(double t, bool recursive = false) const;
 
   /** \brief Calculate min/max points of contact region. */
   std::array<Eigen::Vector2d, 2> calcContactRegionMinMax() const;
