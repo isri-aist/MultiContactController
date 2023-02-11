@@ -238,9 +238,14 @@ protected:
 
   /** \brief Calculate reference data.
       \param t time
+   */
+  RefData calcRefData(double t) const;
+
+  /** \brief Calculate limb average pose for reference data.
+      \param t time
       \param recursive whether it is called recursively
    */
-  RefData calcRefData(double t, bool recursive = false) const;
+  sva::PTransformd calcLimbAveragePoseForRefData(double t, bool recursive) const;
 
   /** \brief Calculate min/max points of contact region. */
   std::array<Eigen::Vector2d, 2> calcContactRegionMinMax() const;

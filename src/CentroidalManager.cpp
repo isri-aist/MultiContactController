@@ -337,10 +337,17 @@ void CentroidalManager::setAnchorFrame()
   ctl().datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) { return calcAnchorFrame(robot); });
 }
 
-CentroidalManager::RefData CentroidalManager::calcRefData(double t, bool recursive) const
+CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
 {
   RefData refData;
 
+  refData.centroidalPose = config().nominalCentroidalPose * projGround(calcLimbAveragePoseForRefData(t, false), false);
+
+  return refData;
+}
+
+sva::PTransformd CentroidalManager::calcLimbAveragePoseForRefData(double t, bool recursive) const
+{
   // Set weightPoseList
   std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
   for(const auto & limbManagerKV : *ctl().limbManagerSet_)
@@ -360,39 +367,41 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t, bool recursi
     weightPoseList.emplace_back(weight, limbManagerKV.second->getLimbPose(t));
   }
 
-  // Calculate centroidalPose
+  // Calculate average pose
   if(weightPoseList.size() > 0)
   {
-    refData.centroidalPose =
-        config().nominalCentroidalPose * projGround(calcWeightedAveragePose(weightPoseList), false);
+    return calcWeightedAveragePose(weightPoseList);
   }
   else
   {
     if(recursive)
     {
       mc_rtc::log::error_and_throw(
-          "[CentroidalManager] weightPoseList should not be empty in recursive call of calcRefData.");
+          "[CentroidalManager] weightPoseList should not be empty in recursive call of calcLimbAveragePoseForRefData.");
     }
 
+    // Calculate closestContactTimes
     std::unordered_set<Limb> limbs;
     for(const auto & weightKV : config().limbWeightListForRefData)
     {
       limbs.insert(weightKV.first);
     }
     const auto & closestContactTimes = ctl().limbManagerSet_->getClosestContactTimes(t, limbs);
-    std::array<RefData, 2> closestRefData;
+
+    // Calculate closestAveragePoses
+    std::array<sva::PTransformd, 2> closestAveragePoses;
     for(int i = 0; i < 2; i++)
     {
       if(std::isnan(closestContactTimes[i]))
       {
-        mc_rtc::log::error_and_throw("[CentroidalManager] closestContactTimes[{}] is NaN in calcRefData.", i);
+        mc_rtc::log::error_and_throw(
+            "[CentroidalManager] closestContactTimes[{}] is NaN in calcLimbAveragePoseForRefData.", i);
       }
-      closestRefData[i] = calcRefData(closestContactTimes[i], true);
+      closestAveragePoses[i] = calcLimbAveragePoseForRefData(closestContactTimes[i], true);
     }
-    refData.centroidalPose = sva::interpolate(closestRefData[0].centroidalPose, closestRefData[1].centroidalPose, 0.5);
-  }
 
-  return refData;
+    return sva::interpolate(closestAveragePoses[0], closestAveragePoses[1], 0.5);
+  }
 }
 
 std::array<Eigen::Vector2d, 2> CentroidalManager::calcContactRegionMinMax() const
