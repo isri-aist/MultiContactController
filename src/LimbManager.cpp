@@ -340,7 +340,7 @@ void LimbManager::update()
     int contactIdx = 0;
     for(const auto & contactCommandKV : contactCommandList_)
     {
-      if(!contactCommandKV.second)
+      if(!contactCommandKV.second || contactCommandKV.second->time < ctl().t())
       {
         continue;
       }
