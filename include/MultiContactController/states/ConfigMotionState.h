@@ -20,6 +20,9 @@ public:
   void teardown(mc_control::fsm::Controller & ctl) override;
 
 protected:
+  //! Collision configuration list
+  std::multimap<double, mc_rtc::Configuration> collisionConfigList_;
+
   //! Task configuration list
   std::multimap<double, mc_rtc::Configuration> taskConfigList_;
 };

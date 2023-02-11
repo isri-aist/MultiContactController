@@ -1,5 +1,6 @@
 #include <cmath>
 #include <limits>
+#include <utility>
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
@@ -40,6 +41,22 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
     }
   }
 
+  // Set collision configuration list
+  collisionConfigList_.clear();
+  if(config_.has("configs") && config_("configs").has("collisionConfigList"))
+  {
+    for(const auto & _collisionConfig : config_("configs")("collisionConfigList"))
+    {
+      mc_rtc::Configuration collisionConfig;
+      collisionConfig.load(_collisionConfig); // deep copy
+      if(!std::isnan(baseTime))
+      {
+        collisionConfig.add("time", static_cast<double>(collisionConfig("time")) + baseTime);
+      }
+      collisionConfigList_.emplace(static_cast<double>(collisionConfig("time")), collisionConfig);
+    }
+  }
+
   // Set task configuration list
   taskConfigList_.clear();
   if(config_.has("configs") && config_("configs").has("taskConfigList"))
@@ -61,6 +78,41 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
 
 bool ConfigMotionState::run(mc_control::fsm::Controller &)
 {
+  // Process collision configuration
+  {
+    auto it = collisionConfigList_.begin();
+    while(it != collisionConfigList_.end())
+    {
+      if(it->first <= ctl().t())
+      {
+        const auto & collisionConfig = it->second;
+        std::string r1 = collisionConfig("r1");
+        std::string r2 = collisionConfig("r2", std::as_const(r1));
+        if(collisionConfig("type") == "Add")
+        {
+          ctl().addCollisions(r1, r2, static_cast<std::vector<mc_rbdyn::Collision>>(collisionConfig("collisions")));
+        }
+        else // if(collisionConfig("type") == "Remove")
+        {
+          if(collisionConfig.has("collisions"))
+          {
+            ctl().removeCollisions(r1, r2,
+                                   static_cast<std::vector<mc_rbdyn::Collision>>(collisionConfig("collisions")));
+          }
+          else
+          {
+            ctl().removeCollisions(r1, r2);
+          }
+        }
+        it = collisionConfigList_.erase(it);
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+
   // Process task configuration
   {
     auto it = taskConfigList_.begin();
@@ -93,7 +145,7 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
     }
   }
 
-  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty();
+  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty();
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
