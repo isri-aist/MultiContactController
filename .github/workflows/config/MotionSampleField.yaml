@@ -241,6 +241,29 @@ states:
           constraint:
             type: Surface
             fricCoeff: 0.5
+      collisionConfigList:
+        - time: 7.0
+          type: Add
+          r1: jvrc1
+          r2: sample_field
+          collisions:
+            - body1: L_WRIST_Y_S
+              body2: HandleLeftHand1
+        - time: 8.5
+          type: Remove
+          r1: jvrc1
+          r2: sample_field
+        - time: 17.0
+          type: Add
+          r1: jvrc1
+          r2: sample_field
+          collisions:
+            - body1: L_WRIST_Y_S
+              body2: HandleLeftHand1
+        - time: 18.5
+          type: Remove
+          r1: jvrc1
+          r2: sample_field
       taskConfigList:
         - time: 33.0
           name: MomentumTask
