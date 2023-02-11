@@ -22,6 +22,13 @@
       </geometry>
       <material name="green" />
     </visual>
+    <collision>
+      <origin xyz="0.0 0.0 -0.01" rpy="0.0 -0.0 0.0" />
+      <geometry>
+        <box size="0.2 0.2 0.02" />
+      </geometry>
+      <material name="green" />
+    </collision>
   </link>
   <link name="HandleLeftHand1">
     <inertial>
@@ -36,6 +43,13 @@
       </geometry>
       <material name="green" />
     </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 -3.88578058619e-16 1.57079632679" />
+      <geometry>
+        <cylinder radius="0.015" length="0.15" />
+      </geometry>
+      <material name="green" />
+    </collision>
   </link>
   <link name="HandleRightHand1">
     <inertial>
@@ -50,6 +64,13 @@
       </geometry>
       <material name="green" />
     </visual>
+    <collision>
+      <origin xyz="0.0 0.0 -0.01" rpy="0.0 -0.0 0.0" />
+      <geometry>
+        <box size="0.2 0.2 0.02" />
+      </geometry>
+      <material name="green" />
+    </collision>
   </link>
   <joint name="StepRightFoot1" type="fixed">
     <origin xyz="0.9 -0.15 0.05" rpy="-0.349065850399 -0.0 0.0" />
