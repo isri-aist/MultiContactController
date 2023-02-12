@@ -150,6 +150,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a20b132ebe08b9fac45043524949c84b8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a20b132ebe08b9fac45043524949c84b8">removeFromLogger</a> (mc_rtc::Logger &amp;logger)</td></tr>
 <tr class="memdesc:a20b132ebe08b9fac45043524949c84b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove entries from the logger.  <a href="classMCC_1_1CentroidalManager.html#a20b132ebe08b9fac45043524949c84b8">More...</a><br /></td></tr>
 <tr class="separator:a20b132ebe08b9fac45043524949c84b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eb5da7c9d5a522e73c0a7c393ddd378"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a4eb5da7c9d5a522e73c0a7c393ddd378">appendNominalCentroidalPose</a> (double t, const sva::PTransformd &amp;nominalCentroidalPose)</td></tr>
+<tr class="memdesc:a4eb5da7c9d5a522e73c0a7c393ddd378"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a nominal centroidal pose.  <a href="classMCC_1_1CentroidalManager.html#a4eb5da7c9d5a522e73c0a7c393ddd378">More...</a><br /></td></tr>
+<tr class="separator:a4eb5da7c9d5a522e73c0a7c393ddd378"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c1dcd98d5e68f394d86e4d3c804f7e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a5c1dcd98d5e68f394d86e4d3c804f7e5">setAnchorFrame</a> ()</td></tr>
 <tr class="memdesc:a5c1dcd98d5e68f394d86e4d3c804f7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set anchor frame.  <a href="classMCC_1_1CentroidalManager.html#a5c1dcd98d5e68f394d86e4d3c804f7e5">More...</a><br /></td></tr>
 <tr class="separator:a5c1dcd98d5e68f394d86e4d3c804f7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +177,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a006255fe09e94efb5f7e436d448dfd20"><td class="memItemLeft" align="right" valign="top">sva::PTransformd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a006255fe09e94efb5f7e436d448dfd20">calcLimbAveragePoseForRefData</a> (double t, bool recursive) const</td></tr>
 <tr class="memdesc:a006255fe09e94efb5f7e436d448dfd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate limb average pose for reference data.  <a href="classMCC_1_1CentroidalManager.html#a006255fe09e94efb5f7e436d448dfd20">More...</a><br /></td></tr>
 <tr class="separator:a006255fe09e94efb5f7e436d448dfd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89411fb179bca43386211aa30237fa9c"><td class="memItemLeft" align="right" valign="top">sva::PTransformd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a89411fb179bca43386211aa30237fa9c">getNominalCentroidalPose</a> (double t) const</td></tr>
+<tr class="memdesc:a89411fb179bca43386211aa30237fa9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get nominal centroidal pose.  <a href="classMCC_1_1CentroidalManager.html#a89411fb179bca43386211aa30237fa9c">More...</a><br /></td></tr>
+<tr class="separator:a89411fb179bca43386211aa30237fa9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="memItemLeft" align="right" valign="top">std::array&lt; Eigen::Vector2d, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7">calcContactRegionMinMax</a> () const</td></tr>
 <tr class="memdesc:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate min/max points of contact region.  <a href="classMCC_1_1CentroidalManager.html#a0d5eb503b774588f3d16e9ac3fcaf1f7">More...</a><br /></td></tr>
 <tr class="separator:a0d5eb503b774588f3d16e9ac3fcaf1f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +207,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ae22ff55f539624d68307019cd6bcba81"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="structMCC_1_1Limb.html">Limb</a>, std::shared_ptr&lt; <a class="el" href="namespaceMCC.html#aa8bb75a953b06caa3dc8561f5983f37b">ContactConstraint</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#ae22ff55f539624d68307019cd6bcba81">contactList_</a></td></tr>
 <tr class="memdesc:ae22ff55f539624d68307019cd6bcba81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contact list.  <a href="classMCC_1_1CentroidalManager.html#ae22ff55f539624d68307019cd6bcba81">More...</a><br /></td></tr>
 <tr class="separator:ae22ff55f539624d68307019cd6bcba81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af296a42306b5d03b736ced87550aacfe"><td class="memItemLeft" align="right" valign="top">std::map&lt; double, sva::PTransformd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#af296a42306b5d03b736ced87550aacfe">nominalCentroidalPoseList_</a></td></tr>
+<tr class="memdesc:af296a42306b5d03b736ced87550aacfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nominal centroidal pose list.  <a href="classMCC_1_1CentroidalManager.html#af296a42306b5d03b736ced87550aacfe">More...</a><br /></td></tr>
+<tr class="separator:af296a42306b5d03b736ced87550aacfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Centroidal manager. </p>
@@ -301,6 +310,44 @@ Protected Attributes</h2></td></tr>
 <p>Add entries to the logger. </p>
 
 <p>Reimplemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a6217cbf93b4083550b04034ce75cc36e">MCC::CentroidalManagerDDP</a>.</p>
+
+</div>
+</div>
+<a id="a4eb5da7c9d5a522e73c0a7c393ddd378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eb5da7c9d5a522e73c0a7c393ddd378">&#9670;&nbsp;</a></span>appendNominalCentroidalPose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCC::CentroidalManager::appendNominalCentroidalPose </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const sva::PTransformd &amp;&#160;</td>
+          <td class="paramname"><em>nominalCentroidalPose</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Append a nominal centroidal pose. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>time </td></tr>
+    <tr><td class="paramname">nominalCentroidalPose</td><td>nominal centroidal pose to append </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>whether nominalCentroidalPose is appended </dd></dl>
 
 </div>
 </div>
@@ -527,7 +574,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00224">224</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00231">231</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -556,7 +603,41 @@ Protected Attributes</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00218">218</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00225">225</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+
+</div>
+</div>
+<a id="a89411fb179bca43386211aa30237fa9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89411fb179bca43386211aa30237fa9c">&#9670;&nbsp;</a></span>getNominalCentroidalPose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">sva::PTransformd MCC::CentroidalManager::getNominalCentroidalPose </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get nominal centroidal pose. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>time </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -774,7 +855,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Contact list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00275">275</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00287">287</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -800,7 +881,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Control data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00266">266</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00278">278</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -826,7 +907,33 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00260">260</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00272">272</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+
+</div>
+</div>
+<a id="af296a42306b5d03b736ced87550aacfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af296a42306b5d03b736ced87550aacfe">&#9670;&nbsp;</a></span>nominalCentroidalPoseList_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;double, sva::PTransformd&gt; MCC::CentroidalManager::nominalCentroidalPoseList_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Nominal centroidal pose list. </p>
+
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00290">290</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -852,7 +959,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reference data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00263">263</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00275">275</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -878,7 +985,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Robot mass [kg]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00269">269</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00281">281</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -904,7 +1011,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00272">272</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00284">284</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
