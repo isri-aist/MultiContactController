@@ -142,6 +142,8 @@ void CentroidalManager::reset()
   controlData_.reset(ctlPtr_);
 
   robotMass_ = ctl().robot().mass();
+
+  nominalCentroidalPoseList_.emplace(ctl().t(), config().nominalCentroidalPose);
 }
 
 void CentroidalManager::update()
@@ -316,6 +318,9 @@ void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
   config().addToLogger(config().name + "_Config", logger);
   refData_.addToLogger(config().name + "_Data", logger);
   controlData_.addToLogger(config().name + "_Data", logger);
+
+  logger.addLogEntry(config().name + "_nominalCentroidalPose", this,
+                     [this]() { return getNominalCentroidalPose(ctl().t()); });
 }
 
 void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)
@@ -325,6 +330,29 @@ void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)
   controlData_.removeFromLogger(logger);
 
   logger.removeLogEntries(this);
+}
+
+bool CentroidalManager::appendNominalCentroidalPose(double t, const sva::PTransformd & nominalCentroidalPose)
+{
+  if(t < ctl().t())
+  {
+    mc_rtc::log::error("[CentroidalManager] Ignore a nominal centroidal pose with past time: {} < {}", t, ctl().t());
+    return false;
+  }
+  if(!nominalCentroidalPoseList_.empty())
+  {
+    double lastTime = nominalCentroidalPoseList_.rbegin()->first;
+    if(t < lastTime)
+    {
+      mc_rtc::log::error("[CentroidalManager] Ignore a nominal centroidal pose earlier than the last one: {} < {}", t,
+                         lastTime);
+      return false;
+    }
+  }
+
+  nominalCentroidalPoseList_.emplace(t, nominalCentroidalPose);
+
+  return true;
 }
 
 void CentroidalManager::setAnchorFrame()
@@ -341,7 +369,7 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
 {
   RefData refData;
 
-  refData.centroidalPose = config().nominalCentroidalPose * projGround(calcLimbAveragePoseForRefData(t, false), false);
+  refData.centroidalPose = getNominalCentroidalPose(t) * projGround(calcLimbAveragePoseForRefData(t, false), false);
 
   return refData;
 }
@@ -402,6 +430,19 @@ sva::PTransformd CentroidalManager::calcLimbAveragePoseForRefData(double t, bool
 
     return sva::interpolate(closestAveragePoses[0], closestAveragePoses[1], 0.5);
   }
+}
+
+sva::PTransformd CentroidalManager::getNominalCentroidalPose(double t) const
+{
+  auto it = nominalCentroidalPoseList_.upper_bound(t);
+  if(it == nominalCentroidalPoseList_.begin())
+  {
+    mc_rtc::log::error_and_throw(
+        "[CentroidalManager] Past time is specified in getNominalCentroidalPose. specified time: {}, current time: {}",
+        t, ctl().t());
+  }
+  it--;
+  return it->second;
 }
 
 std::array<Eigen::Vector2d, 2> CentroidalManager::calcContactRegionMinMax() const

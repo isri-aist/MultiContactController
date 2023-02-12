@@ -2,6 +2,7 @@
 #include <limits>
 #include <utility>
 
+#include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/states/ConfigMotionState.h>
@@ -38,6 +39,21 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
       }
       Limb limb = Limb(stepCommandConfig("limb"));
       ctl().limbManagerSet_->at(limb)->appendStepCommand(stepCommand);
+    }
+  }
+
+  // Send nominal centroidal pose
+  if(config_.has("configs") && config_("configs").has("nominalCentroidalPoseList"))
+  {
+    for(const auto & nominalCentroidalPoseConfig : config_("configs")("nominalCentroidalPoseList"))
+    {
+      double time = nominalCentroidalPoseConfig("time");
+      if(!std::isnan(baseTime))
+      {
+        time += baseTime;
+      }
+      ctl().centroidalManager_->appendNominalCentroidalPose(
+          time, static_cast<sva::PTransformd>(nominalCentroidalPoseConfig("pose")));
     }
   }
 

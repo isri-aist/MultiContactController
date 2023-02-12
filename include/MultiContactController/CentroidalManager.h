@@ -210,6 +210,13 @@ public:
   /** \brief Remove entries from the logger. */
   virtual void removeFromLogger(mc_rtc::Logger & logger);
 
+  /** \brief Append a nominal centroidal pose
+      \param t time
+      \param nominalCentroidalPose nominal centroidal pose to append
+      \return whether nominalCentroidalPose is appended
+  */
+  bool appendNominalCentroidalPose(double t, const sva::PTransformd & nominalCentroidalPose);
+
   /** \brief Set anchor frame. */
   void setAnchorFrame();
 
@@ -247,6 +254,11 @@ protected:
    */
   sva::PTransformd calcLimbAveragePoseForRefData(double t, bool recursive) const;
 
+  /** \brief Get nominal centroidal pose
+      \param t time
+   */
+  sva::PTransformd getNominalCentroidalPose(double t) const;
+
   /** \brief Calculate min/max points of contact region. */
   std::array<Eigen::Vector2d, 2> calcContactRegionMinMax() const;
 
@@ -273,5 +285,8 @@ protected:
 
   //! Contact list
   std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList_;
+
+  //! Nominal centroidal pose list
+  std::map<double, sva::PTransformd> nominalCentroidalPoseList_;
 };
 } // namespace MCC

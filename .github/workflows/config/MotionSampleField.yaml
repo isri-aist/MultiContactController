@@ -241,6 +241,13 @@ states:
           constraint:
             type: Surface
             fricCoeff: 0.5
+      nominalCentroidalPoseList:
+        - time: 26.5
+          pose:
+            translation: [0.0, -0.25, 0.80]
+        - time: 28.5
+          pose:
+            translation: [0.0, 0.0, 0.80]
       collisionConfigList:
         - time: 7.0
           type: Add
@@ -270,6 +277,11 @@ states:
           stiffness: 100.0
           weight: 1000.0
           dimWeight: [1, 1, 1, 0, 0, 0]
+        - time: 37.0
+          name: MomentumTask
+          stiffness: 1.0
+          weight: 0.0
+          dimWeight: [1, 1, 1, 1, 1, 1]
 
 LimbTaskList:
   - type: firstOrderImpedance
