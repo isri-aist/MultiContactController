@@ -328,39 +328,6 @@ LimbManagerSet:
             linear: [1, 1, 1]
             angular: [1, 1, 0]
 
-Contacts:
-  Surface:
-    - name: LeftFoot
-      vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
-    - name: RightFoot
-      vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
-    - name: LeftHand
-      vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
-    - name: RightHand
-      vertices: [[0.025, -0.05, 0.0], [-0.025, -0.05, 0.0], [0.0, 0.05, 0.0]]
-
-  Grasp:
-    - name: LeftHand
-      vertices:
-        - translation: [0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [-0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-        - translation: [-0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-    - name: RightHand
-      vertices:
-        - translation: [0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [-0.025, 0.015, 0]
-          rotation: [1.5707963267948966, 0, 0]
-        - translation: [0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-        - translation: [-0.025, -0.015, 0]
-          rotation: [-1.5707963267948966, 0, 0]
-
 OverwriteConfigList:
   NoSensors:
     LimbManagerSet:
@@ -384,3 +351,36 @@ OverwriteConfigList:
     CentroidalManager:
       nominalCentroidalPose:
         translation: [0.0, 0.0, 0.80]
+
+    Contacts:
+      Surface:
+        - name: LeftFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: RightFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: LeftHand
+          vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
+        - name: RightHand
+          vertices: [[0.025, -0.05, 0.0], [-0.025, -0.05, 0.0], [0.0, 0.05, 0.0]]
+
+      Grasp:
+        - name: LeftHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+        - name: RightHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
