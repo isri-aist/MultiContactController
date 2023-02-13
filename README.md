@@ -6,6 +6,8 @@ Humanoid multi-contact motion controller
 [![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MultiContactController/)
 [![LICENSE](https://img.shields.io/github/license/isri-aist/MultiContactController)](https://github.com/isri-aist/MultiContactController/blob/master/LICENSE)
 
+https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-97e3-c4b7076b9c6a.mp4
+
 ## Features
 - Completely open source! (controller framework: mc_rtc, simulator: Choreonoid, sample robot model: JVRC1)
 - Possible to control bipedal walking and multi-contact motion including surface/grasp contacts in a unified manner.
