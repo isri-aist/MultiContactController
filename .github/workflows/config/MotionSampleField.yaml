@@ -67,7 +67,7 @@ states:
         - limb: LeftHand
           pose:
             translation: [0.9, 0.5, 0.8]
-            rotation: [0.5235987755982988, 0, 0]
+            rotation: [0.2617993877991494, 0, 0]
           swingCommand:
             type: Add
             startTime: 7.0
@@ -249,13 +249,15 @@ states:
           pose:
             translation: [0.0, 0.0, 0.80]
       collisionConfigList:
-        - time: 7.0
+        - time: 5.0
           type: Add
           r1: jvrc1
           r2: sample_field
           collisions:
             - body1: L_WRIST_Y_S
               body2: HandleLeftHand1
+              iDist: 0.15
+              sDist: 0.10
         - time: 8.5
           type: Remove
           r1: jvrc1
@@ -267,7 +269,9 @@ states:
           collisions:
             - body1: L_WRIST_Y_S
               body2: HandleLeftHand1
-        - time: 18.5
+              iDist: 0.15
+              sDist: 0.10
+        - time: 20.5
           type: Remove
           r1: jvrc1
           r2: sample_field
@@ -282,6 +286,10 @@ states:
           stiffness: 1.0
           weight: 0.0
           dimWeight: [1, 1, 1, 1, 1, 1]
+
+  MCC::Main_:
+    base: Parallel
+    states: [MCC::ConfigMotion_]
 
 LimbTaskList:
   - type: firstOrderImpedance
