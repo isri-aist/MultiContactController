@@ -328,10 +328,6 @@ LimbManagerSet:
             linear: [1, 1, 1]
             angular: [1, 1, 0]
 
-CentroidalManager:
-  nominalCentroidalPose:
-    translation: [0.0, 0.0, 0.80]
-
 Contacts:
   Surface:
     - name: LeftFoot
@@ -341,7 +337,7 @@ Contacts:
     - name: LeftHand
       vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
     - name: RightHand
-      vertices: [[0.025, 0.05, 0.0], [-0.025, 0.05, 0.0], [0.0, -0.05, 0.0]]
+      vertices: [[0.025, -0.05, 0.0], [-0.025, -0.05, 0.0], [0.0, 0.05, 0.0]]
 
   Grasp:
     - name: LeftHand
@@ -383,3 +379,8 @@ OverwriteConfigList:
               wrench:
                 linear: [0, 0, 0]
                 angular: [0, 0, 0]
+
+  jvrc1:
+    CentroidalManager:
+      nominalCentroidalPose:
+        translation: [0.0, 0.0, 0.80]
