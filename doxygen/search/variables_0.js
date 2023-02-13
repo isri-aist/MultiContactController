@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['actualcentroidalmomentum_321',['actualCentroidalMomentum',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a6acc121dd4f23448f6175cee688a5c97',1,'MCC::CentroidalManager::ControlData']]],
-  ['actualcentroidalpose_322',['actualCentroidalPose',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a150720ec404508f4ce6e9a5246180faf',1,'MCC::CentroidalManager::ControlData']]],
-  ['actualcentroidalvel_323',['actualCentroidalVel',['../structMCC_1_1CentroidalManager_1_1ControlData.html#ac224c1054040c264b2057d726336cdcf',1,'MCC::CentroidalManager::ControlData']]],
-  ['actualcentroidalwrench_324',['actualCentroidalWrench',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a94b5f769de3553944c80636036f56d50',1,'MCC::CentroidalManager::ControlData']]],
-  ['actualzmp_325',['actualZmp',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a640e902d8b891edabc75577c7129f125',1,'MCC::CentroidalManager::ControlData']]],
-  ['approachdurationratio_326',['approachDurationRatio',['../structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a159cf3976be297875ee67f51dc3a71b7',1,'MCC::SwingTrajCubicSplineSimple::Configuration']]],
-  ['approachoffset_327',['approachOffset',['../structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a314d2ff0062786ba7f32967cb6e97733',1,'MCC::SwingTrajCubicSplineSimple::Configuration']]]
+  ['actualcentroidalmomentum_338',['actualCentroidalMomentum',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a6acc121dd4f23448f6175cee688a5c97',1,'MCC::CentroidalManager::ControlData']]],
+  ['actualcentroidalpose_339',['actualCentroidalPose',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a150720ec404508f4ce6e9a5246180faf',1,'MCC::CentroidalManager::ControlData']]],
+  ['actualcentroidalvel_340',['actualCentroidalVel',['../structMCC_1_1CentroidalManager_1_1ControlData.html#ac224c1054040c264b2057d726336cdcf',1,'MCC::CentroidalManager::ControlData']]],
+  ['actualcentroidalwrench_341',['actualCentroidalWrench',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a94b5f769de3553944c80636036f56d50',1,'MCC::CentroidalManager::ControlData']]],
+  ['actualzmp_342',['actualZmp',['../structMCC_1_1CentroidalManager_1_1ControlData.html#a640e902d8b891edabc75577c7129f125',1,'MCC::CentroidalManager::ControlData']]],
+  ['approachdurationratio_343',['approachDurationRatio',['../structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a159cf3976be297875ee67f51dc3a71b7',1,'MCC::SwingTrajCubicSplineSimple::Configuration']]],
+  ['approachoffset_344',['approachOffset',['../structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a314d2ff0062786ba7f32967cb6e97733',1,'MCC::SwingTrajCubicSplineSimple::Configuration']]]
 ];

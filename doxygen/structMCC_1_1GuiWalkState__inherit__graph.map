@@ -1,0 +1,5 @@
+<map id="MCC::GuiWalkState" name="MCC::GuiWalkState">
+<area shape="rect" id="node1" title="FSM state to send walking command from GUI." alt="" coords="15,155,165,181"/>
+<area shape="rect" id="node2" href="$structMCC_1_1State.html" title="FSM State with utility functions." alt="" coords="43,80,137,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,175,32"/>
+</map>

@@ -1,8 +1,9 @@
 <map id="/home/runner/work/MultiContactController/MultiContactController/catkin_ws/src/isri&#45;aist/MultiContactController/include/MultiContactController/LimbTypes.h" name="/home/runner/work/MultiContactController/MultiContactController/catkin_ws/src/isri&#45;aist/MultiContactController/include/MultiContactController/LimbTypes.h">
-<area shape="rect" id="node1" title=" " alt="" coords="399,5,717,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="589,5,908,76"/>
 <area shape="rect" id="node2" href="$CentroidalManager_8h.html" title=" " alt="" coords="5,124,369,195"/>
 <area shape="rect" id="node4" href="$LimbManager_8h.html" title=" " alt="" coords="393,124,723,195"/>
 <area shape="rect" id="node6" href="$MultiContactController_8h.html" title=" " alt="" coords="747,124,1134,195"/>
+<area shape="rect" id="node7" href="$GuiWalkState_8h.html" title=" " alt="" coords="1158,124,1531,195"/>
 <area shape="rect" id="node3" href="$CentroidalManagerDDP_8h.html" title=" " alt="" coords="28,243,347,328"/>
 <area shape="rect" id="node5" href="$LimbManagerSet_8h.html" title=" " alt="" coords="383,250,733,321"/>
 </map>

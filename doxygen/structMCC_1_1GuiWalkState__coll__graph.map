@@ -1,0 +1,8 @@
+<map id="MCC::GuiWalkState" name="MCC::GuiWalkState">
+<area shape="rect" id="node1" title="FSM state to send walking command from GUI." alt="" coords="125,275,274,301"/>
+<area shape="rect" id="node2" href="$structMCC_1_1State.html" title="FSM State with utility functions." alt="" coords="64,171,159,197"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,81,175,108"/>
+<area shape="rect" id="node4" href="$structMCC_1_1MultiContactController.html" title="Humanoid multi&#45;contact motion controller." alt="" coords="199,81,405,108"/>
+<area shape="rect" id="node5" title=" " alt="" coords="203,5,401,32"/>
+<area shape="rect" id="node6" href="$structMCC_1_1Limb.html" title="Limb." alt="" coords="183,171,275,197"/>
+</map>
