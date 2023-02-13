@@ -46,12 +46,21 @@ states:
           type: Surface
           fricCoeff: 0.5
 
-  MCC::ConfigMotion_:
-    base: MCC::ConfigMotion
+  MCC::GuiWalk_:
+    base: MCC::GuiWalk
+    configs:
+      footstepDuration: 1.0 # [sec]
+      doubleSupportRatio: 0.2 # []
+      deltaTransLimit: [0.15, 0.1, 12.5] # (x [m], y [m], theta [deg])
+      midToFootTranss:
+        Left:
+          translation: [0, 0.105, 0] # [m]
+        Right:
+          translation: [0, -0.105, 0] # [m]
 
   MCC::Main_:
     base: Parallel
-    states: [MCC::ConfigMotion_]
+    states: [MCC::GuiWalk_]
 
 # Transitions map
 transitions:
@@ -253,3 +262,7 @@ OverwriteConfigList:
 
     BaseOrientationTask:
       frame: WAIST_R_S
+
+    CentroidalManager:
+      nominalCentroidalPose:
+        translation: [0.0, 0.0, 0.825]
