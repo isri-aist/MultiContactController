@@ -49,8 +49,8 @@ states:
   MCC::GuiWalk_:
     base: MCC::GuiWalk
     configs:
-      footstepDuration: 1.0 # [sec]
-      doubleSupportRatio: 0.2 # []
+      footstepDuration: 1.5 # [sec]
+      doubleSupportRatio: 0.333 # []
       deltaTransLimit: [0.15, 0.1, 12.5] # (x [m], y [m], theta [deg])
       midToFootTranss:
         Left:
