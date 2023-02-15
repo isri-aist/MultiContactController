@@ -54,9 +54,6 @@ void CentroidalManagerDDP::reset()
                                               static_cast<int>(std::floor(config_.horizonDuration / config_.horizonDt)),
                                               config_.mpcWeightParam);
   ddp_->ddp_solver_->config().max_iter = config_.ddpMaxIter;
-  ddp_->ddp_solver_->config().initial_lambda = 1e-6;
-  ddp_->ddp_solver_->config().lambda_min = 1e-8;
-  ddp_->ddp_solver_->config().lambda_thre = 1e-7;
 }
 
 void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)
