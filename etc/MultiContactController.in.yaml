@@ -186,7 +186,7 @@ CentroidalManager:
   centroidalGainD:
     linear: [150, 150, 150]
     angular: [150, 150, 150]
-  lowPassCutoffPeriod: 0.01 # [sec]
+  lowPassCutoffPeriod: 0.1 # [sec]
   useActualStateForMpc: false
   enableCentroidalFeedback: true
   useTargetPoseForControlRobotAnchorFrame: true
@@ -289,11 +289,11 @@ OverwriteConfigList:
       nominalCentroidalPose:
         translation: [0.0, 0.0, 0.95]
       centroidalGainP:
-        linear: [1500, 1500, 10000]
+        linear: [1000, 1000, 10000]
         angular: [750, 750, 750]
       centroidalGainD:
         linear: [300, 300, 300]
-        angular: [150, 150, 150]
+        angular: [75, 75, 75]
 
     Contacts:
       Surface:

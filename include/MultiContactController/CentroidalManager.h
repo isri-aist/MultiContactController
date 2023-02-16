@@ -54,7 +54,7 @@ public:
     sva::ImpedanceVecd centroidalGainD = sva::ImpedanceVecd::Zero();
 
     //! Cutoff period of low-pass filter for velocity calculation [sec]
-    double lowPassCutoffPeriod = 0.01;
+    double lowPassCutoffPeriod = 0.1;
 
     //! Whether to use actual state for MPC
     bool useActualStateForMpc = false;
