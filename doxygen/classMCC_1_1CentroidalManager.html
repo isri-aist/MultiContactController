@@ -201,6 +201,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a3ad2e87a8bf3fa53669b9c65289f7e2e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a3ad2e87a8bf3fa53669b9c65289f7e2e">robotMass_</a> = 0</td></tr>
 <tr class="memdesc:a3ad2e87a8bf3fa53669b9c65289f7e2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot mass [kg].  <a href="classMCC_1_1CentroidalManager.html#a3ad2e87a8bf3fa53669b9c65289f7e2e">More...</a><br /></td></tr>
 <tr class="separator:a3ad2e87a8bf3fa53669b9c65289f7e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a215166c86df4cbe63d5bd12051973249"><td class="memItemLeft" align="right" valign="top">mc_filter::LowPass&lt; sva::MotionVecd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a215166c86df4cbe63d5bd12051973249">lowPass_</a> = mc_filter::LowPass&lt;sva::MotionVecd&gt;(0.005, 0.01)</td></tr>
+<tr class="memdesc:a215166c86df4cbe63d5bd12051973249"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low-pass filter for velocity calculation.  <a href="classMCC_1_1CentroidalManager.html#a215166c86df4cbe63d5bd12051973249">More...</a><br /></td></tr>
+<tr class="separator:a215166c86df4cbe63d5bd12051973249"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d8dba1725fb3f0996a344f996c619c8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classForceColl_1_1WrenchDistribution.html">ForceColl::WrenchDistribution</a>&lt; <a class="el" href="structMCC_1_1Limb.html">Limb</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a1d8dba1725fb3f0996a344f996c619c8">wrenchDist_</a></td></tr>
 <tr class="memdesc:a1d8dba1725fb3f0996a344f996c619c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrench distribution.  <a href="classMCC_1_1CentroidalManager.html#a1d8dba1725fb3f0996a344f996c619c8">More...</a><br /></td></tr>
 <tr class="separator:a1d8dba1725fb3f0996a344f996c619c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,7 +218,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><p>Centroidal manager. </p>
 <p>Centroidal manager calculates the target of robot centroidal state through trajectory planning and feedback control. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00028">28</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00029">29</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0ddde88244bd11134d9e1a57da76921c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ddde88244bd11134d9e1a57da76921c">&#9670;&nbsp;</a></span>CentroidalManager()</h2>
@@ -574,7 +577,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00231">231</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00235">235</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -603,7 +606,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00225">225</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00229">229</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -855,7 +858,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Contact list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00287">287</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00294">294</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -881,7 +884,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Control data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00278">278</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00282">282</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -907,7 +910,33 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00272">272</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00276">276</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+
+</div>
+</div>
+<a id="a215166c86df4cbe63d5bd12051973249"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a215166c86df4cbe63d5bd12051973249">&#9670;&nbsp;</a></span>lowPass_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">mc_filter::LowPass&lt;sva::MotionVecd&gt; MCC::CentroidalManager::lowPass_ = mc_filter::LowPass&lt;sva::MotionVecd&gt;(0.005, 0.01)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Low-pass filter for velocity calculation. </p>
+
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00288">288</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -933,7 +962,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Nominal centroidal pose list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00290">290</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00297">297</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -959,7 +988,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reference data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00275">275</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00279">279</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -985,7 +1014,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Robot mass [kg]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00281">281</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00285">285</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -1011,7 +1040,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00284">284</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00291">291</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>

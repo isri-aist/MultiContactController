@@ -1,9 +1,10 @@
 <map id="/home/runner/work/MultiContactController/MultiContactController/catkin_ws/src/isri&#45;aist/MultiContactController/include/MultiContactController/CentroidalManager.h" name="/home/runner/work/MultiContactController/MultiContactController/catkin_ws/src/isri&#45;aist/MultiContactController/include/MultiContactController/CentroidalManager.h">
-<area shape="rect" id="node1" title=" " alt="" coords="202,5,566,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,131,192,158"/>
-<area shape="rect" id="node3" title=" " alt="" coords="217,131,367,158"/>
-<area shape="rect" id="node4" href="$CommandTypes_8h.html" title=" " alt="" coords="391,124,561,165"/>
-<area shape="rect" id="node6" href="$LimbTypes_8h.html" title=" " alt="" coords="585,124,754,165"/>
-<area shape="rect" id="node5" title=" " alt="" coords="391,213,561,240"/>
-<area shape="rect" id="node7" title=" " alt="" coords="640,213,699,240"/>
+<area shape="rect" id="node1" title=" " alt="" coords="286,5,650,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,131,157,158"/>
+<area shape="rect" id="node3" title=" " alt="" coords="181,131,368,158"/>
+<area shape="rect" id="node4" title=" " alt="" coords="393,131,543,158"/>
+<area shape="rect" id="node5" href="$CommandTypes_8h.html" title=" " alt="" coords="567,124,737,165"/>
+<area shape="rect" id="node7" href="$LimbTypes_8h.html" title=" " alt="" coords="761,124,930,165"/>
+<area shape="rect" id="node6" title=" " alt="" coords="567,213,737,240"/>
+<area shape="rect" id="node8" title=" " alt="" coords="816,213,875,240"/>
 </map>
