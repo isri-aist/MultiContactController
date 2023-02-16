@@ -186,6 +186,7 @@ CentroidalManager:
   centroidalGainD:
     linear: [150, 150, 150]
     angular: [150, 150, 150]
+  lowPassCutoffPeriod: 0.01 # [sec]
   useActualStateForMpc: false
   enableCentroidalFeedback: true
   useTargetPoseForControlRobotAnchorFrame: true

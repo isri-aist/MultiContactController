@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mc_filter/LowPass.h>
 #include <mc_rtc/gui/StateBuilder.h>
 #include <mc_rtc/log/Logger.h>
 
@@ -51,6 +52,9 @@ public:
 
     //! Feedback gain of centroidal velocity
     sva::ImpedanceVecd centroidalGainD = sva::ImpedanceVecd::Zero();
+
+    //! Cutoff period of low-pass filter for velocity calculation [sec]
+    double lowPassCutoffPeriod = 0.01;
 
     //! Whether to use actual state for MPC
     bool useActualStateForMpc = false;
@@ -279,6 +283,9 @@ protected:
 
   //! Robot mass [kg]
   double robotMass_ = 0;
+
+  //! Low-pass filter for velocity calculation
+  mc_filter::LowPass<sva::MotionVecd> lowPass_ = mc_filter::LowPass<sva::MotionVecd>(0.005, 0.01);
 
   //! Wrench distribution
   std::shared_ptr<ForceColl::WrenchDistribution<Limb>> wrenchDist_;

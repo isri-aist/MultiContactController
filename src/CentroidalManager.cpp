@@ -1,5 +1,8 @@
 #include <cmath>
 
+#include <mc_rtc/gui/ArrayInput.h>
+#include <mc_rtc/gui/Checkbox.h>
+#include <mc_rtc/gui/NumberInput.h>
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 #include <mc_tasks/MomentumTask.h>
@@ -49,6 +52,7 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
   }
   mcRtcConfig("centroidalGainP", centroidalGainP);
   mcRtcConfig("centroidalGainD", centroidalGainD);
+  mcRtcConfig("lowPassCutoffPeriod", lowPassCutoffPeriod);
   mcRtcConfig("useActualStateForMpc", useActualStateForMpc);
   mcRtcConfig("enableCentroidalFeedback", enableCentroidalFeedback);
   mcRtcConfig("useTargetPoseForControlRobotAnchorFrame", useTargetPoseForControlRobotAnchorFrame);
@@ -62,6 +66,7 @@ void CentroidalManager::Configuration::addToLogger(const std::string & baseEntry
   MC_RTC_LOG_HELPER(baseEntry + "_nominalCentroidalPose", nominalCentroidalPose);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainP", centroidalGainP);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainD", centroidalGainD);
+  MC_RTC_LOG_HELPER(baseEntry + "_lowPassCutoffPeriod", lowPassCutoffPeriod);
   MC_RTC_LOG_HELPER(baseEntry + "_useActualStateForMpc", useActualStateForMpc);
   MC_RTC_LOG_HELPER(baseEntry + "_enableCentroidalFeedback", enableCentroidalFeedback);
   MC_RTC_LOG_HELPER(baseEntry + "_useTargetPoseForControlRobotAnchorFrame", useTargetPoseForControlRobotAnchorFrame);
@@ -143,6 +148,9 @@ void CentroidalManager::reset()
 
   robotMass_ = ctl().robot().mass();
 
+  lowPass_.dt(ctl().solver().dt());
+  lowPass_.reset(sva::MotionVecd::Zero());
+
   nominalCentroidalPoseList_.emplace(ctl().t(), config().nominalCentroidalPose);
 }
 
@@ -154,8 +162,13 @@ void CentroidalManager::update()
     const auto & baseOriLinkName = ctl().baseOriTask_->frame_->body();
     controlData_.actualCentroidalPose.translation() = ctl().realRobot().com();
     controlData_.actualCentroidalPose.rotation() = ctl().realRobot().bodyPosW(baseOriLinkName).rotation();
-    controlData_.actualCentroidalVel.linear() = ctl().realRobot().comVelocity();
-    controlData_.actualCentroidalVel.angular() = ctl().realRobot().bodyVelW(baseOriLinkName).angular();
+    if(lowPass_.cutoffPeriod() != config().lowPassCutoffPeriod)
+    {
+      lowPass_.cutoffPeriod(config().lowPassCutoffPeriod);
+    }
+    lowPass_.update(
+        sva::MotionVecd(ctl().realRobot().bodyVelW(baseOriLinkName).angular(), ctl().realRobot().comVelocity()));
+    controlData_.actualCentroidalVel = lowPass_.eval();
     controlData_.actualCentroidalMomentum = rbd::computeCentroidalMomentum(
         ctl().realRobot().mb(), ctl().realRobot().mbc(), controlData_.actualCentroidalPose.translation());
     controlData_.actualCentroidalWrench = sva::ForceVecd::Zero();
@@ -290,6 +303,9 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                      "Centroidal D-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
                      [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainD; },
                      [this](const Eigen::Vector6d & v) { config().centroidalGainD = sva::ImpedanceVecd(v); }),
+                 mc_rtc::gui::NumberInput(
+                     "lowPassCutoffPeriod", [this]() { return config().lowPassCutoffPeriod; },
+                     [this](double v) { config().lowPassCutoffPeriod = v; }),
                  mc_rtc::gui::Checkbox(
                      "useActualStateForMpc", [this]() { return config().useActualStateForMpc; },
                      [this]() { config().useActualStateForMpc = !config().useActualStateForMpc; }),
