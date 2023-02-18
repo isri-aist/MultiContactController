@@ -275,6 +275,7 @@ OverwriteConfigList:
       jointWeights:
         WP: 50
         WR: 50
+        WY: 50
 
     CoMTask:
       activeJoints: [
