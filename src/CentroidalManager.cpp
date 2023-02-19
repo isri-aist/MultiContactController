@@ -23,6 +23,7 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
   mcRtcConfig("name", name);
   mcRtcConfig("method", method);
   mcRtcConfig("nominalCentroidalPose", nominalCentroidalPose);
+  mcRtcConfig("refComZPolicy", refComZPolicy);
   if(mcRtcConfig.has("limbWeightListForRefData"))
   {
     limbWeightListForRefData.clear();
@@ -64,6 +65,7 @@ void CentroidalManager::Configuration::addToLogger(const std::string & baseEntry
 {
   MC_RTC_LOG_HELPER(baseEntry + "_method", method);
   MC_RTC_LOG_HELPER(baseEntry + "_nominalCentroidalPose", nominalCentroidalPose);
+  MC_RTC_LOG_HELPER(baseEntry + "_refComZPolicy", refComZPolicy);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainP", centroidalGainP);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainD", centroidalGainD);
   MC_RTC_LOG_HELPER(baseEntry + "_lowPassCutoffPeriod", lowPassCutoffPeriod);
@@ -295,6 +297,10 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.addElement({ctl().name(), config().name, "Config"},
                  mc_rtc::gui::Label("method", [this]() -> const std::string & { return config().method; }),
+                 mc_rtc::gui::ComboInput(
+                     "refComZPolicy", {"Average", "Constant", "Min", "Max"},
+                     [this]() -> const std::string & { return config().refComZPolicy; },
+                     [this](const std::string & v) { config().refComZPolicy = v; }),
                  mc_rtc::gui::ArrayInput(
                      "Centroidal P-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
                      [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainP; },
@@ -414,7 +420,28 @@ sva::PTransformd CentroidalManager::calcLimbAveragePoseForRefData(double t, bool
   // Calculate average pose
   if(weightPoseList.size() > 0)
   {
-    return calcWeightedAveragePose(weightPoseList);
+    sva::PTransformd averagePose = calcWeightedAveragePose(weightPoseList);
+    if(config().refComZPolicy == "Constant")
+    {
+      averagePose.translation().z() = 0.0;
+    }
+    else if(config().refComZPolicy == "Min" || config().refComZPolicy == "Max")
+    {
+      double posZ = weightPoseList.front().second.translation().z();
+      for(const auto & weightPoseKV : weightPoseList)
+      {
+        if(config().refComZPolicy == "Min")
+        {
+          posZ = std::min(posZ, weightPoseKV.second.translation().z());
+        }
+        else if(config().refComZPolicy == "Max")
+        {
+          posZ = std::max(posZ, weightPoseKV.second.translation().z());
+        }
+      }
+      averagePose.translation().z() = posZ;
+    }
+    return averagePose;
   }
   else
   {

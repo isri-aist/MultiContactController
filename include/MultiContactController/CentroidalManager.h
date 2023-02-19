@@ -41,6 +41,9 @@ public:
     //! Nominal centroidal pose
     sva::PTransformd nominalCentroidalPose = sva::PTransformd(Eigen::Vector3d(0.0, 0.0, 1.0));
 
+    //! Policy for determining the reference CoM Z position ("Average", "Constant", "Min", or "Max")
+    std::string refComZPolicy = "Average";
+
     //! Limb weight list to calculate reference data
     std::unordered_map<Limb, double> limbWeightListForRefData = {{Limb("LeftFoot"), 1.0}, {Limb("RightFoot"), 1.0}};
 
