@@ -47,7 +47,7 @@ public:
     //! Default swing trajectory type
     std::string defaultSwingTrajType = "CubicSplineSimple";
 
-    //! Policy for determining the start pose of the swing trajectory
+    //! Policy for determining the start pose of the swing trajectory ("ControlRobot", "Target", or "Compliance")
     std::string swingStartPolicy = "ControlRobot";
 
     //! Whether to overwrite landing pose so that the relative pose from swing start to end is retained
