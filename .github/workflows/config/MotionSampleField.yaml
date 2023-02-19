@@ -12,6 +12,9 @@ robots:
   sample_field:
     module: MCC/SampleField
 
+transitions:
+  - [MCC::Initial_, OK, MCC::ConfigMotion_, Auto]
+
 states:
   MCC::Initial_:
     base: MCC::Initial
@@ -286,10 +289,6 @@ states:
           stiffness: 1.0
           weight: 0.0
           dimWeight: [1, 1, 1, 1, 1, 1]
-
-  MCC::Main_:
-    base: Parallel
-    states: [MCC::ConfigMotion_]
 
 LimbTaskList:
   - type: firstOrderImpedance
