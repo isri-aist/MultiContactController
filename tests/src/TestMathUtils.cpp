@@ -15,7 +15,7 @@ TEST(TestMathUtils, calcWeightedAveragePose)
       std::vector<std::pair<double, sva::PTransformd>> weightPoseList;
       for(int poseIdx = 0; poseIdx < poseNum; poseIdx++)
       {
-        double weight = 10.0 * std::abs(Eigen::Matrix<double, 1, 1>::Random()[0]);
+        double weight = 10.0 * std::abs(Eigen::Matrix<double, 1, 1>::Random()[0]) + 1e-10;
         sva::PTransformd pose = sva::PTransformd(Eigen::Quaterniond::UnitRandom(), 100.0 * Eigen::Vector3d::Random());
 
         totalWeight += weight;

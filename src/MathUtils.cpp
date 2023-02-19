@@ -11,6 +11,14 @@ sva::PTransformd MCC::calcWeightedAveragePose(const std::vector<std::pair<double
     mc_rtc::log::error_and_throw("[calcWeightedAveragePose] weightPoseList is empty.");
   }
 
+  for(const auto & weightPoseKV : weightPoseList)
+  {
+    if(weightPoseKV.first <= 0.0)
+    {
+      mc_rtc::log::error_and_throw("[calcWeightedAveragePose] Weight must be positive but is {}.", weightPoseKV.first);
+    }
+  }
+
   double weight = weightPoseList[0].first;
   sva::PTransformd pose = weightPoseList[0].second;
   for(size_t i = 1; i < weightPoseList.size(); i++)
