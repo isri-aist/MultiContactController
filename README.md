@@ -6,6 +6,8 @@ Humanoid multi-contact motion controller
 [![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MultiContactController/)
 [![LICENSE](https://img.shields.io/github/license/isri-aist/MultiContactController)](https://github.com/isri-aist/MultiContactController/blob/master/LICENSE)
 
+https://user-images.githubusercontent.com/6636600/220029546-ef3d5e66-c06d-417e-aac3-27832299f216.mp4
+
 https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-97e3-c4b7076b9c6a.mp4
 
 ## Features
