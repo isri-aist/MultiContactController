@@ -212,14 +212,20 @@ void CentroidalManager::update()
   // Update planned state for the next time step
   {
     controlData_.plannedCentroidalPose.translation() =
-        controlData_.mpcCentroidalPose.translation() + ctl().dt() * controlData_.mpcCentroidalVel.linear()
-        + 0.5 * std::pow(ctl().dt(), 2) * controlData_.plannedCentroidalAccel.linear();
-    constexpr double so3IntegrationPrec = 1e-8;
+        controlData_.mpcCentroidalPose.translation()
+        + ctl().dt()
+              * (controlData_.mpcCentroidalVel.linear()
+                 + 0.5 * ctl().dt() * controlData_.plannedCentroidalAccel.linear());
+    Eigen::Vector3d deltaAngular =
+        ctl().dt()
+        * (controlData_.mpcCentroidalVel.angular() + 0.5 * ctl().dt() * controlData_.plannedCentroidalAccel.angular());
+    Eigen::AngleAxisd deltaAngleAxis(Eigen::Quaterniond::Identity());
+    if(deltaAngular.norm() > 1e-10)
+    {
+      deltaAngleAxis = Eigen::AngleAxisd(deltaAngular.norm(), deltaAngular.normalized());
+    }
     controlData_.plannedCentroidalPose.rotation() =
-        rbd::SO3Integration(Eigen::Quaterniond(controlData_.mpcCentroidalPose.rotation()),
-                            controlData_.mpcCentroidalVel.angular(), controlData_.plannedCentroidalAccel.angular(),
-                            ctl().dt(), so3IntegrationPrec, so3IntegrationPrec)
-            .first.toRotationMatrix();
+        deltaAngleAxis.toRotationMatrix().transpose() * controlData_.plannedCentroidalPose.rotation();
     controlData_.plannedCentroidalVel =
         controlData_.mpcCentroidalVel + ctl().dt() * controlData_.plannedCentroidalAccel;
   }

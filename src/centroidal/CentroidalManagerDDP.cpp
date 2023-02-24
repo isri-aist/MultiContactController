@@ -19,6 +19,8 @@ void CentroidalManagerDDP::Configuration::load(const mc_rtc::Configuration & mcR
   mcRtcConfig("horizonDuration", horizonDuration);
   mcRtcConfig("horizonDt", horizonDt);
   mcRtcConfig("ddpMaxIter", ddpMaxIter);
+  mcRtcConfig("angularGainP", angularGainP);
+  mcRtcConfig("angularGainD", angularGainD);
   if(mcRtcConfig.has("mpcWeightParam"))
   {
     mcRtcConfig("mpcWeightParam")("runningPos", mpcWeightParam.running_pos);
@@ -38,6 +40,8 @@ void CentroidalManagerDDP::Configuration::addToLogger(const std::string & baseEn
   MC_RTC_LOG_HELPER(baseEntry + "_horizonDuration", horizonDuration);
   MC_RTC_LOG_HELPER(baseEntry + "_horizonDt", horizonDt);
   MC_RTC_LOG_HELPER(baseEntry + "_ddpMaxIter", ddpMaxIter);
+  MC_RTC_LOG_HELPER(baseEntry + "_angularGainP", angularGainP);
+  MC_RTC_LOG_HELPER(baseEntry + "_angularGainD", angularGainD);
 }
 
 CentroidalManagerDDP::CentroidalManagerDDP(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
@@ -99,9 +103,12 @@ void CentroidalManagerDDP::runMpc()
                                                           ddp_->ddp_solver_->controlData().x_list[1].segment<3>(3));
   controlData_.plannedCentroidalAccel.linear() =
       controlData_.plannedCentroidalWrench.force() / robotMass_ - Eigen::Vector3d(0.0, 0.0, CCC::constants::g);
-  // \todo DdpCentroidal does not explicitly handle orientation (instead it only handles angular momentum) and cannot
-  // calculate angular acceleration
-  controlData_.plannedCentroidalAccel.angular().setZero();
+  // DdpCentroidal does not explicitly handle orientation (instead it only handles angular momentum), so apply simple PD
+  // feedback to track the reference orientation
+  controlData_.plannedCentroidalAccel.angular() =
+      -1 * config_.angularGainP
+          * sva::rotationError(refData_.centroidalPose.rotation(), controlData_.mpcCentroidalPose.rotation())
+      + -1 * config_.angularGainD * controlData_.mpcCentroidalVel.angular();
 }
 
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const

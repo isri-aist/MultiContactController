@@ -25,6 +25,12 @@ public:
     //! DDP maximum iteration
     int ddpMaxIter = 1;
 
+    //! Feedback gain of orientation
+    double angularGainP = 4.0;
+
+    //! Feedback gain of angular velocity
+    double angularGainD = 4.0;
+
     //! Weight parameter of MPC objective function
     CCC::DdpCentroidal::WeightParam mpcWeightParam;
 
