@@ -60,6 +60,20 @@ void CentroidalManagerDDP::reset()
   ddp_->ddp_solver_->config().max_iter = config_.ddpMaxIter;
 }
 
+void CentroidalManagerDDP::addToGUI(mc_rtc::gui::StateBuilder & gui)
+{
+  CentroidalManager::addToGUI(gui);
+
+  gui.addElement(
+      {ctl().name(), config_.name, "Config"},
+      mc_rtc::gui::ArrayInput(
+          "Angular P-Gain", {"x", "y", "z"}, [this]() -> const Eigen::Vector3d & { return config_.angularGainP; },
+          [this](const Eigen::Vector3d & v) { config_.angularGainP = v; }),
+      mc_rtc::gui::ArrayInput(
+          "Angular D-Gain", {"x", "y", "z"}, [this]() -> const Eigen::Vector3d & { return config_.angularGainD; },
+          [this](const Eigen::Vector3d & v) { config_.angularGainD = v; }));
+}
+
 void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)
 {
   CentroidalManager::addToLogger(logger);
@@ -106,9 +120,10 @@ void CentroidalManagerDDP::runMpc()
   // DdpCentroidal does not explicitly handle orientation (instead it only handles angular momentum), so apply simple PD
   // feedback to track the reference orientation
   controlData_.plannedCentroidalAccel.angular() =
-      -1 * config_.angularGainP
-          * sva::rotationError(refData_.centroidalPose.rotation(), controlData_.mpcCentroidalPose.rotation())
-      + -1 * config_.angularGainD * controlData_.mpcCentroidalVel.angular();
+      -1
+          * config_.angularGainP.cwiseProduct(
+              sva::rotationError(refData_.centroidalPose.rotation(), controlData_.mpcCentroidalPose.rotation()))
+      + -1 * config_.angularGainD.cwiseProduct(controlData_.mpcCentroidalVel.angular());
 }
 
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const

@@ -26,10 +26,10 @@ public:
     int ddpMaxIter = 1;
 
     //! Feedback gain of orientation
-    double angularGainP = 4.0;
+    Eigen::Vector3d angularGainP = Eigen::Vector3d(1.0, 1.0, 4.0);
 
     //! Feedback gain of angular velocity
-    double angularGainD = 4.0;
+    Eigen::Vector3d angularGainD = Eigen::Vector3d(2.0, 2.0, 4.0);
 
     //! Weight parameter of MPC objective function
     CCC::DdpCentroidal::WeightParam mpcWeightParam;
@@ -59,6 +59,9 @@ public:
   {
     return config_;
   }
+
+  /** \brief Add entries to the GUI. */
+  virtual void addToGUI(mc_rtc::gui::StateBuilder & gui) override;
 
   /** \brief Add entries to the logger. */
   virtual void addToLogger(mc_rtc::Logger & logger) override;

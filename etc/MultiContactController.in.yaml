@@ -204,8 +204,8 @@ CentroidalManager:
   horizonDuration: 2.0 # [sec]
   horizonDt: 0.05 # [sec]
   ddpMaxIter: 1
-  angularGainP: 4.0
-  angularGainD: 4.0
+  angularGainP: [1.0, 1.0, 4.0]
+  angularGainD: [2.0, 2.0, 4.0]
   mpcWeightParam:
     runningPos: [10.0, 10.0, 10.0]
     runningLinearMomentum: [1e-6, 1e-6, 1e-6]
