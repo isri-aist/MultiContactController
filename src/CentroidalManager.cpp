@@ -7,7 +7,6 @@
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 #include <mc_tasks/MomentumTask.h>
 #include <mc_tasks/OrientationTask.h>
-#include <RBDyn/NumericalIntegration.h>
 
 #include <ForceColl/WrenchDistribution.h>
 
