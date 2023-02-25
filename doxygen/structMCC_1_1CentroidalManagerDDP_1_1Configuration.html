@@ -128,12 +128,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a02d3c89fe92f165ad1d8fdfc6c78d3e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#a02d3c89fe92f165ad1d8fdfc6c78d3e4">ddpMaxIter</a> = 1</td></tr>
 <tr class="memdesc:a02d3c89fe92f165ad1d8fdfc6c78d3e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">DDP maximum iteration.  <a href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#a02d3c89fe92f165ad1d8fdfc6c78d3e4">More...</a><br /></td></tr>
 <tr class="separator:a02d3c89fe92f165ad1d8fdfc6c78d3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac870b44e408aa5fccab22a428bd14b38"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#ac870b44e408aa5fccab22a428bd14b38">angularGainP</a> = 4.0</td></tr>
-<tr class="memdesc:ac870b44e408aa5fccab22a428bd14b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Feedback gain of orientation.  <a href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#ac870b44e408aa5fccab22a428bd14b38">More...</a><br /></td></tr>
-<tr class="separator:ac870b44e408aa5fccab22a428bd14b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ca343d755e00e5eb9e0862f2c271cfe"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#a4ca343d755e00e5eb9e0862f2c271cfe">angularGainD</a> = 4.0</td></tr>
-<tr class="memdesc:a4ca343d755e00e5eb9e0862f2c271cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Feedback gain of angular velocity.  <a href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#a4ca343d755e00e5eb9e0862f2c271cfe">More...</a><br /></td></tr>
-<tr class="separator:a4ca343d755e00e5eb9e0862f2c271cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8ecad6d0a82c234809e5e26adb550a9"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#af8ecad6d0a82c234809e5e26adb550a9">angularGainP</a> = Eigen::Vector3d(1.0, 1.0, 4.0)</td></tr>
+<tr class="memdesc:af8ecad6d0a82c234809e5e26adb550a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Feedback gain of orientation.  <a href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#af8ecad6d0a82c234809e5e26adb550a9">More...</a><br /></td></tr>
+<tr class="separator:af8ecad6d0a82c234809e5e26adb550a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b49eeab8ecd9aabc74ec42037c5afc6"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#a4b49eeab8ecd9aabc74ec42037c5afc6">angularGainD</a> = Eigen::Vector3d(2.0, 2.0, 4.0)</td></tr>
+<tr class="memdesc:a4b49eeab8ecd9aabc74ec42037c5afc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Feedback gain of angular velocity.  <a href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#a4b49eeab8ecd9aabc74ec42037c5afc6">More...</a><br /></td></tr>
+<tr class="separator:a4b49eeab8ecd9aabc74ec42037c5afc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4f7387b16b988a1cd1fb785675ab63d"><td class="memItemLeft" align="right" valign="top">CCC::DdpCentroidal::WeightParam&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#aa4f7387b16b988a1cd1fb785675ab63d">mpcWeightParam</a></td></tr>
 <tr class="memdesc:aa4f7387b16b988a1cd1fb785675ab63d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weight parameter of MPC objective function.  <a href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html#aa4f7387b16b988a1cd1fb785675ab63d">More...</a><br /></td></tr>
 <tr class="separator:aa4f7387b16b988a1cd1fb785675ab63d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,14 +257,14 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4ca343d755e00e5eb9e0862f2c271cfe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ca343d755e00e5eb9e0862f2c271cfe">&#9670;&nbsp;</a></span>angularGainD</h2>
+<a id="a4b49eeab8ecd9aabc74ec42037c5afc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b49eeab8ecd9aabc74ec42037c5afc6">&#9670;&nbsp;</a></span>angularGainD</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double MCC::CentroidalManagerDDP::Configuration::angularGainD = 4.0</td>
+          <td class="memname">Eigen::Vector3d MCC::CentroidalManagerDDP::Configuration::angularGainD = Eigen::Vector3d(2.0, 2.0, 4.0)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -275,14 +275,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac870b44e408aa5fccab22a428bd14b38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac870b44e408aa5fccab22a428bd14b38">&#9670;&nbsp;</a></span>angularGainP</h2>
+<a id="af8ecad6d0a82c234809e5e26adb550a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8ecad6d0a82c234809e5e26adb550a9">&#9670;&nbsp;</a></span>angularGainP</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double MCC::CentroidalManagerDDP::Configuration::angularGainP = 4.0</td>
+          <td class="memname">Eigen::Vector3d MCC::CentroidalManagerDDP::Configuration::angularGainP = Eigen::Vector3d(1.0, 1.0, 4.0)</td>
         </tr>
       </table>
 </div><div class="memdoc">

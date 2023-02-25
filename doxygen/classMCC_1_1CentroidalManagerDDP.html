@@ -129,6 +129,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a787837378f6a4802070f9603df8bb8cc"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a787837378f6a4802070f9603df8bb8cc">config</a> () const override</td></tr>
 <tr class="memdesc:a787837378f6a4802070f9603df8bb8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const accessor to the configuration.  <a href="classMCC_1_1CentroidalManagerDDP.html#a787837378f6a4802070f9603df8bb8cc">More...</a><br /></td></tr>
 <tr class="separator:a787837378f6a4802070f9603df8bb8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0496e018b2f44146b2b431f95867a08f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a0496e018b2f44146b2b431f95867a08f">addToGUI</a> (mc_rtc::gui::StateBuilder &amp;gui) override</td></tr>
+<tr class="memdesc:a0496e018b2f44146b2b431f95867a08f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add entries to the GUI.  <a href="classMCC_1_1CentroidalManagerDDP.html#a0496e018b2f44146b2b431f95867a08f">More...</a><br /></td></tr>
+<tr class="separator:a0496e018b2f44146b2b431f95867a08f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6217cbf93b4083550b04034ce75cc36e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a6217cbf93b4083550b04034ce75cc36e">addToLogger</a> (mc_rtc::Logger &amp;logger) override</td></tr>
 <tr class="memdesc:a6217cbf93b4083550b04034ce75cc36e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add entries to the logger.  <a href="classMCC_1_1CentroidalManagerDDP.html#a6217cbf93b4083550b04034ce75cc36e">More...</a><br /></td></tr>
 <tr class="separator:a6217cbf93b4083550b04034ce75cc36e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,9 +145,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7068f5deb76fba5e698318b28a1690e inherit pub_methods_classMCC_1_1CentroidalManager"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#ab7068f5deb76fba5e698318b28a1690e">stop</a> ()</td></tr>
 <tr class="memdesc:ab7068f5deb76fba5e698318b28a1690e inherit pub_methods_classMCC_1_1CentroidalManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop.  <a href="classMCC_1_1CentroidalManager.html#ab7068f5deb76fba5e698318b28a1690e">More...</a><br /></td></tr>
 <tr class="separator:ab7068f5deb76fba5e698318b28a1690e inherit pub_methods_classMCC_1_1CentroidalManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a952985c3bc6b8242f06d2f2cde25c796 inherit pub_methods_classMCC_1_1CentroidalManager"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a952985c3bc6b8242f06d2f2cde25c796">addToGUI</a> (mc_rtc::gui::StateBuilder &amp;gui)</td></tr>
-<tr class="memdesc:a952985c3bc6b8242f06d2f2cde25c796 inherit pub_methods_classMCC_1_1CentroidalManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add entries to the GUI.  <a href="classMCC_1_1CentroidalManager.html#a952985c3bc6b8242f06d2f2cde25c796">More...</a><br /></td></tr>
-<tr class="separator:a952985c3bc6b8242f06d2f2cde25c796 inherit pub_methods_classMCC_1_1CentroidalManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21df479bb9449d354d9d66a5afde30cf inherit pub_methods_classMCC_1_1CentroidalManager"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a21df479bb9449d354d9d66a5afde30cf">removeFromGUI</a> (mc_rtc::gui::StateBuilder &amp;gui)</td></tr>
 <tr class="memdesc:a21df479bb9449d354d9d66a5afde30cf inherit pub_methods_classMCC_1_1CentroidalManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove entries from the GUI.  <a href="classMCC_1_1CentroidalManager.html#a21df479bb9449d354d9d66a5afde30cf">More...</a><br /></td></tr>
 <tr class="separator:a21df479bb9449d354d9d66a5afde30cf inherit pub_methods_classMCC_1_1CentroidalManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,6 +273,36 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0496e018b2f44146b2b431f95867a08f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0496e018b2f44146b2b431f95867a08f">&#9670;&nbsp;</a></span>addToGUI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void MCC::CentroidalManagerDDP::addToGUI </td>
+          <td>(</td>
+          <td class="paramtype">mc_rtc::gui::StateBuilder &amp;&#160;</td>
+          <td class="paramname"><em>gui</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add entries to the GUI. </p>
+
+<p>Reimplemented from <a class="el" href="classMCC_1_1CentroidalManager.html#a952985c3bc6b8242f06d2f2cde25c796">MCC::CentroidalManager</a>.</p>
+
+</div>
+</div>
 <a id="a6217cbf93b4083550b04034ce75cc36e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6217cbf93b4083550b04034ce75cc36e">&#9670;&nbsp;</a></span>addToLogger()</h2>
 
@@ -429,7 +459,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classMCC_1_1CentroidalManager.html#a52c6f2a65d5222aa584a5e1518a8fe2a">MCC::CentroidalManager</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManagerDDP_8h_source.html#l00068">68</a> of file <a class="el" href="CentroidalManagerDDP_8h_source.html">CentroidalManagerDDP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManagerDDP_8h_source.html#l00071">71</a> of file <a class="el" href="CentroidalManagerDDP_8h_source.html">CentroidalManagerDDP.h</a>.</p>
 
 </div>
 </div>
@@ -516,7 +546,7 @@ Protected Attributes</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1CentroidalManagerDDP_1_1Configuration.html" title="Configuration.">Configuration</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManagerDDP_8h_source.html#l00092">92</a> of file <a class="el" href="CentroidalManagerDDP_8h_source.html">CentroidalManagerDDP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManagerDDP_8h_source.html#l00095">95</a> of file <a class="el" href="CentroidalManagerDDP_8h_source.html">CentroidalManagerDDP.h</a>.</p>
 
 </div>
 </div>
@@ -542,7 +572,7 @@ Protected Attributes</h2></td></tr>
 
 <p>DDP. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManagerDDP_8h_source.html#l00095">95</a> of file <a class="el" href="CentroidalManagerDDP_8h_source.html">CentroidalManagerDDP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManagerDDP_8h_source.html#l00098">98</a> of file <a class="el" href="CentroidalManagerDDP_8h_source.html">CentroidalManagerDDP.h</a>.</p>
 
 </div>
 </div>
