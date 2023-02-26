@@ -1,7 +1,8 @@
 <map id="MCC::State" name="MCC::State">
-<area shape="rect" id="node1" title="FSM State with utility functions." alt="" coords="238,80,333,107"/>
+<area shape="rect" id="node1" title="FSM State with utility functions." alt="" coords="322,80,417,107"/>
 <area shape="rect" id="node3" href="$structMCC_1_1ConfigMotionState.html" title="FSM state to send motion from configuration." alt="" coords="5,155,187,181"/>
-<area shape="rect" id="node4" href="$structMCC_1_1GuiWalkState.html" title="FSM state to send walking command from GUI." alt="" coords="211,155,360,181"/>
-<area shape="rect" id="node5" href="$structMCC_1_1InitialState.html" title="FSM state to initialize." alt="" coords="384,155,515,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="201,5,370,32"/>
+<area shape="rect" id="node4" href="$structMCC_1_1GuiStepState.html" title="FSM state to send step command from GUI." alt="" coords="211,155,357,181"/>
+<area shape="rect" id="node5" href="$structMCC_1_1GuiWalkState.html" title="FSM state to send walking command from GUI." alt="" coords="381,155,531,181"/>
+<area shape="rect" id="node6" href="$structMCC_1_1InitialState.html" title="FSM state to initialize." alt="" coords="555,155,685,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="285,5,454,32"/>
 </map>

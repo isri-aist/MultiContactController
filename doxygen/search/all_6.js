@@ -10,6 +10,8 @@ var searchData=
   ['grippercommandlist_5f_87',['gripperCommandList_',['../classMCC_1_1LimbManager.html#a28c25207fd0f827c229118af96f907fa',1,'MCC::LimbManager']]],
   ['group_88',['Group',['../structMCC_1_1Limb_1_1Group.html',1,'MCC::Limb::Group'],['../structMCC_1_1Limb.html#af2552926eccef34b9ddce84f7a829273',1,'MCC::Limb::group()']]],
   ['grouplimbsmap_5f_89',['groupLimbsMap_',['../classMCC_1_1LimbManagerSet.html#a074c30564e17a34e09711da42a99d73b',1,'MCC::LimbManagerSet']]],
-  ['guiwalkstate_90',['GuiWalkState',['../structMCC_1_1GuiWalkState.html',1,'MCC']]],
-  ['guiwalkstate_2eh_91',['GuiWalkState.h',['../GuiWalkState_8h.html',1,'']]]
+  ['guistepstate_90',['GuiStepState',['../structMCC_1_1GuiStepState.html',1,'MCC']]],
+  ['guistepstate_2eh_91',['GuiStepState.h',['../GuiStepState_8h.html',1,'']]],
+  ['guiwalkstate_92',['GuiWalkState',['../structMCC_1_1GuiWalkState.html',1,'MCC']]],
+  ['guiwalkstate_2eh_93',['GuiWalkState.h',['../GuiWalkState_8h.html',1,'']]]
 ];
