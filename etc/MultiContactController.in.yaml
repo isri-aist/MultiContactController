@@ -58,9 +58,13 @@ states:
         Right:
           translation: [0, -0.105, 0] # [m]
 
+  MCC::GuiStep_:
+    base: MCC::GuiStep
+    configs: {}
+
   MCC::Main_:
     base: Parallel
-    states: [MCC::GuiWalk_]
+    states: [MCC::GuiWalk_, MCC::GuiStep_]
 
 # Transitions map
 transitions:
