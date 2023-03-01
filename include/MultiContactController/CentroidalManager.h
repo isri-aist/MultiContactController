@@ -14,7 +14,6 @@ class Robot;
 
 namespace ForceColl
 {
-template<class PatchID>
 class WrenchDistribution;
 } // namespace ForceColl
 
@@ -291,7 +290,7 @@ protected:
   mc_filter::LowPass<sva::MotionVecd> lowPass_ = mc_filter::LowPass<sva::MotionVecd>(0.005, 0.01);
 
   //! Wrench distribution
-  std::shared_ptr<ForceColl::WrenchDistribution<Limb>> wrenchDist_;
+  std::shared_ptr<ForceColl::WrenchDistribution> wrenchDist_;
 
   //! Contact list
   std::unordered_map<Limb, std::shared_ptr<ContactConstraint>> contactList_;

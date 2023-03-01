@@ -200,7 +200,8 @@ void CentroidalManager::update()
   // Distribute control wrench
   {
     contactList_ = ctl().limbManagerSet_->contactList(ctl().t());
-    wrenchDist_ = std::make_shared<ForceColl::WrenchDistribution<Limb>>(contactList_, config().wrenchDistConfig);
+    wrenchDist_ = std::make_shared<ForceColl::WrenchDistribution>(ForceColl::getContactVecFromMap(contactList_),
+                                                                  config().wrenchDistConfig);
     Eigen::Vector3d comForWrenchDist =
         (config().useActualComForWrenchDist ? controlData_.actualCentroidalPose.translation()
                                             : controlData_.plannedCentroidalPose.translation());
@@ -244,7 +245,7 @@ void CentroidalManager::update()
 
   // Set target wrench of limb tasks
   {
-    const auto & targetWrenchList = wrenchDist_->calcWrenchList();
+    const auto & targetWrenchList = ForceColl::calcWrenchList(contactList_, wrenchDist_->resultWrenchRatio_);
     for(const auto & limbManagerKV : *ctl().limbManagerSet_)
     {
       sva::ForceVecd targetWrench;
