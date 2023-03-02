@@ -327,6 +327,10 @@ LimbManagerSet:
             linear: [1, 1, 1]
             angular: [1, 1, 0]
 
+CentroidalManager:
+  angularGainP: [0.0, 0.0, 4.0]
+  angularGainD: [0.0, 0.0, 4.0]
+
 OverwriteConfigList:
   NoSensors:
     LimbManagerSet:
