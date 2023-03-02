@@ -1,0 +1,10 @@
+<map id="MCC::CentroidalManagerPC" name="MCC::CentroidalManagerPC">
+<area shape="rect" id="node1" title="Centroidal manager with preview control." alt="" coords="897,129,1099,156"/>
+<area shape="rect" id="node2" href="$classMCC_1_1CentroidalManager.html" title="Centroidal manager." alt="" coords="605,97,789,124"/>
+<area shape="rect" id="node3" href="$structMCC_1_1MultiContactController.html" title="Humanoid multi&#45;contact motion controller." alt="" coords="253,5,460,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,204,32"/>
+<area shape="rect" id="node5" href="$structMCC_1_1CentroidalManager_1_1RefData.html" title="Reference data." alt="" coords="265,57,449,98"/>
+<area shape="rect" id="node6" href="$structMCC_1_1CentroidalManager_1_1ControlData.html" title="Control data." alt="" coords="265,122,449,163"/>
+<area shape="rect" id="node7" href="$structMCC_1_1CentroidalManagerPC_1_1Configuration.html" title="Configuration." alt="" coords="596,151,797,193"/>
+<area shape="rect" id="node8" href="$structMCC_1_1CentroidalManager_1_1Configuration.html" title="Configuration." alt="" coords="265,187,449,229"/>
+</map>

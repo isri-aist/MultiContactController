@@ -1,4 +1,5 @@
 <map id="MCC::CentroidalManager::Configuration" name="MCC::CentroidalManager::Configuration">
-<area shape="rect" id="node1" title="Configuration." alt="" coords="19,5,203,47"/>
+<area shape="rect" id="node1" title="Configuration." alt="" coords="134,5,318,47"/>
 <area shape="rect" id="node2" href="$structMCC_1_1CentroidalManagerDDP_1_1Configuration.html" title="Configuration." alt="" coords="5,95,217,136"/>
+<area shape="rect" id="node3" href="$structMCC_1_1CentroidalManagerPC_1_1Configuration.html" title="Configuration." alt="" coords="241,95,443,136"/>
 </map>
