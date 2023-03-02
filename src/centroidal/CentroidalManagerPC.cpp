@@ -61,6 +61,13 @@ void CentroidalManagerPC::reset()
                                                         config_.horizonDt, config_.mpcWeightParam);
 }
 
+void CentroidalManagerPC::addToLogger(mc_rtc::Logger & logger)
+{
+  CentroidalManager::addToLogger(logger);
+
+  MC_RTC_LOG_HELPER(config().name + "_Robot_momentOfInertia", robotMomentOfInertia_);
+}
+
 void CentroidalManagerPC::runMpc()
 {
   CCC::PreviewControlCentroidal::InitialParam initialParam;

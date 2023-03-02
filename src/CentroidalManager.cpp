@@ -349,6 +349,7 @@ void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
 
   logger.addLogEntry(config().name + "_nominalCentroidalPose", this,
                      [this]() { return getNominalCentroidalPose(ctl().t()); });
+  MC_RTC_LOG_HELPER(config().name + "_Robot_mass", robotMass_);
 }
 
 void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)
