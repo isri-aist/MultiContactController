@@ -13,7 +13,8 @@ robots:
     module: MCC/SampleField
 
 transitions:
-  - [MCC::Initial_, OK, MCC::ConfigMotion_, Auto]
+  - [MCC::Initial_, OK, MCC::ConfigMotion1_, Auto]
+  - [MCC::ConfigMotion1_, OK, MCC::ConfigMotion2_, Auto]
 
 states:
   MCC::Initial_:
@@ -26,7 +27,7 @@ states:
         - name: r_gripper
           opening: 1.0
 
-  MCC::ConfigMotion_:
+  MCC::ConfigMotion1_:
     base: MCC::ConfigMotion
     configs:
       baseTime: Relative
@@ -84,7 +85,7 @@ states:
             - time: 10.0
               constraint:
                 type: Grasp
-                fricCoeff: 0.5
+                fricCoeff: 1.0
           gripperCommandList:
             - time: 9.0
               name: l_gripper
@@ -190,60 +191,6 @@ states:
           endTime: 31.0
           swingConfig:
             withdrawOffset: [0, 0, 0.10]
-        - limb: LeftFoot
-          type: Add
-          startTime: 35.0
-          endTime: 35.3
-          pose:
-            translation: [1.8, 0.1, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
-        - limb: RightFoot
-          type: Add
-          startTime: 35.0
-          endTime: 35.3
-          pose:
-            translation: [1.8, -0.1, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
-        - limb: LeftFoot
-          type: Add
-          startTime: 35.6
-          endTime: 35.9
-          pose:
-            translation: [1.8, 0.1, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
-        - limb: RightFoot
-          type: Add
-          startTime: 35.6
-          endTime: 35.9
-          pose:
-            translation: [1.8, -0.1, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
-        - limb: LeftFoot
-          type: Add
-          startTime: 36.2
-          endTime: 36.5
-          pose:
-            translation: [1.8, 0.1, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
-        - limb: RightFoot
-          type: Add
-          startTime: 36.2
-          endTime: 36.5
-          pose:
-            translation: [1.8, -0.1, 0]
-          constraint:
-            type: Surface
-            fricCoeff: 0.5
       nominalCentroidalPoseList:
         - time: 26.5
           pose:
@@ -278,13 +225,73 @@ states:
           type: Remove
           r1: jvrc1
           r2: sample_field
+
+  MCC::ConfigMotion2_:
+    base: MCC::ConfigMotion
+    configs:
+      baseTime: Relative
+      stepCommandList:
+        - limb: LeftFoot
+          type: Add
+          startTime: 6.0
+          endTime: 6.3
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 6.0
+          endTime: 6.3
+          pose:
+            translation: [1.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 6.6
+          endTime: 6.9
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 6.6
+          endTime: 6.9
+          pose:
+            translation: [1.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 7.2
+          endTime: 7.5
+          pose:
+            translation: [1.8, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 7.2
+          endTime: 7.5
+          pose:
+            translation: [1.8, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
       taskConfigList:
-        - time: 33.0
+        - time: 4.0
           name: MomentumTask
           stiffness: 100.0
           weight: 1000.0
           dimWeight: [1, 1, 1, 0, 0, 0]
-        - time: 37.0
+        - time: 8.0
           name: MomentumTask
           stiffness: 1.0
           weight: 0.0
@@ -351,6 +358,25 @@ OverwriteConfigList:
                 angular: [0, 0, 0]
 
   jvrc1:
+    PostureTask:
+      target:
+        # https://github.com/jrl-umi3218/mc_rtc/blob/d297558acdbfe9514d27ebd5996e2f89728878b6/src/mc_robots/jvrc1.cpp#L82-L85
+        # TODO: This configuration will no longer be necessary when https://github.com/jrl-umi3218/mc_rtc/issues/353 is resolved
+        R_SHOULDER_P: [-0.052]
+        R_SHOULDER_R: [-0.17]
+        R_SHOULDER_Y: [0.0]
+        R_ELBOW_P: [-0.52]
+        R_ELBOW_Y: [0.0]
+        R_WRIST_R: [0.0]
+        R_WRIST_Y: [0.0]
+        L_SHOULDER_P: [-0.052]
+        L_SHOULDER_R: [0.17]
+        L_SHOULDER_Y: [0.0]
+        L_ELBOW_P: [-0.52]
+        L_ELBOW_Y: [0.0]
+        L_WRIST_R: [0.0]
+        L_WRIST_Y: [0.0]
+
     CentroidalManager:
       nominalCentroidalPose:
         translation: [0.0, 0.0, 0.80]
