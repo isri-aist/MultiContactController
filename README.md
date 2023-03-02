@@ -12,7 +12,8 @@ https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-9
 
 ## Features
 - Completely open source! (controller framework: mc_rtc, simulator: Choreonoid, sample robot model: JVRC1)
-- Possible to control bipedal walking and multi-contact motion including surface/grasp contacts in a unified manner.
+- Unified control of bipedal walking, multi-contact locomotion including surface/grasp contacts, and jumping motion.
+- Easy to switch between centroidal trajectory generation methods implemented in [CentroidalControlCollection](https://github.com/isri-aist/CentroidalControlCollection).
 - Automated management with CI: Dynamics simulation is run on CI to verify multi-contact motion.
 
 ## Install
