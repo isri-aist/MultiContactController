@@ -1,5 +1,4 @@
 #include <functional>
-#include <limits>
 
 #include <CCC/Constants.h>
 #include <CCC/DdpCentroidal.h>
@@ -128,13 +127,17 @@ void CentroidalManagerDDP::runMpc()
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const
 {
   CCC::DdpCentroidal::MotionParam motionParam;
+
   motionParam.contact_list = ForceColl::getContactVecFromMap(ctl().limbManagerSet_->contactList(t));
+
   return motionParam;
 }
 
 CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcMpcRefData(double t) const
 {
   CCC::DdpCentroidal::RefData refData;
+
   refData.pos = calcRefData(t).centroidalPose.translation();
+
   return refData;
 }

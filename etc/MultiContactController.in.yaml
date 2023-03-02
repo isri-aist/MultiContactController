@@ -219,6 +219,22 @@ CentroidalManager:
     terminalLinearMomentum: [1e-6, 1e-6, 1e-6]
     terminalAngularMomentum: [1e-3, 1e-3, 1e-3]
 
+  # # PreviewControl
+  # method: PC
+  # horizonDuration: 2.0 # [sec]
+  # horizonDt: 0.005 # [sec]
+  # mpcWeightParam:
+  #   pos:
+  #     linear: [2e2, 2e2, 2e2]
+  #     angular: [1e2, 1e2, 1e2]
+  #   wrench:
+  #     force: [5e-4, 5e-4, 5e-4]
+  #     couple: [5e-3, 5e-3, 5e-3]
+  #   jerk:
+  #     linear: [1e-8, 1e-8, 1e-8]
+  #     angular: [1e-8, 1e-8, 1e-8]
+  #   wrenchDistConfig: {}
+
 Contacts:
   Surface: {}
   Grasp: {}

@@ -11,6 +11,7 @@ add_library(${CONTROLLER_NAME} SHARED
   CentroidalManager.cpp
   swing/SwingTrajCubicSplineSimple.cpp
   centroidal/CentroidalManagerDDP.cpp
+  centroidal/CentroidalManagerPC.cpp
   )
 target_link_libraries(${CONTROLLER_NAME} PUBLIC mc_rtc::mc_control_fsm mc_rtc::mc_rtc_ros)
 
