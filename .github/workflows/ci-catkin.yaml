@@ -135,7 +135,7 @@ jobs:
           choreonoid ${CNOID_FILE} --start-simulation &
           CNOID_PID=$!
           if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
-            SLEEP_DURATION="90s"
+            SLEEP_DURATION="120s"
           fi
           sleep ${SLEEP_DURATION}
           kill -2 ${ROSCORE_PID}
