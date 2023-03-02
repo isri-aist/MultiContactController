@@ -1,0 +1,16 @@
+CentroidalManager:
+  method: DDP
+  horizonDuration: 2.0 # [sec]
+  horizonDt: 0.05 # [sec]
+  ddpMaxIter: 1
+  # Jumping motion becomes unstable if roll and pitch gains are not zero
+  angularGainP: [0.0, 0.0, 4.0]
+  angularGainD: [0.0, 0.0, 4.0]
+  mpcWeightParam:
+    runningPos: [10.0, 10.0, 10.0]
+    runningLinearMomentum: [1e-6, 1e-6, 1e-6]
+    runningAngularMomentum: [1e-3, 1e-3, 1e-3]
+    runningForce: 5e-6
+    terminalPos: [10.0, 10.0, 10.0]
+    terminalLinearMomentum: [1e-6, 1e-6, 1e-6]
+    terminalAngularMomentum: [1e-3, 1e-3, 1e-3]
