@@ -110,9 +110,8 @@ void CentroidalManagerDDP::runMpc()
       std::bind(&CentroidalManagerDDP::calcMpcRefData, this, std::placeholders::_1), initialParam, ctl().t());
 
   const auto & motionParam = calcMpcMotionParam(ctl().t());
-  Eigen::Vector6d totalWrench =
-      motionParam.calcTotalWrench(plannedForceScales, controlData_.mpcCentroidalPose.translation());
-  controlData_.plannedCentroidalWrench = sva::ForceVecd(totalWrench.tail<3>(), totalWrench.head<3>());
+  controlData_.plannedCentroidalWrench = ForceColl::calcTotalWrench(motionParam.contact_list, plannedForceScales,
+                                                                    controlData_.mpcCentroidalPose.translation());
   controlData_.plannedCentroidalMomentum = sva::ForceVecd(ddp_->ddp_solver_->controlData().x_list[1].segment<3>(6),
                                                           ddp_->ddp_solver_->controlData().x_list[1].segment<3>(3));
   controlData_.plannedCentroidalAccel.linear() =
@@ -129,41 +128,13 @@ void CentroidalManagerDDP::runMpc()
 CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const
 {
   CCC::DdpCentroidal::MotionParam motionParam;
-
-  const auto & contactList = ctl().limbManagerSet_->contactList(t);
-  {
-    int colNum = 0;
-    for(const auto & contactKV : contactList)
-    {
-      colNum += static_cast<int>(contactKV.second->graspMat_.cols());
-    }
-    motionParam.vertex_ridge_list.resize(6, colNum);
-  }
-  {
-    int colIdx = 0;
-    for(const auto & contactKV : contactList)
-    {
-      for(const auto & vertexWithRidge : contactKV.second->vertexWithRidgeList_)
-      {
-        motionParam.vertex_ridge_list.topRows<3>().middleCols(colIdx, vertexWithRidge.ridgeList.size()).colwise() =
-            vertexWithRidge.vertex;
-        for(const auto & ridge : vertexWithRidge.ridgeList)
-        {
-          motionParam.vertex_ridge_list.bottomRows<3>().col(colIdx) = ridge;
-          colIdx++;
-        }
-      }
-    }
-  }
-
+  motionParam.contact_list = ForceColl::getContactVecFromMap(ctl().limbManagerSet_->contactList(t));
   return motionParam;
 }
 
 CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcMpcRefData(double t) const
 {
   CCC::DdpCentroidal::RefData refData;
-
   refData.pos = calcRefData(t).centroidalPose.translation();
-
   return refData;
 }
