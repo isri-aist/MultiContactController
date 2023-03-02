@@ -79,8 +79,9 @@ void CentroidalManagerPC::runMpc()
   controlData_.plannedCentroidalWrench = pc_->planOnce(
       calcMpcMotionParam(ctl().t()), std::bind(&CentroidalManagerPC::calcMpcRefData, this, std::placeholders::_1),
       initialParam, ctl().t(), ctl().dt());
-  controlData_.plannedCentroidalMomentum.force() += ctl().dt() * controlData_.plannedCentroidalWrench.force()
-                                                    - robotMass_ * Eigen::Vector3d(0.0, 0.0, CCC::constants::g);
+  controlData_.plannedCentroidalMomentum.force() +=
+      ctl().dt()
+      * (controlData_.plannedCentroidalWrench.force() - robotMass_ * Eigen::Vector3d(0.0, 0.0, CCC::constants::g));
   controlData_.plannedCentroidalMomentum.moment() += ctl().dt() * controlData_.plannedCentroidalWrench.moment();
   controlData_.plannedCentroidalAccel.linear() =
       controlData_.plannedCentroidalWrench.force() / robotMass_ - Eigen::Vector3d(0.0, 0.0, CCC::constants::g);
