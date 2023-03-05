@@ -200,9 +200,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a5b88b22673becb26a987d09d7d1af234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1CentroidalManagerPC_1_1Configuration.html">Configuration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManagerPC.html#a5b88b22673becb26a987d09d7d1af234">config_</a></td></tr>
 <tr class="memdesc:a5b88b22673becb26a987d09d7d1af234"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structMCC_1_1CentroidalManagerPC_1_1Configuration.html" title="Configuration.">Configuration</a>.  <a href="classMCC_1_1CentroidalManagerPC.html#a5b88b22673becb26a987d09d7d1af234">More...</a><br /></td></tr>
 <tr class="separator:a5b88b22673becb26a987d09d7d1af234"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a114981958b153d283bcc3d68939eb969"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManagerPC.html#a114981958b153d283bcc3d68939eb969">robotMomentOfInertia_</a> = Eigen::Vector3d::Zero()</td></tr>
-<tr class="memdesc:a114981958b153d283bcc3d68939eb969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot moment of inertia [kg m^2].  <a href="classMCC_1_1CentroidalManagerPC.html#a114981958b153d283bcc3d68939eb969">More...</a><br /></td></tr>
-<tr class="separator:a114981958b153d283bcc3d68939eb969"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3486007cf993235d4b0fd7e64c5cdb79"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CCC::PreviewControlCentroidal &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManagerPC.html#a3486007cf993235d4b0fd7e64c5cdb79">pc_</a></td></tr>
 <tr class="memdesc:a3486007cf993235d4b0fd7e64c5cdb79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preview control.  <a href="classMCC_1_1CentroidalManagerPC.html#a3486007cf993235d4b0fd7e64c5cdb79">More...</a><br /></td></tr>
 <tr class="separator:a3486007cf993235d4b0fd7e64c5cdb79"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,6 +216,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a3ad2e87a8bf3fa53669b9c65289f7e2e inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a3ad2e87a8bf3fa53669b9c65289f7e2e">robotMass_</a> = 0</td></tr>
 <tr class="memdesc:a3ad2e87a8bf3fa53669b9c65289f7e2e inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot mass [kg].  <a href="classMCC_1_1CentroidalManager.html#a3ad2e87a8bf3fa53669b9c65289f7e2e">More...</a><br /></td></tr>
 <tr class="separator:a3ad2e87a8bf3fa53669b9c65289f7e2e inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6775a04cdc3cb16b6042f99a22462345 inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a6775a04cdc3cb16b6042f99a22462345">robotMomentOfInertia_</a> = Eigen::Vector3d::Zero()</td></tr>
+<tr class="memdesc:a6775a04cdc3cb16b6042f99a22462345 inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot moment of inertia [kg m^2].  <a href="classMCC_1_1CentroidalManager.html#a6775a04cdc3cb16b6042f99a22462345">More...</a><br /></td></tr>
+<tr class="separator:a6775a04cdc3cb16b6042f99a22462345 inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a215166c86df4cbe63d5bd12051973249 inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="memItemLeft" align="right" valign="top">mc_filter::LowPass&lt; sva::MotionVecd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a215166c86df4cbe63d5bd12051973249">lowPass_</a> = mc_filter::LowPass&lt;sva::MotionVecd&gt;(0.005, 0.01)</td></tr>
 <tr class="memdesc:a215166c86df4cbe63d5bd12051973249 inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low-pass filter for velocity calculation.  <a href="classMCC_1_1CentroidalManager.html#a215166c86df4cbe63d5bd12051973249">More...</a><br /></td></tr>
 <tr class="separator:a215166c86df4cbe63d5bd12051973249 inherit pro_attribs_classMCC_1_1CentroidalManager"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -544,32 +544,6 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Preview control. </p>
-
-<p class="definition">Definition at line <a class="el" href="CentroidalManagerPC_8h_source.html#l00089">89</a> of file <a class="el" href="CentroidalManagerPC_8h_source.html">CentroidalManagerPC.h</a>.</p>
-
-</div>
-</div>
-<a id="a114981958b153d283bcc3d68939eb969"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a114981958b153d283bcc3d68939eb969">&#9670;&nbsp;</a></span>robotMomentOfInertia_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Vector3d MCC::CentroidalManagerPC::robotMomentOfInertia_ = Eigen::Vector3d::Zero()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Robot moment of inertia [kg m^2]. </p>
 
 <p class="definition">Definition at line <a class="el" href="CentroidalManagerPC_8h_source.html#l00086">86</a> of file <a class="el" href="CentroidalManagerPC_8h_source.html">CentroidalManagerPC.h</a>.</p>
 
