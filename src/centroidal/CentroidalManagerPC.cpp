@@ -46,17 +46,6 @@ void CentroidalManagerPC::reset()
 {
   CentroidalManager::reset();
 
-  // Set robotMomentOfInertia_
-  {
-    sva::RBInertiad totalInertia(0, Eigen::Vector3d::Zero(), Eigen::Matrix3d::Zero());
-    for(const auto & body : ctl().robot().mb().bodies())
-    {
-      totalInertia += body.inertia();
-    }
-    robotMomentOfInertia_ = totalInertia.inertia().diagonal();
-  }
-
-  // Setup preview control
   pc_ = std::make_shared<CCC::PreviewControlCentroidal>(robotMass_, robotMomentOfInertia_, config_.horizonDuration,
                                                         config_.horizonDt, config_.mpcWeightParam);
 }
@@ -64,8 +53,6 @@ void CentroidalManagerPC::reset()
 void CentroidalManagerPC::addToLogger(mc_rtc::Logger & logger)
 {
   CentroidalManager::addToLogger(logger);
-
-  MC_RTC_LOG_HELPER(config().name + "_Robot_momentOfInertia", robotMomentOfInertia_);
 }
 
 void CentroidalManagerPC::runMpc()

@@ -82,9 +82,6 @@ protected:
   //! Configuration
   Configuration config_;
 
-  //! Robot moment of inertia [kg m^2]
-  Eigen::Vector3d robotMomentOfInertia_ = Eigen::Vector3d::Zero();
-
   //! Preview control
   std::shared_ptr<CCC::PreviewControlCentroidal> pc_;
 };

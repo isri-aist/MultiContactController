@@ -286,6 +286,9 @@ protected:
   //! Robot mass [kg]
   double robotMass_ = 0;
 
+  //! Robot moment of inertia [kg m^2]
+  Eigen::Vector3d robotMomentOfInertia_ = Eigen::Vector3d::Zero();
+
   //! Low-pass filter for velocity calculation
   mc_filter::LowPass<sva::MotionVecd> lowPass_ = mc_filter::LowPass<sva::MotionVecd>(0.005, 0.01);
 

@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include <mc_rtc/gui/ArrayInput.h>
+#include <mc_rtc/gui/Box.h>
 #include <mc_rtc/gui/Checkbox.h>
 #include <mc_rtc/gui/NumberInput.h>
 #include <mc_tasks/CoMTask.h>
@@ -148,6 +149,14 @@ void CentroidalManager::reset()
   controlData_.reset(ctlPtr_);
 
   robotMass_ = ctl().robot().mass();
+  {
+    sva::RBInertiad totalInertia(0, Eigen::Vector3d::Zero(), Eigen::Matrix3d::Zero());
+    for(const auto & body : ctl().robot().mb().bodies())
+    {
+      totalInertia += body.inertia();
+    }
+    robotMomentOfInertia_ = totalInertia.inertia().diagonal();
+  }
 
   lowPass_.dt(ctl().solver().dt());
   lowPass_.reset(sva::MotionVecd::Zero());
@@ -301,6 +310,16 @@ void CentroidalManager::stop()
 
 void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
+  Eigen::Vector3d boxSize;
+  boxSize << robotMomentOfInertia_.y() + robotMomentOfInertia_.z() - robotMomentOfInertia_.x(),
+      robotMomentOfInertia_.z() + robotMomentOfInertia_.x() - robotMomentOfInertia_.y(),
+      robotMomentOfInertia_.x() + robotMomentOfInertia_.y() - robotMomentOfInertia_.z();
+  boxSize = ((6.0 / robotMass_) * boxSize).cwiseSqrt();
+  gui.addElement({ctl().name(), config().name, "Status"},
+                 mc_rtc::gui::Box(
+                     "plannedCentroidalPose", boxSize,
+                     [this]() -> const sva::PTransformd & { return controlData_.plannedCentroidalPose; },
+                     mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.8)));
   gui.addElement({ctl().name(), config().name, "Config"},
                  mc_rtc::gui::Label("method", [this]() -> const std::string & { return config().method; }),
                  mc_rtc::gui::ComboInput(
@@ -350,6 +369,7 @@ void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
   logger.addLogEntry(config().name + "_nominalCentroidalPose", this,
                      [this]() { return getNominalCentroidalPose(ctl().t()); });
   MC_RTC_LOG_HELPER(config().name + "_Robot_mass", robotMass_);
+  MC_RTC_LOG_HELPER(config().name + "_Robot_momentOfInertia", robotMomentOfInertia_);
 }
 
 void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)
