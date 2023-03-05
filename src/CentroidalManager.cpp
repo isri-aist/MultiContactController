@@ -1,8 +1,8 @@
 #include <cmath>
 
 #include <mc_rtc/gui/ArrayInput.h>
-#include <mc_rtc/gui/Box.h>
 #include <mc_rtc/gui/Checkbox.h>
+#include <mc_rtc/gui/Ellipsoid.h>
 #include <mc_rtc/gui/NumberInput.h>
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
@@ -310,14 +310,14 @@ void CentroidalManager::stop()
 
 void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  Eigen::Vector3d boxSize;
-  boxSize << robotMomentOfInertia_.y() + robotMomentOfInertia_.z() - robotMomentOfInertia_.x(),
+  Eigen::Vector3d centroidMarkerSize;
+  centroidMarkerSize << robotMomentOfInertia_.y() + robotMomentOfInertia_.z() - robotMomentOfInertia_.x(),
       robotMomentOfInertia_.z() + robotMomentOfInertia_.x() - robotMomentOfInertia_.y(),
       robotMomentOfInertia_.x() + robotMomentOfInertia_.y() - robotMomentOfInertia_.z();
-  boxSize = ((6.0 / robotMass_) * boxSize).cwiseSqrt();
+  centroidMarkerSize = ((5.0 / robotMass_) * centroidMarkerSize).cwiseSqrt();
   gui.addElement({ctl().name(), config().name, "Status"},
-                 mc_rtc::gui::Box(
-                     "plannedCentroidalPose", boxSize,
+                 mc_rtc::gui::Ellipsoid(
+                     "plannedCentroidalPose", centroidMarkerSize,
                      [this]() -> const sva::PTransformd & { return controlData_.plannedCentroidalPose; },
                      mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.8)));
   gui.addElement({ctl().name(), config().name, "Config"},
