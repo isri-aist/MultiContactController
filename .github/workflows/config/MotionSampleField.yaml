@@ -1,17 +1,3 @@
-robots:
-  jvrc1:
-    frames:
-      - name: LeftHandGraspFrame
-        parent: l_wrist
-        X_p_f:
-          translation: [0.0, -0.0085, -0.110]
-      - name: RightHandOpenFrame
-        parent: r_wrist
-        X_p_f:
-          translation: [0.0, 0.0085, -0.1225]
-  sample_field:
-    module: MCC/SampleField
-
 transitions:
   - [MCC::Initial_, OK, MCC::ConfigMotion1_, Auto]
   - [MCC::ConfigMotion1_, OK, MCC::ConfigMotion2_, Auto]
@@ -353,7 +339,23 @@ OverwriteConfigList:
                 linear: [0, 0, 0]
                 angular: [0, 0, 0]
 
+robots:
+  # Environment models
+  sample_field:
+    module: MCC/SampleField
+
+  # Robot-specific configurations
   jvrc1:
+    frames:
+      - name: LeftHandGraspFrame
+        parent: l_wrist
+        X_p_f:
+          translation: [0.0, -0.0085, -0.110]
+      - name: RightHandOpenFrame
+        parent: r_wrist
+        X_p_f:
+          translation: [0.0, 0.0085, -0.1225]
+
     PostureTask:
       target:
         # https://github.com/jrl-umi3218/mc_rtc/blob/d297558acdbfe9514d27ebd5996e2f89728878b6/src/mc_robots/jvrc1.cpp#L82-L85
