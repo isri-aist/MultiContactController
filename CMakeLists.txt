@@ -45,6 +45,13 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
   include_directories(include ${catkin_INCLUDE_DIRS})
   link_directories(${catkin_LIBRARY_DIRS})
   set(CONFIG_OUT "${CATKIN_DEVEL_PREFIX}/lib/mc_controller/etc/MultiContactController.yaml")
+  set(CONFIG_DIR_STANDALONE "${MC_CONTROLLER_RUNTIME_INSTALL_PREFIX}/MultiContactController")
+  set(CONFIG_DIR_CATKIN "${CATKIN_DEVEL_PREFIX}/lib/mc_controller/MultiContactController")
+  if(EXISTS "${CONFIG_DIR_STANDALONE}" AND IS_DIRECTORY "${CONFIG_DIR_STANDALONE}")
+    execute_process(COMMAND cmake -E create_symlink
+      "${CONFIG_DIR_STANDALONE}" "${CONFIG_DIR_CATKIN}"
+    )
+  endif()
   configure_file(etc/mc_rtc.in.yaml ${PROJECT_SOURCE_DIR}/etc/mc_rtc.yaml @ONLY)
   set(STATES_INSTALL_PREFIX ${CATKIN_DEVEL_PREFIX}/lib)
 else()
