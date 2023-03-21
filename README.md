@@ -17,7 +17,7 @@ https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-9
 - Automated management with CI: Dynamics simulation is run on CI to verify multi-contact motion.
 
 ## Technical details
-This controller is a simple combination of the following existing typical elemental methods in the field of biped robotics:
+This controller integrates the following elements related to humanoid multi-contact motion:
 - Centroidal trajectory generation based on MPC
 - Feedback based on centroidal state
 - Wrench distribution
