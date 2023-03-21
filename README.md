@@ -16,6 +16,17 @@ https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-9
 - Easy to switch between centroidal trajectory generation methods implemented in [CentroidalControlCollection](https://github.com/isri-aist/CentroidalControlCollection).
 - Automated management with CI: Dynamics simulation is run on CI to verify multi-contact motion.
 
+## Technical details
+This controller is a simple combination of the following existing typical elemental methods in the field of biped robotics:
+- Centroidal trajectory generation based on MPC
+- Feedback based on centroidal state
+- Wrench distribution
+- Damping control in limbs
+
+For more information on the technical details, please see the following papers:
+- Papers listed in [CentroidalControlCollection](https://github.com/isri-aist/CentroidalControlCollection)
+- M Murooka, et al. Centroidal trajectory generation and stabilization based on preview control for humanoid multi-contact motion. RA-Letters, 2022. [(available here)](https://hal.science/hal-03720407)
+
 ## Install
 
 ### Requirements
