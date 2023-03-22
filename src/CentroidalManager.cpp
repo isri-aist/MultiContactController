@@ -425,13 +425,13 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
   RefData refData;
 
   sva::PTransformd nominalCentroidalPose = getNominalCentroidalPose(t);
-  if(config().nominalCentroidalPoseBaseFrame == "LimbAveragePose")
-  {
-    refData.centroidalPose = nominalCentroidalPose * projGround(calcLimbAveragePoseForRefData(t, false), false);
-  }
-  else // if(config().nominalCentroidalPoseBaseFrame == "World")
+  if(config().nominalCentroidalPoseBaseFrame == "World")
   {
     refData.centroidalPose = nominalCentroidalPose;
+  }
+  else // if(config().nominalCentroidalPoseBaseFrame == "LimbAveragePose")
+  {
+    refData.centroidalPose = nominalCentroidalPose * projGround(calcLimbAveragePoseForRefData(t, false), false);
   }
 
   return refData;
