@@ -23,6 +23,7 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
   mcRtcConfig("name", name);
   mcRtcConfig("method", method);
   mcRtcConfig("nominalCentroidalPose", nominalCentroidalPose);
+  mcRtcConfig("nominalCentroidalPoseBaseFrame", nominalCentroidalPoseBaseFrame);
   mcRtcConfig("refComZPolicy", refComZPolicy);
   if(mcRtcConfig.has("limbWeightListForRefData"))
   {
@@ -65,6 +66,7 @@ void CentroidalManager::Configuration::addToLogger(const std::string & baseEntry
 {
   MC_RTC_LOG_HELPER(baseEntry + "_method", method);
   MC_RTC_LOG_HELPER(baseEntry + "_nominalCentroidalPose", nominalCentroidalPose);
+  MC_RTC_LOG_HELPER(baseEntry + "_nominalCentroidalPoseBaseFrame", nominalCentroidalPoseBaseFrame);
   MC_RTC_LOG_HELPER(baseEntry + "_refComZPolicy", refComZPolicy);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainP", centroidalGainP);
   MC_RTC_LOG_HELPER(baseEntry + "_centroidalGainD", centroidalGainD);
@@ -323,6 +325,10 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
   gui.addElement({ctl().name(), config().name, "Config"},
                  mc_rtc::gui::Label("method", [this]() -> const std::string & { return config().method; }),
                  mc_rtc::gui::ComboInput(
+                     "nominalCentroidalPoseBaseFrame", {"LimbAveragePose", "World"},
+                     [this]() -> const std::string & { return config().nominalCentroidalPoseBaseFrame; },
+                     [this](const std::string & v) { config().nominalCentroidalPoseBaseFrame = v; }),
+                 mc_rtc::gui::ComboInput(
                      "refComZPolicy", {"Average", "Constant", "Min", "Max"},
                      [this]() -> const std::string & { return config().refComZPolicy; },
                      [this](const std::string & v) { config().refComZPolicy = v; }),
@@ -418,7 +424,15 @@ CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
 {
   RefData refData;
 
-  refData.centroidalPose = getNominalCentroidalPose(t) * projGround(calcLimbAveragePoseForRefData(t, false), false);
+  sva::PTransformd nominalCentroidalPose = getNominalCentroidalPose(t);
+  if(config().nominalCentroidalPoseBaseFrame == "LimbAveragePose")
+  {
+    refData.centroidalPose = nominalCentroidalPose * projGround(calcLimbAveragePoseForRefData(t, false), false);
+  }
+  else // if(config().nominalCentroidalPoseBaseFrame == "World")
+  {
+    refData.centroidalPose = nominalCentroidalPose;
+  }
 
   return refData;
 }

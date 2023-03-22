@@ -40,6 +40,9 @@ public:
     //! Nominal centroidal pose
     sva::PTransformd nominalCentroidalPose = sva::PTransformd(Eigen::Vector3d(0.0, 0.0, 1.0));
 
+    //! Base frame of nominal centroidal pose ("LimbAveragePose" or "World")
+    std::string nominalCentroidalPoseBaseFrame = "LimbAveragePose";
+
     //! Policy for determining the reference CoM Z position ("Average", "Constant", "Min", or "Max")
     std::string refComZPolicy = "Average";
 
@@ -260,7 +263,7 @@ protected:
    */
   sva::PTransformd calcLimbAveragePoseForRefData(double t, bool recursive) const;
 
-  /** \brief Get nominal centroidal pose
+  /** \brief Get nominal centroidal pose.
       \param t time
    */
   sva::PTransformd getNominalCentroidalPose(double t) const;
