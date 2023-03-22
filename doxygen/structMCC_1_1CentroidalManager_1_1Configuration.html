@@ -119,6 +119,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a871cb887fdb766caed23b66a544180f7"><td class="memItemLeft" align="right" valign="top">sva::PTransformd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManager_1_1Configuration.html#a871cb887fdb766caed23b66a544180f7">nominalCentroidalPose</a> = sva::PTransformd(Eigen::Vector3d(0.0, 0.0, 1.0))</td></tr>
 <tr class="memdesc:a871cb887fdb766caed23b66a544180f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nominal centroidal pose.  <a href="structMCC_1_1CentroidalManager_1_1Configuration.html#a871cb887fdb766caed23b66a544180f7">More...</a><br /></td></tr>
 <tr class="separator:a871cb887fdb766caed23b66a544180f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97b920620594c727b5f5360447256d64"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManager_1_1Configuration.html#a97b920620594c727b5f5360447256d64">nominalCentroidalPoseBaseFrame</a> = &quot;LimbAveragePose&quot;</td></tr>
+<tr class="memdesc:a97b920620594c727b5f5360447256d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base frame of nominal centroidal pose ("LimbAveragePose" or "World")  <a href="structMCC_1_1CentroidalManager_1_1Configuration.html#a97b920620594c727b5f5360447256d64">More...</a><br /></td></tr>
+<tr class="separator:a97b920620594c727b5f5360447256d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa4f19c3f8378dfbffa48e280039750"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1CentroidalManager_1_1Configuration.html#abfa4f19c3f8378dfbffa48e280039750">refComZPolicy</a> = &quot;Average&quot;</td></tr>
 <tr class="memdesc:abfa4f19c3f8378dfbffa48e280039750"><td class="mdescLeft">&#160;</td><td class="mdescRight">Policy for determining the reference CoM Z position ("Average", "Constant", "Min", or "Max")  <a href="structMCC_1_1CentroidalManager_1_1Configuration.html#abfa4f19c3f8378dfbffa48e280039750">More...</a><br /></td></tr>
 <tr class="separator:abfa4f19c3f8378dfbffa48e280039750"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,7 +274,7 @@ Public Attributes</h2></td></tr>
 
 <p>Feedback gain of centroidal velocity. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00056">56</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00059">59</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -289,7 +292,7 @@ Public Attributes</h2></td></tr>
 
 <p>Feedback gain of centroidal pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00053">53</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00056">56</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -307,7 +310,7 @@ Public Attributes</h2></td></tr>
 
 <p>Whether to enable centroidal feedback. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00065">65</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00068">68</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -325,7 +328,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> weight list to calculate anchor frame. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00050">50</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00053">53</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -343,7 +346,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> weight list to calculate reference data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00047">47</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00050">50</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -361,7 +364,7 @@ Public Attributes</h2></td></tr>
 
 <p>Cutoff period of low-pass filter for velocity calculation [sec]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00059">59</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00062">62</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -419,6 +422,24 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a97b920620594c727b5f5360447256d64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97b920620594c727b5f5360447256d64">&#9670;&nbsp;</a></span>nominalCentroidalPoseBaseFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string MCC::CentroidalManager::Configuration::nominalCentroidalPoseBaseFrame = &quot;LimbAveragePose&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Base frame of nominal centroidal pose ("LimbAveragePose" or "World") </p>
+
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00044">44</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+
+</div>
+</div>
 <a id="abfa4f19c3f8378dfbffa48e280039750"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abfa4f19c3f8378dfbffa48e280039750">&#9670;&nbsp;</a></span>refComZPolicy</h2>
 
@@ -433,7 +454,7 @@ Public Attributes</h2></td></tr>
 
 <p>Policy for determining the reference CoM Z position ("Average", "Constant", "Min", or "Max") </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00044">44</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00047">47</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -451,7 +472,7 @@ Public Attributes</h2></td></tr>
 
 <p>Whether to use actual CoM for wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00071">71</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00074">74</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -469,7 +490,7 @@ Public Attributes</h2></td></tr>
 
 <p>Whether to use actual state for MPC. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00062">62</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00065">65</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -487,7 +508,7 @@ Public Attributes</h2></td></tr>
 
 <p>Whether to use target limb pose for anchor frame of control robot. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00068">68</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00071">71</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -505,7 +526,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1CentroidalManager_1_1Configuration.html" title="Configuration.">Configuration</a> for wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00074">74</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00077">77</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
