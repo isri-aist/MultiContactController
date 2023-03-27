@@ -19,7 +19,7 @@ links:
         type: Shape
         translation: [ 0.0, 0.0, 1.0 ]
         rotation: [ 1, 0, 0, 1.5707963267948966 ]
-        geometry: { type: Cylinder, radius: 0.015, height: 2.0 }
+        geometry: { type: Box, size: [ 0.02, 2.0, 0.02 ] }
         appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
   -
     name: HandrailRight
@@ -33,7 +33,7 @@ links:
         type: Shape
         translation: [ 0.0, 0.0, 1.0 ]
         rotation: [ 1, 0, 0, 1.5707963267948966 ]
-        geometry: { type: Cylinder, radius: 0.015, height: 2.0 }
+        geometry: { type: Box, size: [ 0.02, 2.0, 0.02 ] }
         appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
   -
     name: Step1
@@ -77,18 +77,6 @@ links:
     jointType: fixed
     material: Stepladder
     translation: [ 0.21435935394489816, 0.0, 0.8 ]
-    elements:
-      -
-        type: Shape
-        translation: [ 0.0, 0.0, -0.01 ]
-        geometry: { type: Box, size: [ 0.08, 0.6, 0.02 ] }
-        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
-  -
-    name: Step5
-    parent: Root
-    jointType: fixed
-    material: Stepladder
-    translation: [ 0.2679491924311227, 0.0, 1.0 ]
     elements:
       -
         type: Shape

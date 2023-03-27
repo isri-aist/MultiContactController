@@ -10,9 +10,9 @@
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
     </inertial>
     <visual>
-      <origin xyz="0.0 0.0 1.0" rpy="3.14159265359 -0.0 0.0" />
+      <origin xyz="0.0 0.0 1.0" rpy="1.57079632679 -0.0 -0.0" />
       <geometry>
-        <cylinder radius="0.015" length="2.0" />
+        <box size="0.02 2.0 0.02" />
       </geometry>
       <material name="green" />
     </visual>
@@ -24,9 +24,9 @@
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
     </inertial>
     <visual>
-      <origin xyz="0.0 0.0 1.0" rpy="3.14159265359 -0.0 0.0" />
+      <origin xyz="0.0 0.0 1.0" rpy="1.57079632679 -0.0 -0.0" />
       <geometry>
-        <cylinder radius="0.015" length="2.0" />
+        <box size="0.02 2.0 0.02" />
       </geometry>
       <material name="green" />
     </visual>
@@ -87,20 +87,6 @@
       <material name="green" />
     </visual>
   </link>
-  <link name="Step5">
-    <inertial>
-      <mass value="1e-06" />
-      <origin xyz="0 0 0" rpy="0 -0 0" />
-      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
-    </inertial>
-    <visual>
-      <origin xyz="0.0 0.0 -0.01" rpy="0.0 -0.0 0.0" />
-      <geometry>
-        <box size="0.08 0.6 0.02" />
-      </geometry>
-      <material name="green" />
-    </visual>
-  </link>
   <joint name="HandrailLeft" type="fixed">
     <origin xyz="0.0 0.3 0.0" rpy="-0.0 0.261799387799 -0.0" />
     <parent link="Root" />
@@ -130,10 +116,5 @@
     <origin xyz="0.21435935394489816 0.0 0.8" rpy="0.0 -0.0 0.0" />
     <parent link="Root" />
     <child link="Step4" />
-  </joint>
-  <joint name="Step5" type="fixed">
-    <origin xyz="0.2679491924311227 0.0 1.0" rpy="0.0 -0.0 0.0" />
-    <parent link="Root" />
-    <child link="Step5" />
   </joint>
 </robot>
