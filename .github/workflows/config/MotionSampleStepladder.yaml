@@ -106,13 +106,13 @@ states:
       nominalCentroidalPoseList:
         - time: 9.0
           pose:
-            translation: [-0.1, 0.0, 0.875]
+            translation: [-0.1, 0.0, 0.85]
         - time: 11.5
           pose:
             translation: [-0.07320508075688774, 0.0, 0.925]
         - time: 14.0
           pose:
-            translation: [-0.046410161513775465, 0.0, 1.075]
+            translation: [-0.026410161513775465, 0.0, 1.05]
 
   MCC::ConfigMotion2_:
     base: MCC::ConfigMotion
@@ -226,13 +226,13 @@ states:
       nominalCentroidalPoseList:
         - time: 14.0
           pose:
-            translation: [-0.046410161513775465, 0.0, 1.075]
+            translation: [-0.046410161513775465, 0.0, 1.05]
         - time: 16.5
           pose:
             translation: [-0.019615242270663205, 0.0, 1.125]
         - time: 19.0
           pose:
-            translation: [0.0071796769724490755, 0.0, 1.275]
+            translation: [0.0271796769724490755, 0.0, 1.25]
 
 LimbTaskList:
   - type: firstOrderImpedance
