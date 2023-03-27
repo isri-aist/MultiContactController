@@ -1,0 +1,97 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: radian
+name: SampleStepladder
+rootLink: Root
+links:
+  -
+    name: Root
+    jointType: fixed
+  -
+    name: HandrailLeft
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.0, 0.3, 0.0 ]
+    rotation: [ 0, 1, 0, 0.2617993877991494 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, 1.0 ]
+        rotation: [ 1, 0, 0, 1.5707963267948966 ]
+        geometry: { type: Cylinder, radius: 0.015, height: 2.0 }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: HandrailRight
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.0, -0.3, 0.0 ]
+    rotation: [ 0, 1, 0, 0.2617993877991494 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, 1.0 ]
+        rotation: [ 1, 0, 0, 1.5707963267948966 ]
+        geometry: { type: Cylinder, radius: 0.015, height: 2.0 }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: Step1
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.05358983848622454, 0.0, 0.2 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, -0.01 ]
+        geometry: { type: Box, size: [ 0.08, 0.6, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: Step2
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.10717967697244908, 0.0, 0.4 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, -0.01 ]
+        geometry: { type: Box, size: [ 0.08, 0.6, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: Step3
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.1607695154586736, 0.0, 0.6 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, -0.01 ]
+        geometry: { type: Box, size: [ 0.08, 0.6, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: Step4
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.21435935394489816, 0.0, 0.8 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, -0.01 ]
+        geometry: { type: Box, size: [ 0.08, 0.6, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: Step5
+    parent: Root
+    jointType: fixed
+    material: Stepladder
+    translation: [ 0.2679491924311227, 0.0, 1.0 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0.0, 0.0, -0.01 ]
+        geometry: { type: Box, size: [ 0.08, 0.6, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
