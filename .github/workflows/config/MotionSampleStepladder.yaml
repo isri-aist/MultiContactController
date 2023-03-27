@@ -309,11 +309,11 @@ robots:
       - name: LeftHandGraspFrame
         parent: l_wrist
         X_p_f:
-          translation: [0.0, -0.0085, -0.09]
+          translation: [0.0, -0.0085, -0.08]
       - name: RightHandGraspFrame
         parent: r_wrist
         X_p_f:
-          translation: [0.0, 0.0085, -0.09]
+          translation: [0.0, 0.0085, -0.08]
 
     PostureTask:
       jointWeights:
