@@ -10,6 +10,8 @@ https://user-images.githubusercontent.com/6636600/220029546-ef3d5e66-c06d-417e-a
 
 https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-97e3-c4b7076b9c6a.mp4
 
+https://user-images.githubusercontent.com/6636600/227840423-618b41c1-cd10-436c-bf14-8af3ea85e3b3.mp4
+
 ## Features
 - Completely open source! (controller framework: mc_rtc, simulator: Choreonoid, sample robot model: JVRC1)
 - Unified control of bipedal walking, multi-contact locomotion including surface/grasp contacts, and jumping motion.
