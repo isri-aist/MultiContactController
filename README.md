@@ -1,8 +1,7 @@
 # [MultiContactController](https://github.com/isri-aist/MultiContactController)
 Humanoid multi-contact motion controller
 
-[![CI](https://github.com/isri-aist/MultiContactController/actions/workflows/ci-standalone.yaml/badge.svg)](https://github.com/isri-aist/MultiContactController/actions/workflows/ci-standalone.yaml)
-[![CI](https://github.com/isri-aist/MultiContactController/actions/workflows/ci-catkin.yaml/badge.svg)](https://github.com/isri-aist/MultiContactController/actions/workflows/ci-catkin.yaml)
+[![CI](https://github.com/isri-aist/MultiContactController/actions/workflows/ci.yaml/badge.svg)](https://github.com/isri-aist/MultiContactController/actions/workflows/ci.yaml)
 [![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MultiContactController/)
 [![LICENSE](https://img.shields.io/github/license/isri-aist/MultiContactController)](https://github.com/isri-aist/MultiContactController/blob/master/LICENSE)
 

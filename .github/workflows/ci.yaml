@@ -1,4 +1,4 @@
-name: Build and test (catkin)
+name: Build and test
 
 on:
   push:
@@ -11,12 +11,12 @@ on:
     - cron: '0 0 * * 0'
 
 jobs:
-
   build-and-test:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04]
+        catkin-build: [catkin, standalone]
         build-type: [RelWithDebInfo, Debug]
         mc-rtc-version: [head, stable]
         motion-type: [MotionSampleField]
@@ -24,112 +24,134 @@ jobs:
         exclude:
           - build-type: Debug
             mc-rtc-version: stable
+          # Some packages have not been released onto the stable mirror yet
+          - catkin-build: standalone
+            mc-rtc-version: stable
         include:
           - os: ubuntu-20.04
+            catkin-build: catkin
+            build-type: RelWithDebInfo
+            mc-rtc-version: head
+            motion-type: MotionSampleField
+            mpc-method: PC
+          - os: ubuntu-20.04
+            catkin-build: standalone
             build-type: RelWithDebInfo
             mc-rtc-version: head
             motion-type: MotionSampleField
             mpc-method: PC
     runs-on: ${{ matrix.os }}
     env:
-      RESULTS_POSTFIX: ${{ matrix.mpc-method }}-${{ matrix.motion-type }}
+      RESULTS_POSTFIX: ${{ matrix.mpc-method }}-${{ matrix.motion-type }}-${{ matrix.catkin-build }}
     steps:
-      - name: Set ROS version
+      - name: Setup environment variables
         run: |
-          if [ "${{ matrix.os }}" == "ubuntu-20.04" ]; then
-            echo "ROS_DISTRO=noetic" >> $GITHUB_ENV
-            echo "PYTHON_PACKAGE_PREFIX=python3" >> $GITHUB_ENV
-          else # if [ "${{ matrix.os }}" == "ubuntu-18.04" ]
-            echo "ROS_DISTRO=melodic" >> $GITHUB_ENV
-            echo "PYTHON_PACKAGE_PREFIX=python" >> $GITHUB_ENV
+          set -e
+          set -x
+          if [ "${{ matrix.os }}" == "ubuntu-20.04" ] && \
+             [ "${{ matrix.build-type }}" == "RelWithDebInfo" ] && \
+             [ "${{ matrix.mc-rtc-version }}" == "head" ]
+          then
+            echo "RUN_SIMULATION_STEPS=true" >> $GITHUB_ENV
+          else
+            echo "RUN_SIMULATION_STEPS=false" >> $GITHUB_ENV
           fi
-      - name: Install ROS
-        run: |
-          set -e
-          set -x
-          sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-          wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
-          sudo apt-get update -y -qq
-          sudo apt-get install -y -qq ros-${ROS_DISTRO}-ros-base ${PYTHON_PACKAGE_PREFIX}-catkin-tools ${PYTHON_PACKAGE_PREFIX}-rosdep ${PYTHON_PACKAGE_PREFIX}-wstool doxygen graphviz
-      - name: Install mc_rtc
-        run: |
-          set -e
-          set -x
-          curl -1sLf 'https://dl.cloudsmith.io/public/mc-rtc/${{ matrix.mc-rtc-version }}/setup.deb.sh' | sudo -E bash
-          sudo apt install -y -qq libmc-rtc-dev mc-rtc-utils mc-state-observation jvrc-choreonoid ros-${ROS_DISTRO}-mc-rtc-plugin libeigen-qld-dev
+          if [ "${{ matrix.os }}" == "ubuntu-20.04" ] && \
+             [ "${{ matrix.catkin-build }}" == "catkin" ] && \
+             [ "${{ matrix.build-type }}" == "RelWithDebInfo" ] && \
+             [ "${{ matrix.mc-rtc-version }}" == "head" ] && \
+             [ "${{ matrix.motion-type }}" == "MotionSampleField" ] && \
+             [ "${{ matrix.mpc-method }}" == "DDP" ] && \
+             [ "${{ github.repository_owner }}" == "isri-aist" ] && \
+             [ "${{ github.ref }}" == "refs/heads/master" ]
+          then
+            echo "UPLOAD_DOCUMENTATION=true" >> $GITHUB_ENV
+          else
+            echo "UPLOAD_DOCUMENTATION=false" >> $GITHUB_ENV
+          fi
+          if [ "${{ matrix.catkin-build }}" == "catkin" ]
+          then
+            echo "CI_DIR=${GITHUB_WORKSPACE}/catkin_ws/src/${{ github.repository }}/.github/workflows" >> $GITHUB_ENV
+          else
+            echo "CI_DIR=${GITHUB_WORKSPACE}/.github/workflows" >> $GITHUB_ENV
+          fi
+      - name: Install dependencies
+        uses: jrl-umi3218/github-actions/install-dependencies@master
+        with:
+          ubuntu: |
+            apt-mirrors:
+              mc-rtc:
+                cloudsmith: mc-rtc/${{ matrix.mc-rtc-version }}
+            apt: libmc-rtc-dev mc-rtc-utils mc-state-observation doxygen graphviz jvrc-choreonoid choreonoid libcnoid-dev
+          ros: |
+            apt: ros-base mc-rtc-plugin eigen-conversions
+      - name: Install standalone dependencies
+        if: matrix.catkin-build == 'standalone'
+        uses: jrl-umi3218/github-actions/install-dependencies@master
+        with:
+          build-type: ${{ matrix.build-type }}
+          ubuntu: |
+            apt: libforcecontrolcollection-dev libtrajectorycollection-dev libcentroidalcontrolcollection-dev
+          github: |
+            - path: isri-aist/BaselineWalkingController
+            - path: isri-aist/CnoidRosUtils
       - name: Checkout repository code
+        if: matrix.catkin-build == 'standalone'
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          path: catkin_ws/src/isri-aist/MultiContactController
-      - name: Download dependent repository codes
-        run: |
-          set -e
-          set -x
-          cd ${GITHUB_WORKSPACE}/catkin_ws
-          wstool init src
-          wstool merge -t src src/isri-aist/MultiContactController/depends.rosinstall -y
-          wstool update -t src
-      - name: Rosdep install
-        run: |
-          set -e
-          set -x
-          cd ${GITHUB_WORKSPACE}/catkin_ws
-          set +x
-          . /opt/ros/${ROS_DISTRO}/setup.bash
-          set -x
-          sudo rosdep init
-          rosdep update
-          rosdep install -y -r --from-paths src --ignore-src
+      - name: Standalone build
+        if: matrix.catkin-build == 'standalone'
+        uses: jrl-umi3218/github-actions/build-cmake-project@master
+        with:
+          build-type: ${{ matrix.build-type }}
       - name: Catkin build
-        run: |
-          set -e
-          set -x
-          cd ${GITHUB_WORKSPACE}/catkin_ws
-          set +x
-          . /opt/ros/${ROS_DISTRO}/setup.bash
-          set -x
-          catkin build multi_contact_controller --limit-status-rate 0.1 -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DENABLE_QLD=ON -DINSTALL_DOCUMENTATION=ON
-      - name: Run tests
-        run: |
-          set -e
-          set -x
-          cd ${GITHUB_WORKSPACE}/catkin_ws
-          set +x
-          . devel/setup.bash
-          set -x
-          catkin build multi_contact_controller --no-deps --limit-status-rate 0.1 --catkin-make-args run_tests
-          catkin_test_results --verbose --all build
+        if: matrix.catkin-build == 'catkin'
+        uses: jrl-umi3218/github-actions/build-catkin-project@master
+        with:
+          build-type: ${{ matrix.build-type }}
+          cmake-args: -DINSTALL_DOCUMENTATION=${{ env.UPLOAD_DOCUMENTATION }} -DENABLE_QLD=ON
       - name: Run simulation
-        # Only run for one configuration
-        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
+        if: env.RUN_SIMULATION_STEPS == 'true'
         # https://github.com/jrl-umi3218/lipm_walking_controller/blob/b564d655388ae6a6725c504e5c74a62192e58c7c/.github/workflows/build.yml#L64-L92
         run: |
           set -e
           set -x
           sudo apt-get install -y -qq xvfb ffmpeg mesa-utils fluxbox xserver-xorg xserver-xorg-core xserver-xorg-video-all libwayland-egl1-mesa
           set +x
-          . ${GITHUB_WORKSPACE}/catkin_ws/devel/setup.bash
+          if [ "${{ matrix.catkin-build }}" == "catkin" ]
+          then
+            . ${GITHUB_WORKSPACE}/catkin_ws/devel/setup.bash
+          fi
           set -x
           export DISPLAY=":1"
           Xvfb ${DISPLAY} -screen 0 1920x1080x24 &
           sleep 10s
           fluxbox 2> /dev/null &
           mkdir -p ${HOME}/.config/mc_rtc/controllers
-          cp ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/etc/mc_rtc.yaml ${HOME}/.config/mc_rtc
-          CI_DIR=${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows
-          python3 ${CI_DIR}/scripts/mergeConfigs.py ${CI_DIR}/config/${{ matrix.motion-type }}.yaml ${CI_DIR}/config/${{ matrix.mpc-method }}.yaml > ${HOME}/.config/mc_rtc/controllers/MultiContactController.yaml
+          if [ "${{ matrix.catkin-build }}" == "catkin" ]
+          then
+            cp ${GITHUB_WORKSPACE}/catkin_ws/src/${{ github.repository }}/etc/mc_rtc.yaml ${HOME}/.config/mc_rtc
+          else
+            echo "Enabled: MultiContactController" > ${HOME}/.config/mc_rtc/mc_rtc.yaml
+          fi
+          python3 ${{ env.CI_DIR }}/scripts/mergeConfigs.py ${{ env.CI_DIR }}/config/${{ matrix.motion-type }}.yaml ${{ env.CI_DIR }}/config/${{ matrix.mpc-method }}.yaml > ${HOME}/.config/mc_rtc/controllers/MultiContactController.yaml
           ffmpeg -y -f x11grab -s 1920x1080 -r 30 -i ${DISPLAY} -qscale 0 -vcodec huffyuv /tmp/video.avi > /dev/null 2>&1 < /dev/null &
           FFMPEG_PID=$!
           /usr/share/hrpsys/samples/JVRC1/clear-omninames.sh
           roscore > /dev/null 2>&1 < /dev/null &
           ROSCORE_PID=$!
           sleep 1s
-          roscd multi_contact_controller/cnoid/project
+          if [ "${{ matrix.catkin-build }}" == "catkin" ]
+          then
+            roscd multi_contact_controller/cnoid/project
+          else
+            cd /usr/share/hrpsys/samples/JVRC1
+          fi
           if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
             CNOID_FILE=MCC_JVRC1_SampleField.cnoid
           fi
-          choreonoid ${CNOID_FILE} --start-simulation &
+          choreonoid ${CNOID_FILE} --test-mode --start-simulation &
           CNOID_PID=$!
           if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
             SLEEP_DURATION="120s"
@@ -147,15 +169,13 @@ jobs:
           mv `readlink -f /tmp/mc-control-MultiContactController-latest.bin` /tmp/${LOG_FILENAME}.bin
           tar czf /tmp/results/${LOG_FILENAME}.tar.gz -C /tmp ${LOG_FILENAME}.bin
       - name: Upload simulation data
-        # Only run for one configuration
-        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
+        if: env.RUN_SIMULATION_STEPS == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: MCC-ci-results
+          name: MCC-ci-results-${{ matrix.catkin-build }}
           path: /tmp/results
       - name: Check simulation results
-        # Only run for one configuration
-        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head'
+        if: env.RUN_SIMULATION_STEPS == 'true'
         run: |
           set -e
           set -x
@@ -163,14 +183,13 @@ jobs:
             EXPECTED_BASE_POS="1.8 0.0 0.75"
           fi
           LOG_FILENAME=MCC-log-${RESULTS_POSTFIX}
-          python3 ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController/.github/workflows/scripts/checkSimulationResults.py /tmp/${LOG_FILENAME}.bin --expected-base-pos ${EXPECTED_BASE_POS}
+          python3 ${{ env.CI_DIR }}/scripts/checkSimulationResults.py /tmp/${LOG_FILENAME}.bin --expected-base-pos ${EXPECTED_BASE_POS}
       - name: Upload documentation
-        # Only run for one configuration and on master branch
-        if: matrix.os == 'ubuntu-20.04' && matrix.build-type == 'RelWithDebInfo' && matrix.mc-rtc-version == 'head' && matrix.motion-type == 'MotionSampleField' && matrix.mpc-method == 'DDP' && github.repository_owner == 'isri-aist' && github.ref == 'refs/heads/master'
+        if: env.UPLOAD_DOCUMENTATION == 'true'
         run: |
           set -e
           set -x
-          cd ${GITHUB_WORKSPACE}/catkin_ws/src/isri-aist/MultiContactController
+          cd ${GITHUB_WORKSPACE}/catkin_ws/src/${{ github.repository }}
           git config --global user.name "Masaki Murooka"
           git config --global user.email "m-murooka@aist.go.jp"
           git remote set-url origin "https://mmurooka:${{ secrets.CI_TOKEN }}@github.com/isri-aist/MultiContactController"
