@@ -1,0 +1,12 @@
+<mujoco model="SampleField">
+  <compiler angle="radian" autolimits="true"/>
+
+  <worldbody>
+    <geom size="0.1 0.1 0.01" pos="0.9 -0.15342 0.0406031" quat="0.984808 -0.173648 0 0" type="box" rgba="0.3 0.5 0.2 1"
+          condim="3" group="1" density="0"/>
+    <geom size="0.015 0.075" pos="0.9 0.5 0.8" quat="0.5 0.5 0.5 0.5" type="cylinder" rgba="0.3 0.5 0.2 1"
+          condim="3" group="1" density="0"/>
+    <geom size="0.1 0.1 0.01" pos="1.8 -0.71 1" quat="0.707107 -0.707107 0 0" type="box" rgba="0.3 0.5 0.2 1"
+          condim="3" group="1" density="0"/>
+  </worldbody>
+</mujoco>

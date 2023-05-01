@@ -11,6 +11,7 @@ set(PROJECT_USE_CMAKE_EXPORT TRUE)
 set(CXX_DISABLE_WERROR ON)
 
 option(ENABLE_CNOID "Install Choreonoid files" ON)
+option(ENABLE_MUJOCO "Install MuJoCo files" OFF)
 option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
 
 include(cmake/base.cmake)
@@ -72,6 +73,10 @@ add_subdirectory(description)
 
 if(ENABLE_CNOID)
   add_subdirectory(cnoid)
+endif()
+
+if(ENABLE_MUJOCO)
+  add_subdirectory(mujoco)
 endif()
 
 if(BUILD_TESTING OR CATKIN_ENABLE_TESTING)
