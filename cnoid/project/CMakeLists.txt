@@ -14,6 +14,7 @@ endforeach()
 
 set(MCC_PROJECT_FILE_LIST
   MCC_JVRC1_SampleField.in.cnoid
+  MCC_JVRC1_SampleStepladder.in.cnoid
   )
 foreach(PROJECT_FILE_IN IN LISTS MCC_PROJECT_FILE_LIST)
   string(REPLACE ".in." "." PROJECT_FILE_OUT "${PROJECT_FILE_IN}")

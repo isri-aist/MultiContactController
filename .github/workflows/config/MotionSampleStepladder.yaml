@@ -1,0 +1,360 @@
+transitions:
+  - [MCC::Initial_, OK, MCC::ConfigMotion1_, Auto]
+  - [MCC::ConfigMotion1_, OK, MCC::ConfigMotion2_, Auto]
+
+states:
+  MCC::Initial_:
+    base: MCC::Initial
+    configs:
+      autoStartTime: 2.0
+
+  MCC::ConfigMotion1_:
+    base: MCC::ConfigMotion
+    configs:
+      baseTime: Relative
+      stepCommandList:
+        - limb: LeftHand
+          pose:
+            translation: [0.5215390309173472, 0.3, 1.2]
+            rotation: [0.0, -1.3089969389957472, 0.0]
+          swingCommand:
+            type: Add
+            startTime: 3.0
+            endTime: 7.0
+            config:
+              approachDurationRatio: 0.15
+              approachOffset: [0, 0, 0.03]
+              swingOffset: [0, 0, 0.12]
+          contactCommandList:
+            - time: 7.0
+              constraint:
+                type: Empty
+            - time: 8.0
+              constraint:
+                type: Grasp
+                fricCoeff: 1.0
+          gripperCommandList:
+            - time: 2.0
+              name: l_gripper
+              config:
+                opening: 1.0
+            - time: 7.0
+              name: l_gripper
+              config:
+                opening: 0.0
+        - limb: RightHand
+          pose:
+            translation: [0.5215390309173472, -0.3, 1.2]
+            rotation: [0.0, -1.3089969389957472, 0.0]
+          swingCommand:
+            type: Add
+            startTime: 3.0
+            endTime: 7.0
+            config:
+              approachDurationRatio: 0.15
+              approachOffset: [0, 0, 0.03]
+              swingOffset: [0, 0, 0.12]
+          contactCommandList:
+            - time: 7.0
+              constraint:
+                type: Empty
+            - time: 8.0
+              constraint:
+                type: Grasp
+                fricCoeff: 1.0
+          gripperCommandList:
+            - time: 2.0
+              name: r_gripper
+              config:
+                opening: 1.0
+            - time: 7.0
+              name: r_gripper
+              config:
+                opening: 0.0
+        - limb: LeftFoot
+          type: Add
+          startTime: 9.0
+          endTime: 11.0
+          pose:
+            translation: [0.19358983848622455, 0.11, 0.2]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+            verticesName: LeftFootOnStep
+          swingConfig:
+            withdrawDurationRatio: 0.3
+            withdrawOffset: [-0.03, 0, 0.1]
+            approachDurationRatio: 0.2
+            approachOffset: [0, 0, 0.02]
+            swingOffset: [-0.05, 0, 0.1]
+        - limb: RightFoot
+          type: Add
+          startTime: 12.0
+          endTime: 14.0
+          pose:
+            translation: [0.19358983848622455, -0.11, 0.2]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+            verticesName: RightFootOnStep
+          swingConfig:
+            withdrawDurationRatio: 0.3
+            withdrawOffset: [-0.03, 0, 0.1]
+            approachDurationRatio: 0.2
+            approachOffset: [0, 0, 0.02]
+            swingOffset: [-0.05, 0, 0.1]
+      nominalCentroidalPoseList:
+        - time: 9.0
+          pose:
+            translation: [-0.1, 0.0, 0.85]
+        - time: 11.5
+          pose:
+            translation: [-0.07320508075688774, 0.0, 0.925]
+        - time: 14.0
+          pose:
+            translation: [-0.026410161513775465, 0.0, 1.05]
+
+  MCC::ConfigMotion2_:
+    base: MCC::ConfigMotion
+    configs:
+      baseTime: Relative
+      stepCommandList:
+        - limb: LeftHand
+          pose:
+            translation: [0.57512886940357176, 0.3, 1.4]
+            rotation: [0.0, -1.3089969389957472, 0.0]
+          swingCommand:
+            type: Add
+            startTime: 3.0
+            endTime: 6.0
+            config:
+              withdrawDurationRatio: 0.25
+              withdrawOffset: [0, 0, 0.02]
+              approachDurationRatio: 0.25
+              approachOffset: [0, 0, 0.02]
+              swingOffset: [0, 0, 0.05]
+          contactCommandList:
+            - time: 2.0
+              constraint:
+                type: Empty
+            - time: 3.0
+              constraint: {}
+            - time: 6.0
+              constraint:
+                type: Empty
+            - time: 7.0
+              constraint:
+                type: Grasp
+                fricCoeff: 1.0
+          gripperCommandList:
+            - time: 2.0
+              name: l_gripper
+              config:
+                opening: 1.0
+            - time: 6.0
+              name: l_gripper
+              config:
+                opening: 0.0
+        - limb: RightHand
+          pose:
+            translation: [0.57512886940357176, -0.3, 1.4]
+            rotation: [0.0, -1.3089969389957472, 0.0]
+          swingCommand:
+            type: Add
+            startTime: 9.0
+            endTime: 12.0
+            config:
+              withdrawDurationRatio: 0.25
+              withdrawOffset: [0, 0, 0.02]
+              approachDurationRatio: 0.25
+              approachOffset: [0, 0, 0.02]
+              swingOffset: [0, 0, 0.05]
+          contactCommandList:
+            - time: 8.0
+              constraint:
+                type: Empty
+            - time: 9.0
+              constraint: {}
+            - time: 12.0
+              constraint:
+                type: Empty
+            - time: 13.0
+              constraint:
+                type: Grasp
+                fricCoeff: 1.0
+          gripperCommandList:
+            - time: 8.0
+              name: r_gripper
+              config:
+                opening: 1.0
+            - time: 12.0
+              name: r_gripper
+              config:
+                opening: 0.0
+        - limb: LeftFoot
+          type: Add
+          startTime: 14.0
+          endTime: 16.0
+          pose:
+            translation: [0.24717967697244908, 0.11, 0.4]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+            verticesName: LeftFootOnStep
+          swingConfig:
+            withdrawDurationRatio: 0.3
+            withdrawOffset: [-0.05, 0, 0.1]
+            approachDurationRatio: 0.2
+            approachOffset: [0, 0, 0.02]
+            swingOffset: [-0.06, 0, 0.1]
+        - limb: RightFoot
+          type: Add
+          startTime: 17.0
+          endTime: 19.0
+          pose:
+            translation: [0.24717967697244908, -0.11, 0.4]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+            verticesName: RightFootOnStep
+          swingConfig:
+            withdrawDurationRatio: 0.3
+            withdrawOffset: [-0.05, 0, 0.1]
+            approachDurationRatio: 0.2
+            approachOffset: [0, 0, 0.02]
+            swingOffset: [-0.06, 0, 0.1]
+      nominalCentroidalPoseList:
+        - time: 14.0
+          pose:
+            translation: [-0.046410161513775465, 0.0, 1.05]
+        - time: 16.5
+          pose:
+            translation: [-0.019615242270663205, 0.0, 1.125]
+        - time: 19.0
+          pose:
+            translation: [0.0271796769724490755, 0.0, 1.25]
+
+LimbTaskList:
+  - type: firstOrderImpedance
+    limb: LeftFoot
+    frame: LeftFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightFoot
+    frame: RightFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftHand
+    frame: LeftHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightHand
+    frame: RightHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+
+LimbManagerSet:
+  LimbManager:
+    Hand:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [5e4, 5e4, 5e4]
+            angular: [100, 100, 100]
+          spring:
+            linear: [0, 0, 0]
+            angular: [0, 0, 2000]
+          wrench:
+            linear: [1, 1, 1]
+            angular: [1, 1, 0]
+
+CentroidalManager:
+  nominalCentroidalPoseBaseFrame: World
+  mpcWeightParam:
+    runningPos: [10.0, 10.0, 10.0]
+    terminalPos: [10.0, 10.0, 10.0]
+
+OverwriteConfigList:
+  NoSensors:
+    LimbManagerSet:
+      LimbManager:
+        Hand:
+          impedanceGains:
+            SingleContact:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
+            MultiContact:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
+            Swing:
+              wrench:
+                linear: [0, 0, 0]
+                angular: [0, 0, 0]
+
+robots:
+  # Environment models
+  sample_stepladder:
+    module: MCC/SampleStepladder
+    init_pos:
+      translation: [0.2, 0.0, 0.0]
+
+  # Robot-specific configurations
+  jvrc1:
+    frames:
+      - name: LeftHandGraspFrame
+        parent: l_wrist
+        X_p_f:
+          translation: [0.0, -0.0085, -0.08]
+      - name: RightHandGraspFrame
+        parent: r_wrist
+        X_p_f:
+          translation: [0.0, 0.0085, -0.08]
+
+    PostureTask:
+      jointWeights:
+        WAIST_R: 1000
+        WAIST_P: 1000
+        WAIST_Y: 1000
+      target:
+        R_SHOULDER_P: [0.2617993877991494] # 15
+        R_ELBOW_P: [-1.5707963267948966] # -90
+        R_ELBOW_Y: [1.5707963267948966] # 90
+        R_WRIST_Y: [-1.5707963267948966] # -90
+        L_SHOULDER_P: [0.2617993877991494] # 15
+        L_ELBOW_P: [-1.5707963267948966] # -90
+        L_ELBOW_Y: [-1.5707963267948966] # -90
+        L_WRIST_Y: [1.5707963267948966] # 90
+
+    CentroidalManager:
+      nominalCentroidalPose:
+        translation: [0.0, 0.0, 0.85]
+
+    Contacts:
+      Surface:
+        - name: LeftFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: RightFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: LeftFootOnStep
+          vertices: [[0.03, -0.04, 0.0], [0.03, 0.04, 0.0], [0.08, 0.04, 0.0], [0.08, -0.04, 0.0]]
+        - name: RightFootOnStep
+          vertices: [[0.03, -0.04, 0.0], [0.03, 0.04, 0.0], [0.08, 0.04, 0.0], [0.08, -0.04, 0.0]]
+
+      Grasp:
+        - name: LeftHand
+          vertices:
+            - translation: [0.0, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.0, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+        - name: RightHand
+          vertices:
+            - translation: [0.0, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.0, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]

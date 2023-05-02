@@ -8,6 +8,9 @@ materials:
   -
     name: Field
     roughness: 1.0
+  -
+    name: Stepladder
+    roughness: 1.0
 
 contactMaterials:
   -
@@ -18,4 +21,7 @@ contactMaterials:
     friction: 0.5
   -
     materials: [ Field, Floor ]
+    friction: 0.5
+  -
+    materials: [ Stepladder, Floor ]
     friction: 0.5
