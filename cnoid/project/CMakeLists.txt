@@ -12,10 +12,9 @@ foreach(CNOID_CONFIG_FILE IN LISTS MCC_CNOID_CONFIG_FILE_LIST)
   )
 endforeach()
 
-set(MCC_PROJECT_FILE_LIST
-  MCC_JVRC1_SampleField.in.cnoid
-  )
+file(GLOB MCC_PROJECT_FILE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/*.in.cnoid)
 foreach(PROJECT_FILE_IN IN LISTS MCC_PROJECT_FILE_LIST)
+  get_filename_component(PROJECT_FILE_IN ${PROJECT_FILE_IN} NAME)
   string(REPLACE ".in." "." PROJECT_FILE_OUT "${PROJECT_FILE_IN}")
   set(MCC_MODEL_DIR "${PROJECT_SOURCE_DIR}/cnoid/model")
   configure_file(${PROJECT_FILE_IN}
