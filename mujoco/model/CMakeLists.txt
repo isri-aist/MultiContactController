@@ -1,8 +1,7 @@
-set(MODEL_NAME_LIST
-  SampleField
-)
+file(GLOB MODEL_NAME_LIST ${CMAKE_CURRENT_SOURCE_DIR}/*.xml)
 
 foreach(MODEL_NAME IN LISTS MODEL_NAME_LIST)
+  get_filename_component(MODEL_NAME ${MODEL_NAME} NAME_WE)
   file(WRITE
     ${CMAKE_CURRENT_BINARY_DIR}/${MODEL_NAME}.yaml
     "xmlModelPath: ${MC_MUJOCO_MODEL_DIR}/${MODEL_NAME}.xml"
