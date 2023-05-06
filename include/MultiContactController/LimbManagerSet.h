@@ -52,11 +52,11 @@ public:
 
       An example of \p constraintSetConfig is as follows.
       @code
-      LeftFoot: # limb
+      - limb: LeftFoot
         # configuration for ContactConstraint
         type: Surface
         fricCoeff: 0.5
-      RightFoot:
+      - limb: RightFoot
         type: Surface
         fricCoeff: 0.5
       @endcode

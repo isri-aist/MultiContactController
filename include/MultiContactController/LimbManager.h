@@ -97,7 +97,7 @@ public:
 
       This method should be called once when controller is reset.
   */
-  void reset(const mc_rtc::Configuration & constraintConfig);
+  void reset(const mc_rtc::Configuration & constraintConfig = {});
 
   /** \brief Update.
 

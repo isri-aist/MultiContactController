@@ -35,10 +35,10 @@ states:
     base: MCC::Initial
     configs:
       initialContacts:
-        LeftFoot:
+        - limb: LeftFoot
           type: Surface
           fricCoeff: 0.5
-        RightFoot:
+        - limb: RightFoot
           type: Surface
           fricCoeff: 0.5
 

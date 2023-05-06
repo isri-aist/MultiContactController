@@ -43,9 +43,28 @@ LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Co
 
 void LimbManagerSet::reset(const mc_rtc::Configuration & constraintSetConfig)
 {
+  std::unordered_map<Limb, mc_rtc::Configuration> constraintConfigMap;
+  for(const auto & constraintConfig : constraintSetConfig)
+  {
+    Limb limb = Limb(constraintConfig("limb"));
+    if(this->count(limb) == 0)
+    {
+      mc_rtc::log::error_and_throw(
+          "[LimbManagerSet] A constraint is specified for limb for which LimbManager does not exist: {}",
+          constraintConfig("limb"));
+    }
+    constraintConfigMap.emplace(limb, constraintConfig);
+  }
   for(const auto & limbManagerKV : *this)
   {
-    limbManagerKV.second->reset(constraintSetConfig(std::to_string(limbManagerKV.first), mc_rtc::Configuration{}));
+    if(constraintConfigMap.count(limbManagerKV.first))
+    {
+      limbManagerKV.second->reset(constraintConfigMap.at(limbManagerKV.first));
+    }
+    else
+    {
+      limbManagerKV.second->reset();
+    }
   }
 }
 
