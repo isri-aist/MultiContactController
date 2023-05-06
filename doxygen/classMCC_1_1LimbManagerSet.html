@@ -535,11 +535,11 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <p>This method should be called once when controller is reset.</p>
-<p>An example of <code>constraintSetConfig</code> is as follows. </p><div class="fragment"><div class="line">LeftFoot: # limb</div>
+<p>An example of <code>constraintSetConfig</code> is as follows. </p><div class="fragment"><div class="line">- limb: LeftFoot</div>
 <div class="line"><span class="preprocessor">  # configuration for ContactConstraint</span></div>
 <div class="line">  type: Surface</div>
 <div class="line">  fricCoeff: 0.5</div>
-<div class="line">RightFoot:</div>
+<div class="line">- limb: RightFoot</div>
 <div class="line">  type: Surface</div>
 <div class="line">  fricCoeff: 0.5</div>
 </div><!-- fragment --> 
