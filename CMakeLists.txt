@@ -69,6 +69,8 @@ install(FILES ${CONFIG_OUT} DESTINATION ${MC_RTC_LIBDIR}/mc_controller/etc/)
 
 add_subdirectory(src)
 
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/MultiContactController DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.h")
+
 add_subdirectory(description)
 
 if(ENABLE_CNOID)
