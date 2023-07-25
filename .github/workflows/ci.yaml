@@ -40,6 +40,18 @@ jobs:
             mc-rtc-version: head
             motion-type: MotionSampleField
             mpc-method: PC
+          - os: ubuntu-20.04
+            catkin-build: catkin
+            build-type: RelWithDebInfo
+            mc-rtc-version: head
+            motion-type: MotionSampleField
+            mpc-method: SRB
+          - os: ubuntu-20.04
+            catkin-build: standalone
+            build-type: RelWithDebInfo
+            mc-rtc-version: head
+            motion-type: MotionSampleField
+            mpc-method: SRB
     runs-on: ${{ matrix.os }}
     env:
       RESULTS_POSTFIX: ${{ matrix.mpc-method }}-${{ matrix.motion-type }}-${{ matrix.catkin-build }}
