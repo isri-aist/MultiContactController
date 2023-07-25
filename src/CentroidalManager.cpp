@@ -321,7 +321,7 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
   centroidMarkerSize << robotInertiaMat_(1, 1) + robotInertiaMat_(2, 2) - robotInertiaMat_(0, 0),
       robotInertiaMat_(2, 2) + robotInertiaMat_(0, 0) - robotInertiaMat_(1, 1),
       robotInertiaMat_(0, 0) + robotInertiaMat_(1, 1) - robotInertiaMat_(2, 2);
-  centroidMarkerSize = ((5.0 / robotMass_) * centroidMarkerSize).cwiseSqrt();
+  centroidMarkerSize = ((2.0 / robotMass_) * centroidMarkerSize).cwiseSqrt();
   gui.addElement({ctl().name(), config().name, "Status"},
                  mc_rtc::gui::Ellipsoid(
                      "plannedCentroidalPose", centroidMarkerSize,
