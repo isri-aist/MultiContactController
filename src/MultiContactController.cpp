@@ -12,6 +12,7 @@
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/centroidal/CentroidalManagerDDP.h>
 #include <MultiContactController/centroidal/CentroidalManagerPC.h>
+#include <MultiContactController/centroidal/CentroidalManagerSRB.h>
 
 using namespace MCC;
 
@@ -106,6 +107,10 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     else if(centroidalManagerMethod == "PC")
     {
       centroidalManager_ = std::make_shared<CentroidalManagerPC>(this, config()("CentroidalManager"));
+    }
+    else if(centroidalManagerMethod == "SRB")
+    {
+      centroidalManager_ = std::make_shared<CentroidalManagerSRB>(this, config()("CentroidalManager"));
     }
     else
     {
