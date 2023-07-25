@@ -1,7 +1,6 @@
 #include <functional>
 
 #include <CCC/Constants.h>
-#include <CCC/DdpCentroidal.h>
 
 #include <ForceColl/Contact.h>
 

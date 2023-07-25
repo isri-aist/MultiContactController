@@ -3,7 +3,6 @@
 #include <mc_rbdyn/rpy_utils.h>
 
 #include <CCC/Constants.h>
-#include <CCC/PreviewControlCentroidal.h>
 
 #include <ForceColl/Contact.h>
 
