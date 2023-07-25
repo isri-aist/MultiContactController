@@ -153,11 +153,14 @@ void CentroidalManager::reset()
   robotMass_ = ctl().robot().mass();
   {
     sva::RBInertiad totalInertia(0, Eigen::Vector3d::Zero(), Eigen::Matrix3d::Zero());
-    for(const auto & body : ctl().robot().mb().bodies())
+    sva::PTransformd comPoseInv = sva::PTransformd(ctl().robot().com()).inv();
+    for(size_t i = 0; i < ctl().robot().mb().nrBodies(); i++)
     {
-      totalInertia += body.inertia();
+      const auto & bodyPose = ctl().robot().bodyPosW()[i];
+      const auto & bodyInertia = ctl().robot().mb().body(i).inertia();
+      totalInertia += (bodyPose * comPoseInv).dualMul(bodyInertia);
     }
-    robotMomentOfInertia_ = totalInertia.inertia().diagonal();
+    robotInertiaMat_ = totalInertia.inertia();
   }
 
   lowPass_.dt(ctl().solver().dt());
@@ -235,8 +238,10 @@ void CentroidalManager::update()
     {
       deltaAngleAxis = Eigen::AngleAxisd(deltaAngular.norm(), deltaAngular.normalized());
     }
+    // \todo The reverse order of rotation multiplication seems to be correct, but then the rotation diverges in
+    // CentroidalManagerSRB
     controlData_.plannedCentroidalPose.rotation() =
-        deltaAngleAxis.toRotationMatrix().transpose() * controlData_.plannedCentroidalPose.rotation();
+        controlData_.mpcCentroidalPose.rotation() * deltaAngleAxis.toRotationMatrix().transpose();
     controlData_.plannedCentroidalVel =
         controlData_.mpcCentroidalVel + ctl().dt() * controlData_.plannedCentroidalAccel;
   }
@@ -313,9 +318,9 @@ void CentroidalManager::stop()
 void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   Eigen::Vector3d centroidMarkerSize;
-  centroidMarkerSize << robotMomentOfInertia_.y() + robotMomentOfInertia_.z() - robotMomentOfInertia_.x(),
-      robotMomentOfInertia_.z() + robotMomentOfInertia_.x() - robotMomentOfInertia_.y(),
-      robotMomentOfInertia_.x() + robotMomentOfInertia_.y() - robotMomentOfInertia_.z();
+  centroidMarkerSize << robotInertiaMat_(1, 1) + robotInertiaMat_(2, 2) - robotInertiaMat_(0, 0),
+      robotInertiaMat_(2, 2) + robotInertiaMat_(0, 0) - robotInertiaMat_(1, 1),
+      robotInertiaMat_(0, 0) + robotInertiaMat_(1, 1) - robotInertiaMat_(2, 2);
   centroidMarkerSize = ((5.0 / robotMass_) * centroidMarkerSize).cwiseSqrt();
   gui.addElement({ctl().name(), config().name, "Status"},
                  mc_rtc::gui::Ellipsoid(
@@ -375,7 +380,8 @@ void CentroidalManager::addToLogger(mc_rtc::Logger & logger)
   logger.addLogEntry(config().name + "_nominalCentroidalPose", this,
                      [this]() { return getNominalCentroidalPose(ctl().t()); });
   MC_RTC_LOG_HELPER(config().name + "_Robot_mass", robotMass_);
-  MC_RTC_LOG_HELPER(config().name + "_Robot_momentOfInertia", robotMomentOfInertia_);
+  logger.addLogEntry(config().name + "_Robot_momentOfInertia", this,
+                     [this]() -> Eigen::Vector3d { return robotInertiaMat_.diagonal(); });
 }
 
 void CentroidalManager::removeFromLogger(mc_rtc::Logger & logger)

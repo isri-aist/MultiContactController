@@ -45,8 +45,8 @@ void CentroidalManagerPC::reset()
 {
   CentroidalManager::reset();
 
-  pc_ = std::make_shared<CCC::PreviewControlCentroidal>(robotMass_, robotMomentOfInertia_, config_.horizonDuration,
-                                                        config_.horizonDt, config_.mpcWeightParam);
+  pc_ = std::make_shared<CCC::PreviewControlCentroidal>(
+      robotMass_, robotInertiaMat_.diagonal(), config_.horizonDuration, config_.horizonDt, config_.mpcWeightParam);
 }
 
 void CentroidalManagerPC::addToLogger(mc_rtc::Logger & logger)
@@ -72,7 +72,7 @@ void CentroidalManagerPC::runMpc()
   controlData_.plannedCentroidalAccel.linear() =
       controlData_.plannedCentroidalWrench.force() / robotMass_ - Eigen::Vector3d(0.0, 0.0, CCC::constants::g);
   controlData_.plannedCentroidalAccel.angular() =
-      controlData_.plannedCentroidalWrench.moment().cwiseQuotient(robotMomentOfInertia_);
+      controlData_.plannedCentroidalWrench.moment().cwiseQuotient(robotInertiaMat_.diagonal());
 }
 
 CCC::PreviewControlCentroidal::MotionParam CentroidalManagerPC::calcMpcMotionParam(double t) const
