@@ -92,9 +92,10 @@ Inheritance diagram for MCC::CentroidalManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="classMCC_1_1CentroidalManager__inherit__graph.png" border="0" usemap="#MCC_1_1CentroidalManager_inherit__map" alt="Inheritance graph"/></div>
 <map name="MCC_1_1CentroidalManager_inherit__map" id="MCC_1_1CentroidalManager_inherit__map">
-<area shape="rect" title="Centroidal manager." alt="" coords="134,5,318,32"/>
+<area shape="rect" title="Centroidal manager." alt="" coords="250,5,434,32"/>
 <area shape="rect" href="classMCC_1_1CentroidalManagerDDP.html" title="Centroidal manager with DDP." alt="" coords="5,80,217,107"/>
 <area shape="rect" href="classMCC_1_1CentroidalManagerPC.html" title="Centroidal manager with preview control." alt="" coords="241,80,443,107"/>
+<area shape="rect" href="classMCC_1_1CentroidalManagerSRB.html" title="Centroidal manager with DDP applied to single rigid&#45;body dynamics (SRBD) approximation." alt="" coords="467,80,678,107"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -202,9 +203,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a3ad2e87a8bf3fa53669b9c65289f7e2e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a3ad2e87a8bf3fa53669b9c65289f7e2e">robotMass_</a> = 0</td></tr>
 <tr class="memdesc:a3ad2e87a8bf3fa53669b9c65289f7e2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot mass [kg].  <a href="classMCC_1_1CentroidalManager.html#a3ad2e87a8bf3fa53669b9c65289f7e2e">More...</a><br /></td></tr>
 <tr class="separator:a3ad2e87a8bf3fa53669b9c65289f7e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6775a04cdc3cb16b6042f99a22462345"><td class="memItemLeft" align="right" valign="top">Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a6775a04cdc3cb16b6042f99a22462345">robotMomentOfInertia_</a> = Eigen::Vector3d::Zero()</td></tr>
-<tr class="memdesc:a6775a04cdc3cb16b6042f99a22462345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot moment of inertia [kg m^2].  <a href="classMCC_1_1CentroidalManager.html#a6775a04cdc3cb16b6042f99a22462345">More...</a><br /></td></tr>
-<tr class="separator:a6775a04cdc3cb16b6042f99a22462345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1aabcfc91875a17162808c930d8487e0"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix3d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a1aabcfc91875a17162808c930d8487e0">robotInertiaMat_</a> = Eigen::Matrix3d::Zero()</td></tr>
+<tr class="memdesc:a1aabcfc91875a17162808c930d8487e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot inertia matrix [kg m^2].  <a href="classMCC_1_1CentroidalManager.html#a1aabcfc91875a17162808c930d8487e0">More...</a><br /></td></tr>
+<tr class="separator:a1aabcfc91875a17162808c930d8487e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a215166c86df4cbe63d5bd12051973249"><td class="memItemLeft" align="right" valign="top">mc_filter::LowPass&lt; sva::MotionVecd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a215166c86df4cbe63d5bd12051973249">lowPass_</a> = mc_filter::LowPass&lt;sva::MotionVecd&gt;(0.005, 0.01)</td></tr>
 <tr class="memdesc:a215166c86df4cbe63d5bd12051973249"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low-pass filter for velocity calculation.  <a href="classMCC_1_1CentroidalManager.html#a215166c86df4cbe63d5bd12051973249">More...</a><br /></td></tr>
 <tr class="separator:a215166c86df4cbe63d5bd12051973249"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -318,7 +319,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Add entries to the logger. </p>
 
-<p>Reimplemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a6217cbf93b4083550b04034ce75cc36e">MCC::CentroidalManagerDDP</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a80dbff55c75b2a9c8a9337c36dbf6692">MCC::CentroidalManagerPC</a>.</p>
+<p>Reimplemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a6217cbf93b4083550b04034ce75cc36e">MCC::CentroidalManagerDDP</a>, <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#aa9f8ee30f6bfb80a16606d2adff34a85">MCC::CentroidalManagerSRB</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a80dbff55c75b2a9c8a9337c36dbf6692">MCC::CentroidalManagerPC</a>.</p>
 
 </div>
 </div>
@@ -525,7 +526,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Const accessor to the configuration. </p>
 
-<p>Implemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a787837378f6a4802070f9603df8bb8cc">MCC::CentroidalManagerDDP</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a60a216b542890ed3c4767c8bd362fc23">MCC::CentroidalManagerPC</a>.</p>
+<p>Implemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a787837378f6a4802070f9603df8bb8cc">MCC::CentroidalManagerDDP</a>, <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#a497c181d4ee89643aa234ec3a5437e47">MCC::CentroidalManagerSRB</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a60a216b542890ed3c4767c8bd362fc23">MCC::CentroidalManagerPC</a>.</p>
 
 </div>
 </div>
@@ -554,7 +555,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Accessor to the configuration. </p>
 
-<p>Implemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a85c2f2e90e457c511b6c73db6b4da111">MCC::CentroidalManagerDDP</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a82f824fadde76bf4430d6a78ed6f43db">MCC::CentroidalManagerPC</a>.</p>
+<p>Implemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a85c2f2e90e457c511b6c73db6b4da111">MCC::CentroidalManagerDDP</a>, <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#a966de2a8677ffed4f9f485c3aad6493d">MCC::CentroidalManagerSRB</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a82f824fadde76bf4430d6a78ed6f43db">MCC::CentroidalManagerPC</a>.</p>
 
 </div>
 </div>
@@ -732,7 +733,7 @@ Protected Attributes</h2></td></tr>
 <p>Reset. </p>
 <p>This method should be called once when controller is reset. </p>
 
-<p>Reimplemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#acf28c8827ee801c8e73938156aa61b86">MCC::CentroidalManagerDDP</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#aec617dbf686eccbcfb7cbaaa681a47ec">MCC::CentroidalManagerPC</a>.</p>
+<p>Reimplemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#acf28c8827ee801c8e73938156aa61b86">MCC::CentroidalManagerDDP</a>, <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#af6792f33ca3dcf4e8768d5f197928bf0">MCC::CentroidalManagerSRB</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#aec617dbf686eccbcfb7cbaaa681a47ec">MCC::CentroidalManagerPC</a>.</p>
 
 </div>
 </div>
@@ -762,7 +763,7 @@ Protected Attributes</h2></td></tr>
 <p>Run MPC to plan centroidal trajectory. </p>
 <p>This method calculates controlData_.planned(CentroidalAccel|CentroidalMomentum|CentroidalWrench) from controlData_.mpc(mpcCentroidalPose|mpcCentroidalVel|mpcCentroidalMomentum). </p>
 
-<p>Implemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#aea5afbe4288a184c2a02bc3012904af1">MCC::CentroidalManagerDDP</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a3db9bc9f24bf6026cf6b67f28d054663">MCC::CentroidalManagerPC</a>.</p>
+<p>Implemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#aea5afbe4288a184c2a02bc3012904af1">MCC::CentroidalManagerDDP</a>, <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#acec8e017942eb6bd9d3fdb5f38662711">MCC::CentroidalManagerSRB</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#a3db9bc9f24bf6026cf6b67f28d054663">MCC::CentroidalManagerPC</a>.</p>
 
 </div>
 </div>
@@ -998,6 +999,32 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1aabcfc91875a17162808c930d8487e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1aabcfc91875a17162808c930d8487e0">&#9670;&nbsp;</a></span>robotInertiaMat_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix3d MCC::CentroidalManager::robotInertiaMat_ = Eigen::Matrix3d::Zero()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Robot inertia matrix [kg m^2]. </p>
+
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00293">293</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+
+</div>
+</div>
 <a id="a3ad2e87a8bf3fa53669b9c65289f7e2e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3ad2e87a8bf3fa53669b9c65289f7e2e">&#9670;&nbsp;</a></span>robotMass_</h2>
 
@@ -1021,32 +1048,6 @@ Protected Attributes</h2></td></tr>
 <p>Robot mass [kg]. </p>
 
 <p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00290">290</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
-
-</div>
-</div>
-<a id="a6775a04cdc3cb16b6042f99a22462345"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6775a04cdc3cb16b6042f99a22462345">&#9670;&nbsp;</a></span>robotMomentOfInertia_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Vector3d MCC::CentroidalManager::robotMomentOfInertia_ = Eigen::Vector3d::Zero()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Robot moment of inertia [kg m^2]. </p>
-
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00293">293</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
