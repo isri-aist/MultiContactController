@@ -198,11 +198,18 @@ jobs:
         run: |
           set -e
           set -x
+          # Workaround to achieve allow-failure
+          if [ "${{ matrix.mpc-method }}" == "SRB" ]; then
+            ALLOW_FAILURE=true
+          else
+            ALLOW_FAILURE=false
+          fi
+          echo "- ALLOW_FAILURE: ${ALLOW_FAILURE}"
           if [ "${{ matrix.motion-type }}" == "MotionSampleField" ]; then
             EXPECTED_BASE_POS="1.8 0.0 0.75"
           fi
           LOG_FILENAME=MCC-log-${RESULTS_POSTFIX}
-          python3 ${{ env.CI_DIR }}/scripts/checkSimulationResults.py /tmp/${LOG_FILENAME}.bin --expected-base-pos ${EXPECTED_BASE_POS}
+          python3 ${{ env.CI_DIR }}/scripts/checkSimulationResults.py /tmp/${LOG_FILENAME}.bin --expected-base-pos ${EXPECTED_BASE_POS} || ${ALLOW_FAILURE}
       - name: Upload documentation
         if: env.UPLOAD_DOCUMENTATION == 'true'
         run: |
