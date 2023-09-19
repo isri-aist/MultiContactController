@@ -4,6 +4,7 @@
 
 #include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/states/ConfigMotionState.h>
 
@@ -54,6 +55,21 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
       }
       ctl().centroidalManager_->appendNominalCentroidalPose(
           time, static_cast<sva::PTransformd>(nominalCentroidalPoseConfig("pose")));
+    }
+  }
+
+  // Send nominal posture
+  if(config_.has("configs") && config_("configs").has("nominalPostureList"))
+  {
+    for(const auto & nominalPostureConfig : config_("configs")("nominalPostureList"))
+    {
+      double time = nominalPostureConfig("time");
+      if(!std::isnan(baseTime))
+      {
+        time += baseTime;
+      }
+      PostureManager::PostureMap refPosture = nominalPostureConfig("target");
+      ctl().postureManager_->appendNominalPosture(time, refPosture);
     }
   }
 
