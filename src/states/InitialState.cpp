@@ -69,6 +69,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     ctl().limbManagerSet_->reset(initialContactsConfig);
     ctl().centroidalManager_->reset();
     ctl().enableManagerUpdate_ = true;
+    ctl().postureManager_->reset();
 
     // Setup anchor frame
     ctl().centroidalManager_->setAnchorFrame();
