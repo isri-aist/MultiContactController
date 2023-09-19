@@ -2,6 +2,7 @@
 
 #include <mc_rtc/gui/StateBuilder.h>
 #include <mc_rtc/log/Logger.h>
+#include <mc_tasks/PostureTask.h>
 
 namespace mc_rbdyn
 {
@@ -19,6 +20,8 @@ class MultiContactController;
 class PostureManager
 {
 public:
+  typedef std::map<std::string, std::vector<double> > PostureMap;
+  
   /** \brief Configuration. */
   struct Configuration
   {
@@ -27,22 +30,6 @@ public:
 
     /** \brief Load mc_rtc configuration. */
     virtual void load(const mc_rtc::Configuration & mcRtcConfig);
-  };
-
-  /** \brief Reference data. */
-  struct RefData
-  {
-    //! Nominal posture
-    std::vector<std::vector<double>> posture;
-
-    /** \brief Reset. */
-    void reset();
-
-    /** \brief Add entries to the logger. */
-    virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);
-
-    /** \brief Remove entries from the logger. */
-    virtual void removeFromLogger(mc_rtc::Logger & logger);
   };
 
 public:
@@ -80,17 +67,15 @@ public:
 
   /** \brief Append a nominal centroidal pose
       \param t time
-      \param jointNames joint names to append
-      \param posture nominal postures to append
+      \param PostureMap map from joint names to joint angle
       \return whether nominalCentroidalPose is appended
   */
-  bool appendNominalPosture(double t, const std::vector<std::string> &jointNames,
-                            const std::vector<std::vector<double>> &posture);
+  virtual bool appendNominalPosture(double t, const PostureMap &joints);
 
   /** \brief Get nominal posture.
       \param t time
   */
-  std::vector<std::vector<double> > getNominalPosture(double t) const;
+  virtual PostureMap getNominalPosture(double t) const;
 
 protected:
   /** \brief Const accessor to the controller. */
@@ -111,11 +96,6 @@ protected:
     return config_;
   }
 
-  /** \brief Calculate reference data.
-      \param t time
-   */
-  RefData calcRefData(double t) const;
-
 protected:
   //! Configuration
   Configuration config_;
@@ -126,10 +106,7 @@ protected:
   //! Pointer to posture task in controller
   std::shared_ptr<mc_tasks::PostureTask> postureTask_;
 
-  //! Reference data
-  RefData refData_;
-
   //! Nominal posture list
-  std::map<double, std::vector<std::vector<double> > > nominalPostureList_;
+  std::map<double, PostureMap> nominalPostureList_;
 };
 } // namespace MCC
