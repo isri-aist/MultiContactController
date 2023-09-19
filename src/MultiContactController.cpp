@@ -130,6 +130,7 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   else
   {
     mc_rtc::log::warning("[MultiContactController] PostureManager configuration is missing.");
+    postureManager_ = std::make_shared<PostureManager>(this); // config is not mandatory
   }
   
   // Load other configurations
