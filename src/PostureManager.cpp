@@ -16,15 +16,6 @@ void PostureManager::Configuration::load(const mc_rtc::Configuration & mcRtcConf
   mcRtcConfig("name", name);
 }
 
-void PostureManager::Configuration::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
-{
-}
-
-void PostureManager::Configuration::removeFromLogger(mc_rtc::Logger & logger)
-{
-  logger.removeLogEntries(this);
-}
-
 void PostureManager::RefData::reset()
 {
   *this = RefData();
@@ -32,7 +23,12 @@ void PostureManager::RefData::reset()
 
 void PostureManager::RefData::addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger)
 {
-  MC_RTC_LOG_HELPER(baseEntry + "_posture_ref", posture);
+  std::vector<double> flatten;
+  for (auto p : posture) {
+    flatten.insert(flatten.end(), p.begin(), p.end());
+  }
+  logger.addLogEntry(baseEntry + "_nominalPosture", this,
+                     [flatten]() { return flatten; });
 }
 
 void PostureManager::RefData::removeFromLogger(mc_rtc::Logger & logger)
@@ -43,74 +39,59 @@ void PostureManager::RefData::removeFromLogger(mc_rtc::Logger & logger)
 PostureManager::PostureManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
   : ctlPtr_(ctlPtr)
 {
+  postureTask_ = ctl().getPostureTask(ctl().robot().name());
+  if (postureTask_ == nullptr) {
+    mc_rtc::log::error_and_throw("[PostureManager] PostureTask does not exist");
+  }
+  config_.load(mcRtcConfig);
 }
 
 void PostureManager::reset()
 {
   refData_.reset();
-
-  auto postureTask = ctl().getPostureTask(ctl().robot().name());
-  if (postureTask == nullptr) {
-    mc_rtc::log::error("[PostureManager] PostureTask does not exist");
-    return;
-  }
-  nominalPostureList_.emplace(ctl().t(), postureTask->posture());
+  nominalPostureList_.emplace(ctl().t(), postureTask_->posture());
 }
 
 void PostureManager::update()
 {
   // Set data
   refData_ = calcRefData(ctl().t());
-  
-  auto postureTask = ctl().getPostureTask(ctl().robot().name());
-  postureTask->posture(refData_.posture());
+  postureTask_->posture(refData_.posture);
 
-  // TODO: update postureTask->refVel and postureTask->refAcc
+  // TODO: update postureTask_->refVel and postureTask_->refAcc
 }
 
 void PostureManager::stop()
 {
-  removeFromGUI(*ctl().gui());
   removeFromLogger(ctl().logger());
-}
-
-void PostureManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
-{
-}
-
-void PostureManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
-{
-  // gui.removeCategory({ctl().name(), config().name});
 }
 
 void PostureManager::addToLogger(mc_rtc::Logger & logger)
 {
-  config().addToLogger(config().name + "_Config", logger);
   refData_.addToLogger(config().name + "_Data", logger);
-
-  logger.addLogEntry(config().name + "_nominalPosture", this,
-                     [this]() { return getNominalPosture(ctl().t()); });
 }
 
 void PostureManager::removeFromLogger(mc_rtc::Logger & logger)
 {
-  config().removeFromLogger(logger);
   refData_.removeFromLogger(logger);
-
   logger.removeLogEntries(this);
 }
 
 std::vector<std::vector<double> > PostureManager::getNominalPosture(double t) const
 {
-  auto it = nominalPostureList_.upper_bound(t);
-  if(it == nominalPostureList_.begin())
-  {
-    mc_rtc::log::error_and_throw(
+  if (nominalPostureList_.empty()) {
+    // if nominalPostureList_ is not defined, return current posture task
+    return postureTask_->posture();
+  } else {
+    auto it = nominalPostureList_.upper_bound(t);
+    if(it == nominalPostureList_.begin()) {
+      mc_rtc::log::error_and_throw(
         "[PostureManager] Past time is specified in {}. specified time: {}, current time: {}",
         __func__, t, ctl().t());
+    }
+    it--;
+    return it->second;
   }
-  it--;
-  return it->second;
 }
 
 bool PostureManager::appendNominalPosture(double t, const std::vector<std::string> &jointNames,
@@ -127,7 +108,7 @@ bool PostureManager::appendNominalPosture(double t, const std::vector<std::strin
       return false;
   }
 
-  std::vector<std::vector<double> > refPosture;
+  std::vector<std::vector<double> > refPosture, lastPosture;
   if (!nominalPostureList_.empty()) {
     double lastTime = nominalPostureList_.rbegin()->first;
     if (t < lastTime) {
@@ -135,21 +116,20 @@ bool PostureManager::appendNominalPosture(double t, const std::vector<std::strin
                          t, lastTime);
       return false;
     }
-    std::vector<std::vector<double> > lastPosture = nominalPostureList_.rbegin()->second;
-    std::copy(lastPosture.begin(), lastPosture.rbegin()->second.end(), std::back_inserter(refPosture));
+    lastPosture = nominalPostureList_.rbegin()->second;
   } else {
-    std::vector<std::vector<double> > postureInTask = ctl().getPostureTask(ctl().robot().name())->posture();
-    std::copy(postureInTask.begin(), postureInTask.end(), std::back_inserter(refPosture));
+    lastPosture = postureTask_->posture();
   }
+  std::copy(lastPosture.begin(), lastPosture.end(), std::back_inserter(refPosture));
 
-  for (int i = 0; i < jointNames.size(); i++) {
+  for (unsigned int i = 0; i < jointNames.size(); i++) {
     std::string jn = jointNames[i];
     int jIndex = ctl().robot().mb().jointIndexByName(jn);
     if (jIndex < 0) {
       mc_rtc::log::error("[PostureManager] Ignore joint {} which does not exist", jn);
       continue;
     }
-    if (jIndex < refPosture.size()) {
+    if (static_cast<size_t>(jIndex) < refPosture.size()) {
       refPosture[jIndex] = posture[i];
     } else {
       mc_rtc::log::error("[PostureManager] Ignore joint index {} for {} which exceeds size of posture ({})",
@@ -168,7 +148,7 @@ PostureManager::RefData PostureManager::calcRefData(double t) const
 
   // TODO: should be interpolated?
   std::vector<std::vector<double> > nominalPosture = getNominalPosture(t);
-  refData.nominalPosture = nominalPosture;
+  refData.posture = nominalPosture;
 
   return refData;
 }

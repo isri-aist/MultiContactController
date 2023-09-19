@@ -13,6 +13,7 @@
 #include <MultiContactController/centroidal/CentroidalManagerDDP.h>
 #include <MultiContactController/centroidal/CentroidalManagerPC.h>
 #include <MultiContactController/centroidal/CentroidalManagerSRB.h>
+#include <MultiContactController/PostureManager.h>
 
 using namespace MCC;
 
@@ -122,7 +123,15 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   {
     mc_rtc::log::warning("[MultiContactController] CentroidalManager configuration is missing.");
   }
-
+  if(config().has("PostureManager"))
+  {
+    postureManager_ = std::make_shared<PostureManager>(this, config()("PostureManager"));
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] PostureManager configuration is missing.");
+  }
+  
   // Load other configurations
   if(config().has("Contacts"))
   {
@@ -163,6 +172,7 @@ bool MultiContactController::run()
     // Update managers
     limbManagerSet_->update();
     centroidalManager_->update();
+    postureManager_->update();
   }
 
   return mc_control::fsm::Controller::run();
@@ -184,6 +194,8 @@ void MultiContactController::stop()
   limbManagerSet_.reset();
   centroidalManager_->stop();
   centroidalManager_.reset();
+  postureManager_->stop();
+  postureManager_.reset();
 
   // Clean up anchor
   setDefaultAnchor();

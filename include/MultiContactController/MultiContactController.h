@@ -20,7 +20,8 @@ namespace MCC
 {
 class LimbManagerSet;
 class CentroidalManager;
-
+class PostureManager;
+  
 /** \brief Humanoid multi-contact motion controller. */
 struct MultiContactController : public mc_control::fsm::Controller
 {
@@ -85,6 +86,9 @@ public:
 
   //! Centroidal manager
   std::shared_ptr<CentroidalManager> centroidalManager_;
+
+  //! Posture manager
+  std::shared_ptr<PostureManager> postureManager_;
 
   //! Whether to enable manager update
   bool enableManagerUpdate_ = false;

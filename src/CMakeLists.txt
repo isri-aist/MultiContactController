@@ -9,6 +9,7 @@ add_library(${CONTROLLER_NAME} SHARED
   LimbManager.cpp
   LimbManagerSet.cpp
   CentroidalManager.cpp
+  PostureManager.cpp
   swing/SwingTrajCubicSplineSimple.cpp
   centroidal/CentroidalManagerDDP.cpp
   centroidal/CentroidalManagerPC.cpp

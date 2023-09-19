@@ -27,12 +27,6 @@ public:
 
     /** \brief Load mc_rtc configuration. */
     virtual void load(const mc_rtc::Configuration & mcRtcConfig);
-
-    /** \brief Add entries to the logger. */
-    virtual void addToLogger(const std::string & baseEntry, mc_rtc::Logger & logger);
-
-    /** \brief Remove entries from the logger. */
-    virtual void removeFromLogger(mc_rtc::Logger & logger);
   };
 
   /** \brief Reference data. */
@@ -76,14 +70,7 @@ public:
   */
   virtual void stop();
 
-  /** \brief Const accessor to the configuration. */
-  virtual const Configuration & config();
-
-  /** \brief Add entries to the GUI. */
-  virtual void addToGUI(mc_rtc::gui::StateBuilder & gui);
-
-  /** \brief Remove entries from the GUI. */
-  virtual void removeFromGUI(mc_rtc::gui::StateBuilder & gui);
+  // TODO: implement GUI functions
 
   /** \brief Add entries to the logger. */
   virtual void addToLogger(mc_rtc::Logger & logger);
@@ -100,6 +87,11 @@ public:
   bool appendNominalPosture(double t, const std::vector<std::string> &jointNames,
                             const std::vector<std::vector<double>> &posture);
 
+  /** \brief Get nominal posture.
+      \param t time
+  */
+  std::vector<std::vector<double> > getNominalPosture(double t) const;
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const MultiContactController & ctl() const
@@ -113,8 +105,11 @@ protected:
     return *ctlPtr_;
   }
 
-  /** \brief Accessor to the configuration. */
-  virtual Configuration & config();
+  /** \brief Const accessor to the configuration. */
+  inline virtual const Configuration & config() const
+  {
+    return config_;
+  }
 
   /** \brief Calculate reference data.
       \param t time
@@ -122,8 +117,14 @@ protected:
   RefData calcRefData(double t) const;
 
 protected:
+  //! Configuration
+  Configuration config_;
+
   //! Pointer to controller
   MultiContactController * ctlPtr_ = nullptr;
+
+  //! Pointer to posture task in controller
+  std::shared_ptr<mc_tasks::PostureTask> postureTask_;
 
   //! Reference data
   RefData refData_;
