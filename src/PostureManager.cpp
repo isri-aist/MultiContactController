@@ -49,12 +49,15 @@ void PostureManager::stop()
 
 void PostureManager::addToLogger(mc_rtc::Logger & logger)
 {
-  std::vector<double> flatten;
-  for (auto p : postureTask_->posture()) {
-    flatten.insert(flatten.end(), p.begin(), p.end());
+  auto q = postureTask_->posture();
+  for (unsigned int i = 0; i < q.size(); i++) {
+    if (q[i].size() == 1) { // only consider 1DoF joints (posture includes Root and fixed joints)
+      std::string jname = ctl().robot().mb().joint(i).name();
+      std::replace(jname.begin(), jname.end(), '_', '-'); // underbar creates a new layer 
+      logger.addLogEntry(config().name + "_nominalPosture_" + jname, this,
+                         [this, i]() { return postureTask_->posture()[i][0]; });
+    }
   }
-  logger.addLogEntry(config().name + "_nominalPosture", this,
-                     [flatten]() { return flatten; });
 }
 
 void PostureManager::removeFromLogger(mc_rtc::Logger & logger)
