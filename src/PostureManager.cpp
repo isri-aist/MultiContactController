@@ -28,7 +28,7 @@ PostureManager::PostureManager(MultiContactController * ctlPtr, const mc_rtc::Co
 
 void PostureManager::reset()
 {
-  // TODO: nominalPostureList_ should be cleared?
+  nominalPostureList_.clear();
   PostureManager::PostureMap postures; // empty map (= no modification for current PostureTask)
   nominalPostureList_.emplace(ctl().t(), postures);
 }
