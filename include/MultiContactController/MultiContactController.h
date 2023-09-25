@@ -21,7 +21,7 @@ namespace MCC
 class LimbManagerSet;
 class CentroidalManager;
 class PostureManager;
-  
+
 /** \brief Humanoid multi-contact motion controller. */
 struct MultiContactController : public mc_control::fsm::Controller
 {

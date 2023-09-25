@@ -4,8 +4,8 @@
 
 #include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
-#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/states/ConfigMotionState.h>
 
 using namespace MCC;

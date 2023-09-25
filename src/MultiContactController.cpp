@@ -10,10 +10,10 @@
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/centroidal/CentroidalManagerDDP.h>
 #include <MultiContactController/centroidal/CentroidalManagerPC.h>
 #include <MultiContactController/centroidal/CentroidalManagerSRB.h>
-#include <MultiContactController/PostureManager.h>
 
 using namespace MCC;
 
@@ -132,7 +132,7 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     mc_rtc::log::warning("[MultiContactController] PostureManager configuration is missing.");
     postureManager_ = std::make_shared<PostureManager>(this); // config is not mandatory
   }
-  
+
   // Load other configurations
   if(config().has("Contacts"))
   {

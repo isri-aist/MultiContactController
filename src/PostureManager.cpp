@@ -6,8 +6,8 @@
 #include <mc_rtc/gui/NumberInput.h>
 #include <mc_tasks/PostureTask.h>
 
-#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 
 using namespace MCC;
 
@@ -17,10 +17,11 @@ void PostureManager::Configuration::load(const mc_rtc::Configuration & mcRtcConf
 }
 
 PostureManager::PostureManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
-  : ctlPtr_(ctlPtr)
+: ctlPtr_(ctlPtr)
 {
   postureTask_ = ctl().getPostureTask(ctl().robot().name());
-  if (postureTask_ == nullptr) {
+  if(postureTask_ == nullptr)
+  {
     mc_rtc::log::error_and_throw("[PostureManager] PostureTask does not exist");
   }
   config_.load(mcRtcConfig);
@@ -50,10 +51,12 @@ void PostureManager::stop()
 void PostureManager::addToLogger(mc_rtc::Logger & logger)
 {
   auto q = postureTask_->posture();
-  for (unsigned int i = 0; i < q.size(); i++) {
-    if (q[i].size() == 1) { // only consider 1DoF joints (posture includes Root and fixed joints)
+  for(unsigned int i = 0; i < q.size(); i++)
+  {
+    if(q[i].size() == 1)
+    { // only consider 1DoF joints (posture includes Root and fixed joints)
       std::string jname = ctl().robot().mb().joint(i).name();
-      std::replace(jname.begin(), jname.end(), '_', '-'); // underbar creates a new layer 
+      std::replace(jname.begin(), jname.end(), '_', '-'); // underbar creates a new layer
       logger.addLogEntry(config().name + "_nominalPosture_" + jname, this,
                          [this, i]() { return postureTask_->posture()[i][0]; });
     }
@@ -69,12 +72,14 @@ PostureManager::PostureMap PostureManager::getNominalPosture(double t) const
 {
   // if nominalPostureList_ is empty or specified past time, return empty map
   PostureManager::PostureMap postures;
-  if (!nominalPostureList_.empty()) {
+  if(!nominalPostureList_.empty())
+  {
     auto it = nominalPostureList_.upper_bound(t);
-    if(it == nominalPostureList_.begin()) {
+    if(it == nominalPostureList_.begin())
+    {
       mc_rtc::log::error_and_throw(
-        "[PostureManager] Past time is specified in {}. specified time: {}, current time: {}",
-        __func__, t, ctl().t());
+          "[PostureManager] Past time is specified in {}. specified time: {}, current time: {}", __func__, t,
+          ctl().t());
     }
     it--;
     postures = it->second;
@@ -82,9 +87,10 @@ PostureManager::PostureMap PostureManager::getNominalPosture(double t) const
   return postures;
 }
 
-bool PostureManager::appendNominalPosture(double t, const PostureManager::PostureMap &postures)
+bool PostureManager::appendNominalPosture(double t, const PostureManager::PostureMap & postures)
 {
-  if (t < ctl().t()) {
+  if(t < ctl().t())
+  {
     mc_rtc::log::error("[PostureManager] Ignore a nominal posture with past time: {} < {}", t, ctl().t());
     return false;
   }

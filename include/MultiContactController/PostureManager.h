@@ -20,8 +20,8 @@ class MultiContactController;
 class PostureManager
 {
 public:
-  typedef std::map<std::string, std::vector<double> > PostureMap;
-  
+  typedef std::map<std::string, std::vector<double>> PostureMap;
+
   /** \brief Configuration. */
   struct Configuration
   {
@@ -70,7 +70,7 @@ public:
       \param PostureMap map from joint names to joint angle
       \return whether nominalCentroidalPose is appended
   */
-  virtual bool appendNominalPosture(double t, const PostureMap &joints);
+  virtual bool appendNominalPosture(double t, const PostureMap & joints);
 
   /** \brief Get nominal posture.
       \param t time
