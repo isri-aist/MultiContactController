@@ -145,6 +145,15 @@ CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_r
 {
 }
 
+void CentroidalManager::reset(const mc_rtc::Configuration & nominalCentroidalPoseConfig)
+{
+  if(nominalCentroidalPoseConfig.has("nominalCentroidalPose"))
+  {
+    nominalCentroidalPoseConfig("nominalCentroidalPose", config().nominalCentroidalPose);
+  }
+  reset();
+}
+
 void CentroidalManager::reset()
 {
   refData_.reset();
