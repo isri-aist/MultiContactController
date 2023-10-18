@@ -67,9 +67,18 @@ bool InitialState::run(mc_control::fsm::Controller &)
       initialContactsConfig = config_("configs")("initialContacts");
     }
     ctl().limbManagerSet_->reset(initialContactsConfig);
-    ctl().centroidalManager_->reset();
-    ctl().enableManagerUpdate_ = true;
+
+    if(config_.has("configs"))
+    {
+      // Overwrite nominalCetnroidalPose if config_("configs")("nominalCentroidalPose") exists
+      ctl().centroidalManager_->reset(config_("configs"));
+    }
+    else
+    {
+      ctl().centroidalManager_->reset();
+    }
     ctl().postureManager_->reset();
+    ctl().enableManagerUpdate_ = true;
 
     // Setup anchor frame
     ctl().centroidalManager_->setAnchorFrame();
