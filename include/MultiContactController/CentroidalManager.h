@@ -187,6 +187,20 @@ public:
   CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
 
   /** \brief Reset.
+      \param constraintSetConfig mc_rtc configuration that has nominalCentroidalPose
+
+      This method should be called once when controller is reset.
+
+      An example of \p nominalCentroidalPoseConfig is as follows.
+      @code
+      configs:
+        nominalCentroidalPose:
+          translation: [0.0, 0.0, 0.966]
+      @endcode
+  */
+  virtual void reset(const mc_rtc::Configuration & nominalCentroidalPoseConfig);
+
+  /** \brief Reset.
 
       This method should be called once when controller is reset.
    */

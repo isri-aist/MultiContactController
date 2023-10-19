@@ -66,8 +66,42 @@ bool InitialState::run(mc_control::fsm::Controller &)
       initialContactsConfig = config_("configs")("initialContacts");
     }
     ctl().limbManagerSet_->reset(initialContactsConfig);
-    ctl().centroidalManager_->reset();
+    if(config_.has("configs"))
+    {
+      // Overwrite nominalCetnroidalPose if config_("configs")("nominalCentroidalPose") exists
+      ctl().centroidalManager_->reset(config_("configs"));
+    }
+    else
+    {
+      ctl().centroidalManager_->reset();
+    }
     ctl().enableManagerUpdate_ = true;
+
+    // Setup collisions
+    if(config_.has("configs") && config_("configs").has("collisionConfigList"))
+    {
+      for(const auto & collisionConfig : config_("configs")("collisionConfigList"))
+      {
+        std::string r1 = collisionConfig("r1");
+        std::string r2 = collisionConfig("r2", std::as_const(r1));
+        if(collisionConfig("type") == "Add")
+        {
+          ctl().addCollisions(r1, r2, static_cast<std::vector<mc_rbdyn::Collision>>(collisionConfig("collisions")));
+        }
+        else
+        {
+          if(collisionConfig.has("collisions"))
+          {
+            ctl().removeCollisions(r1, r2,
+                                   static_cast<std::vector<mc_rbdyn::Collision>>(collisionConfig("collisions")));
+          }
+          else
+          {
+            ctl().removeCollisions(r1, r2);
+          }
+        }
+      }
+    }
 
     // Setup anchor frame
     ctl().centroidalManager_->setAnchorFrame();
