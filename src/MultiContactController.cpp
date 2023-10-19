@@ -194,7 +194,6 @@ void MultiContactController::stop()
   limbManagerSet_->stop();
   centroidalManager_->stop();
   postureManager_->stop();
-  postureManager_.reset();
 
   // Clean up anchor
   setDefaultAnchor();
