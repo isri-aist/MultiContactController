@@ -68,8 +68,19 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
     ctl().limbManagerSet_->reset(initialContactsConfig);
     ctl().centroidalManager_->reset();
+
+    if(config_.has("configs") && config_("configs").has("nominalPosture"))
+    {
+      mc_rtc::Configuration nominalPostureConfig = config_("configs")("nominalPosture");
+      PostureManager::PostureMap initPosture = nominalPostureConfig("target");
+      ctl().postureManager_->reset(initPosture);
+    }
+    else
+    {
+      ctl().postureManager_->reset();
+    }
+
     ctl().enableManagerUpdate_ = true;
-    ctl().postureManager_->reset();
 
     // Setup anchor frame
     ctl().centroidalManager_->setAnchorFrame();

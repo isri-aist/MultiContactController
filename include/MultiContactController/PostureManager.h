@@ -40,6 +40,13 @@ public:
   PostureManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
 
   /** \brief Reset.
+      \param initialPosture map of joint names and angles for the initial posture
+
+      This method should be called once when controller is reset.
+   */
+  virtual void reset(const PostureManager::PostureMap & initialPosture);
+
+  /** \brief Reset.
 
       This method should be called once when controller is reset.
    */

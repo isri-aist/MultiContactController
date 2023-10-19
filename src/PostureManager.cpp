@@ -27,11 +27,17 @@ PostureManager::PostureManager(MultiContactController * ctlPtr, const mc_rtc::Co
   config_.load(mcRtcConfig);
 }
 
-void PostureManager::reset()
+void PostureManager::reset(const PostureManager::PostureMap & initialPosture)
 {
   nominalPostureList_.clear();
-  PostureManager::PostureMap postures; // empty map (= no modification for current PostureTask)
-  nominalPostureList_.emplace(ctl().t(), postures);
+  nominalPostureList_.emplace(ctl().t(), initialPosture);
+}
+
+void PostureManager::reset()
+{
+  // empty map (= no modification for current PostureTask)
+  PostureManager::PostureMap posture;
+  reset(posture);
 }
 
 void PostureManager::update()
