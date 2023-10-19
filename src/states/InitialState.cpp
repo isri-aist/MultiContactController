@@ -6,6 +6,7 @@
 #include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/states/InitialState.h>
 
 using namespace MCC;
@@ -67,6 +68,18 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
     ctl().limbManagerSet_->reset(initialContactsConfig);
     ctl().centroidalManager_->reset();
+
+    if(config_.has("configs") && config_("configs").has("nominalPosture"))
+    {
+      mc_rtc::Configuration nominalPostureConfig = config_("configs")("nominalPosture");
+      PostureManager::PostureMap initPosture = nominalPostureConfig("target");
+      ctl().postureManager_->reset(initPosture);
+    }
+    else
+    {
+      ctl().postureManager_->reset();
+    }
+
     ctl().enableManagerUpdate_ = true;
 
     // Setup anchor frame
@@ -94,6 +107,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // it is safe to call the update method once and then add the logger
     ctl().limbManagerSet_->addToLogger(ctl().logger());
     ctl().centroidalManager_->addToLogger(ctl().logger());
+    ctl().postureManager_->addToLogger(ctl().logger());
   }
 
   // Interpolate task stiffness
