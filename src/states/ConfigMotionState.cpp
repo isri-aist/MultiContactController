@@ -89,6 +89,12 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
     }
   }
 
+  // Set option to wait for finishing swing motion
+  if(config_.has("configs") && config_("configs").has("exitWhenLimbSwingFinished"))
+  {
+    exitWhenLimbSwingFinished_ = static_cast<bool>(config_("configs")("exitWhenLimbSwingFinished"));
+  }
+
   output("OK");
 }
 
@@ -161,7 +167,13 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
     }
   }
 
-  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty();
+  bool limbCofingsFinshed = !ctl().limbManagerSet_->contactCommandStacked();
+  if(exitWhenLimbSwingFinished_)
+  {
+    limbCofingsFinshed = limbCofingsFinshed && !ctl().limbManagerSet_->isExecutingLimbSwing();
+  }
+
+  return limbCofingsFinshed && taskConfigList_.empty() && collisionConfigList_.empty();
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
