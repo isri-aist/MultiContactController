@@ -77,7 +77,18 @@ bool InitialState::run(mc_control::fsm::Controller &)
     {
       ctl().centroidalManager_->reset();
     }
-    ctl().postureManager_->reset();
+
+    if(config_.has("configs") && config_("configs").has("nominalPosture"))
+    {
+      mc_rtc::Configuration nominalPostureConfig = config_("configs")("nominalPosture");
+      PostureManager::PostureMap initPosture = nominalPostureConfig("target");
+      ctl().postureManager_->reset(initPosture);
+    }
+    else
+    {
+      ctl().postureManager_->reset();
+    }
+
     ctl().enableManagerUpdate_ = true;
 
     // Setup collisions
