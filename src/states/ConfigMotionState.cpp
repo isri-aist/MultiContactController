@@ -183,13 +183,8 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
     }
   }
 
-  bool limbCofingsFinshed = !ctl().limbManagerSet_->contactCommandStacked();
-  if(exitWhenLimbSwingFinished_)
-  {
-    limbCofingsFinshed = limbCofingsFinshed && !ctl().limbManagerSet_->isExecutingLimbSwing();
-  }
-
-  return limbCofingsFinshed && taskConfigList_.empty() && collisionConfigList_.empty();
+  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty()
+    && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing());
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
