@@ -72,6 +72,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
       sva::PTransformd lastBasePose = ctl().datastore().get<sva::PTransformd>("MCC::LastBasePose");
       ctl().robot().posW(lastBasePose);
       ctl().realRobot().posW(lastBasePose);
+      ctl().datastore().remove("MCC::LastBasePose"); // avoid accidental reuse of old base pose
     }
 
     // Reset managers
