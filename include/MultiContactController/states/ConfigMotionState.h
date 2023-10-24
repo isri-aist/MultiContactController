@@ -28,5 +28,8 @@ protected:
 
   //! Option to select whether this state should wait for finishing swing motion or not
   bool exitWhenLimbSwingFinished_ = false;
+
+  //! Option to save the last pose in datastore for the other motion
+  bool saveLastBasePose_ = false;
 };
 } // namespace MCC

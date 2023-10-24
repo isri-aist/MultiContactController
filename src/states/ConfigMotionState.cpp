@@ -110,6 +110,10 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
   {
     exitWhenLimbSwingFinished_ = static_cast<bool>(config_("configs")("exitWhenLimbSwingFinished"));
   }
+  if(config_.has("configs") && config_("configs").has("saveLastBasePose"))
+  {
+    saveLastBasePose_ = static_cast<bool>(config_("configs")("saveLastBasePose"));
+  }
 
   output("OK");
 }
@@ -187,6 +191,20 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
          && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing());
 }
 
-void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
+void ConfigMotionState::teardown(mc_control::fsm::Controller &)
+{
+  if(saveLastBasePose_)
+  {
+    auto & ds = ctl().datastore();
+    if(!ds.has("MCC::LastBasePose"))
+    {
+      ds.make<sva::PTransformd>("MCC::LastBasePose", ctl().robot().posW());
+    }
+    else
+    {
+      ds.assign<sva::PTransformd>("MCC::LastBasePose", ctl().robot().posW());
+    }
+  }
+}
 
 EXPORT_SINGLE_STATE("MCC::ConfigMotion", ConfigMotionState)

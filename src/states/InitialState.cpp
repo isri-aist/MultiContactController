@@ -61,11 +61,17 @@ bool InitialState::run(mc_control::fsm::Controller &)
         std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
 
     // Initialize base pose of the robot
-    if (config_.has("configs") && config_("configs").has("basePose"))
+    if(config_.has("configs") && config_("configs").has("basePose"))
     {
-      sva::PTransformd basePose = static_cast<sva::PTransformd>(config_("configs")("basePose"));
-      ctl().robot().posW(basePose);
-      ctl().realRobot().posW(basePose);
+      sva::PTransformd configBasePose = static_cast<sva::PTransformd>(config_("configs")("basePose"));
+      ctl().robot().posW(configBasePose);
+      ctl().realRobot().posW(configBasePose);
+    }
+    else if(ctl().datastore().has("MCC::LastBasePose"))
+    {
+      sva::PTransformd lastBasePose = ctl().datastore().get<sva::PTransformd>("MCC::LastBasePose");
+      ctl().robot().posW(lastBasePose);
+      ctl().realRobot().posW(lastBasePose);
     }
 
     // Reset managers
