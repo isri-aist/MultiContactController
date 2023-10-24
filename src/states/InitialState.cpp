@@ -60,6 +60,14 @@ bool InitialState::run(mc_control::fsm::Controller &)
     stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
         std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
 
+    // Initialize base pose of the robot
+    if (config_.has("configs") && config_("configs").has("basePose"))
+    {
+      sva::PTransformd basePose = static_cast<sva::PTransformd>(config_("configs")("basePose"));
+      ctl().robot().posW(basePose);
+      ctl().realRobot().posW(basePose);
+    }
+
     // Reset managers
     mc_rtc::Configuration initialContactsConfig;
     if(config_.has("configs") && config_("configs").has("initialContacts"))
