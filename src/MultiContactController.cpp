@@ -151,6 +151,22 @@ void MultiContactController::reset(const mc_control::ControllerResetData & reset
 {
   mc_control::fsm::Controller::reset(resetData);
 
+  if(datastore().has("MCC::LastBasePose"))
+  {
+    const auto & pose = datastore().get<sva::PTransformd>("MCC::LastBasePose");
+    robot().posW(pose);
+    realRobot().posW(pose);
+  }
+  else
+  {
+    if(config_.has("basePose"))
+    {
+      auto pose = config_("basePose").operator sva::PTransformd();
+      robot().posW(pose);
+      realRobot().posW(pose);
+    }
+  }
+
   enableManagerUpdate_ = false;
 
   // Print message to set priority
