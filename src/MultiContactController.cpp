@@ -141,6 +141,11 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     ForceColl::GraspContact::loadVerticesMap(contactsConfig("Grasp", mc_rtc::Configuration{}));
   }
 
+  if(config().has("saveLastBasePose"))
+  {
+    saveLastBasePose_ = config()("saveLastBasePose");
+  }
+
   // Setup anchor
   setDefaultAnchor();
 
@@ -156,7 +161,7 @@ void MultiContactController::reset(const mc_control::ControllerResetData & reset
     const auto & pose = datastore().get<sva::PTransformd>("MCC::LastBasePose");
     robot().posW(pose);
     realRobot().posW(pose);
-    ctl().datastore().remove("MCC::LastBasePose"); // avoid accidental reuse of old base pose
+    datastore().remove("MCC::LastBasePose"); // avoid accidental reuse of old base pose
   }
   else
   {
@@ -214,6 +219,20 @@ void MultiContactController::stop()
 
   // Clean up anchor
   setDefaultAnchor();
+
+  // Save last base pose to change controllers
+  if(saveLastBasePose_)
+  {
+    auto & ds = datastore();
+    if(!ds.has("MCC::LastBasePose"))
+    {
+      ds.make<sva::PTransformd>("MCC::LastBasePose", robot().posW());
+    }
+    else
+    {
+      ds.assign<sva::PTransformd>("MCC::LastBasePose", robot().posW());
+    }
+  }
 
   mc_control::fsm::Controller::stop();
 }

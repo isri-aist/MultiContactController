@@ -93,6 +93,9 @@ public:
   //! Whether to enable manager update
   bool enableManagerUpdate_ = false;
 
+  //! Whether to save last base pose when stopping this controller
+  bool saveLastBasePose_ = false;
+
 protected:
   //! Controller name
   std::string name_ = "MCC";

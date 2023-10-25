@@ -191,20 +191,6 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
          && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing());
 }
 
-void ConfigMotionState::teardown(mc_control::fsm::Controller &)
-{
-  if(saveLastBasePose_)
-  {
-    auto & ds = ctl().datastore();
-    if(!ds.has("MCC::LastBasePose"))
-    {
-      ds.make<sva::PTransformd>("MCC::LastBasePose", ctl().robot().posW());
-    }
-    else
-    {
-      ds.assign<sva::PTransformd>("MCC::LastBasePose", ctl().robot().posW());
-    }
-  }
-}
+void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
 
 EXPORT_SINGLE_STATE("MCC::ConfigMotion", ConfigMotionState)
