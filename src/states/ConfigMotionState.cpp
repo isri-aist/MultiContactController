@@ -174,20 +174,6 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
   return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty();
 }
 
-void ConfigMotionState::teardown(mc_control::fsm::Controller &)
-{
-  if(saveLastBasePose_)
-  {
-    auto & ds = ctl().datastore();
-    if(!ds.has("MCC::LastBasePose"))
-    {
-      ds.make<sva::PTransformd>("MCC::LastBasePose", ctl().robot().posW());
-    }
-    else
-    {
-      ds.assign<sva::PTransformd>("MCC::LastBasePose", ctl().robot().posW());
-    }
-  }
-}
+void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
 
 EXPORT_SINGLE_STATE("MCC::ConfigMotion", ConfigMotionState)
