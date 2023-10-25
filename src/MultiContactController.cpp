@@ -156,6 +156,7 @@ void MultiContactController::reset(const mc_control::ControllerResetData & reset
     const auto & pose = datastore().get<sva::PTransformd>("MCC::LastBasePose");
     robot().posW(pose);
     realRobot().posW(pose);
+    ctl().datastore().remove("MCC::LastBasePose"); // avoid accidental reuse of old base pose
   }
   else
   {
