@@ -114,6 +114,19 @@ bool LimbManagerSet::contactCommandStacked() const
   return false;
 }
 
+bool LimbManagerSet::isExecutingLimbSwing() const
+{
+  for(const auto & limbManagerKV : *this)
+  {
+    const auto & contactCommandList = limbManagerKV.second->contactCommandList();
+    if(limbManagerKV.second->currentSwingCommand_ != nullptr)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   for(const auto & limbManagerKV : *this)

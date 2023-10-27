@@ -25,5 +25,8 @@ protected:
 
   //! Task configuration list
   std::multimap<double, mc_rtc::Configuration> taskConfigList_;
+
+  //! Option to select whether this state should wait for finishing swing motion or not
+  bool exitWhenLimbSwingFinished_ = false;
 };
 } // namespace MCC

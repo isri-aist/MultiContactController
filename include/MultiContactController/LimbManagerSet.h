@@ -101,6 +101,9 @@ public:
   /** \brief Get whether future contact command is stacked. */
   bool contactCommandStacked() const;
 
+  /** \brief Get whether any limbs are executing swing motion. */
+  bool isExecutingLimbSwing() const;
+
   /** \brief Get limbs of the specified group.
       \param group limb group
    */
