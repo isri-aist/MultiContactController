@@ -168,7 +168,7 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
   }
 
   return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty()
-    && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing());
+         && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing());
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
