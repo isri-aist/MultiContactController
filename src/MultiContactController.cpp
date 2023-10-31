@@ -169,6 +169,8 @@ void MultiContactController::reset(const mc_control::ControllerResetData & reset
 {
   mc_control::fsm::Controller::reset(resetData);
 
+  posture_tasks_[robot().name()]->reset();
+
   if(datastore().has("MCC::ResetBasePose"))
   {
     const auto & pose = datastore().get<sva::PTransformd>("MCC::ResetBasePose");
