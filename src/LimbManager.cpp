@@ -66,6 +66,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     impGainType_ = "Uninitialized";
 
     requireImpGainUpdate_ = false;
+
+    requireTouchDownPoseUpdate_ = false;
   }
 
   contactCommandList_.clear();
@@ -143,6 +145,10 @@ void LimbManager::update()
       if(!(config_.keepPoseForTouchDownLimb && touchDown_))
       {
         targetPose_ = swingTraj_->endPose_;
+      }
+      else
+      {
+        requireTouchDownPoseUpdate_ = true;
       }
       targetVel_ = sva::MotionVecd::Zero();
       targetAccel_ = sva::MotionVecd::Zero();
@@ -274,6 +280,10 @@ void LimbManager::update()
 
   // Update currentContactCommand_ (this should be after setting swingTraj_)
   currentContactCommand_ = getContactCommand(ctl().t());
+  if (currentContactCommand_ && requireTouchDownPoseUpdate_) {
+    currentContactCommand_->constraint->updateGlobalVertices(targetPose_);
+    requireTouchDownPoseUpdate_ = false;
+  }
 
   // Update phase_
   if(currentSwingCommand_)
