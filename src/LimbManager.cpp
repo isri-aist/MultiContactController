@@ -146,10 +146,13 @@ void LimbManager::update()
       {
         targetPose_ = swingTraj_->endPose_;
       }
-      else
+      else if(!config_.enableWrenchDistForTouchDownLimb)
       {
+        // Vertices has already been updated when touchDown is detected
+        // if enableWrenchDistForTouchDownLimb is true
         requireTouchDownPoseUpdate_ = true;
       }
+
       targetVel_ = sva::MotionVecd::Zero();
       targetAccel_ = sva::MotionVecd::Zero();
 
@@ -250,6 +253,13 @@ void LimbManager::update()
     {
       touchDown_ = true;
 
+      if(config_.keepPoseForTouchDownLimb && config_.enableWrenchDistForTouchDownLimb)
+      {
+        // Vertices in contactCommand should be immediately updated by the current pose
+        // because the wrench distribution is activated just after touchDown
+        requireTouchDownPoseUpdate_ = true;
+      }
+
       if(config_.stopSwingTrajForTouchDownLimb)
       {
         swingTraj_->touchDown(ctl().t());
@@ -280,7 +290,9 @@ void LimbManager::update()
 
   // Update currentContactCommand_ (this should be after setting swingTraj_)
   currentContactCommand_ = getContactCommand(ctl().t());
-  if (currentContactCommand_ && requireTouchDownPoseUpdate_) {
+  if (currentContactCommand_ && currentContactCommand_->constraint->type() != "Empty" && requireTouchDownPoseUpdate_)
+  {
+    // Empty contact command does not have vertices for wrench distribution
     currentContactCommand_->constraint->updateGlobalVertices(targetPose_);
     requireTouchDownPoseUpdate_ = false;
   }
