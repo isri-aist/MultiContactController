@@ -282,7 +282,7 @@ void LimbManager::update()
 
   // Update currentContactCommand_ (this should be after setting swingTraj_)
   currentContactCommand_ = getContactCommand(ctl().t());
-  if (currentContactCommand_ && currentContactCommand_->constraint->type() != "Empty" && requireTouchDownPoseUpdate_)
+  if(currentContactCommand_ && currentContactCommand_->constraint->type() != "Empty" && requireTouchDownPoseUpdate_)
   {
     // Empty contact command does not have vertices for wrench distribution
     currentContactCommand_->constraint->updateGlobalVertices(targetPose_);
