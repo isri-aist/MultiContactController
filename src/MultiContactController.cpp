@@ -176,8 +176,8 @@ void MultiContactController::reset(const mc_control::ControllerResetData & reset
     const auto & pose = datastore().get<sva::PTransformd>("MCC::ResetBasePose");
     robot().posW(pose);
     realRobot().posW(pose);
-    mc_rtc::log::info("[MultiContactController] update basePose:\ntrans={}\nrot=\n{}",
-                      pose.translation().transpose(), pose.rotation());
+    mc_rtc::log::info("[MultiContactController] update basePose:\ntrans={}\nrot=\n{}", pose.translation().transpose(),
+                      pose.rotation());
   }
 
   enableManagerUpdate_ = false;
