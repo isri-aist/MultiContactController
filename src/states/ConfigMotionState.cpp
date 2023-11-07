@@ -89,6 +89,16 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
     }
   }
 
+  // Set option to wait for finishing swing motion
+  if(config_.has("configs") && config_("configs").has("exitWhenLimbSwingFinished"))
+  {
+    exitWhenLimbSwingFinished_ = static_cast<bool>(config_("configs")("exitWhenLimbSwingFinished"));
+  }
+  if(config_.has("configs") && config_("configs").has("saveLastBasePose"))
+  {
+    saveLastBasePose_ = static_cast<bool>(config_("configs")("saveLastBasePose"));
+  }
+
   output("OK");
 }
 
