@@ -32,6 +32,9 @@ protected:
   //! Option to select whether this state should wait for finishing reference CoM trajectory or not
   bool exitWhenCentroidalManagerFinished_ = false;
 
+  //! Option to select whether this state should wait for finishing reference postures or not
+  bool exitWhenPostureManagerFinished_ = false;
+
   //! Option to save the last pose in datastore for the other motion
   bool saveLastBasePose_ = false;
 };
