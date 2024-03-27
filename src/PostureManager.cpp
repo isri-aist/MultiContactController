@@ -100,6 +100,24 @@ bool PostureManager::appendNominalPosture(double t, const PostureManager::Postur
     mc_rtc::log::error("[PostureManager] Ignore a nominal posture with past time: {} < {}", t, ctl().t());
     return false;
   }
+  if(!nominalPostureList_.empty())
+  {
+    double lastTime = nominalPostureList_.rbegin()->first;
+    if(t < lastTime)
+    {
+      mc_rtc::log::error("[PostureManager] Ignore a nominal posture earlier than the last one: {} < {}", t, lastTime);
+      return false;
+    }
+  }
   nominalPostureList_.emplace(t, postures);
   return true;
+}
+
+bool PostureManager::isFinished(const double t) const
+{
+  if(nominalPostureList_.empty())
+  {
+    return true;
+  }
+  return t > nominalPostureList_.rbegin()->first;
 }

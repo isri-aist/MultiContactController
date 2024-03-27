@@ -84,6 +84,11 @@ public:
   */
   virtual PostureMap getNominalPosture(double t) const;
 
+  /** \brief Check whether reference postures are completed at given time
+      \param t time
+  */
+  virtual bool isFinished(double t) const;
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const MultiContactController & ctl() const
