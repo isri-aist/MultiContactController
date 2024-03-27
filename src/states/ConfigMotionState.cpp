@@ -110,6 +110,10 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
   {
     exitWhenLimbSwingFinished_ = static_cast<bool>(config_("configs")("exitWhenLimbSwingFinished"));
   }
+  if(config_.has("configs") && config_("configs").has("exitWhenCentroidalManagerFinished"))
+  {
+    exitWhenCentroidalManagerFinished_ = static_cast<bool>(config_("configs")("exitWhenCentroidalManagerFinished"));
+  }
   if(config_.has("configs") && config_("configs").has("saveLastBasePose"))
   {
     saveLastBasePose_ = static_cast<bool>(config_("configs")("saveLastBasePose"));
@@ -188,7 +192,8 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
   }
 
   return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty()
-         && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing());
+         && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing())
+         && (!exitWhenCentroidalManagerFinished_ || ctl().centroidalManager_->isFinished(ctl().t()));
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}

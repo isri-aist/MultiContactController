@@ -435,6 +435,15 @@ void CentroidalManager::setAnchorFrame()
   ctl().datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) { return calcAnchorFrame(robot); });
 }
 
+bool CentroidalManager::isFinished(const double t) const
+{
+  if(nominalCentroidalPoseList_.empty())
+  {
+    return true;
+  }
+  return t > nominalCentroidalPoseList_.rbegin()->first;
+}
+
 CentroidalManager::RefData CentroidalManager::calcRefData(double t) const
 {
   RefData refData;

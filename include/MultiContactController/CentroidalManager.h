@@ -243,6 +243,11 @@ public:
   /** \brief Set anchor frame. */
   void setAnchorFrame();
 
+  /** \brief Check whether reference CoM trajectory is completed at given time
+      \param t time
+  */
+  bool isFinished(const double t) const;
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const MultiContactController & ctl() const
