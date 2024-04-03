@@ -23,9 +23,6 @@ void InterruptState::start(mc_control::fsm::Controller & _ctl)
     }
   }
 
-  // Stop updating references
-  ctl().enableManagerUpdate_ = false;
-
   // Setup GUI
   ctl().gui()->addElement({ctl().name()}, mc_rtc::gui::Button("Start", [this]() { phase_ = 1; }));
 
@@ -51,6 +48,8 @@ bool InterruptState::run(mc_control::fsm::Controller &)
     ctl().gui()->removeElement({ctl().name()}, "Start");
 
     // Start updating references
+    // NOTE: enableManagerUpdate_ is not explicitly disabled by InterruptState
+    //       for feedback control to maintain balance while stopping in CentroidalManager
     ctl().enableManagerUpdate_ = true;
   }
 
