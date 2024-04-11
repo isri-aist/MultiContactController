@@ -81,8 +81,8 @@ bool InitialState::run(mc_control::fsm::Controller &)
     if(config_.has("configs") && config_("configs").has("nominalPosture"))
     {
       mc_rtc::Configuration nominalPostureConfig = config_("configs")("nominalPosture");
-      PostureManager::PostureMap initPosture = nominalPostureConfig("target");
-      ctl().postureManager_->reset(initPosture);
+      PostureManager::PostureMap initialPosture = nominalPostureConfig("target");
+      ctl().postureManager_->reset(initialPosture);
     }
     else
     {

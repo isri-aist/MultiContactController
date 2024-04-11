@@ -29,22 +29,16 @@ PostureManager::PostureManager(MultiContactController * ctlPtr, const mc_rtc::Co
 
 void PostureManager::reset(const PostureManager::PostureMap & initialPosture)
 {
+  // Default argument is empty map (= no modification for current PostureTask)
   nominalPostureList_.clear();
   nominalPostureList_.emplace(ctl().t(), initialPosture);
-}
-
-void PostureManager::reset()
-{
-  // empty map (= no modification for current PostureTask)
-  PostureManager::PostureMap posture;
-  reset(posture);
 }
 
 void PostureManager::update()
 {
   // Set data
-  PostureManager::PostureMap ref = getNominalPosture(ctl().t());
-  postureTask_->target(ref); // this function will do nothing if ref is empty
+  PostureMap nominalPosture = getNominalPosture(ctl().t());
+  postureTask_->target(nominalPosture); // this function will do nothing if nominalPosture is empty
 
   // TODO: update postureTask_->refVel and postureTask_->refAcc
 }
@@ -76,8 +70,8 @@ void PostureManager::removeFromLogger(mc_rtc::Logger & logger)
 
 PostureManager::PostureMap PostureManager::getNominalPosture(double t) const
 {
-  // if nominalPostureList_ is empty or specified past time, return empty map
-  PostureManager::PostureMap postures;
+  // If nominalPostureList_ is empty or specified past time, return empty map
+  PostureManager::PostureMap nominalPosture;
   if(!nominalPostureList_.empty())
   {
     auto it = nominalPostureList_.upper_bound(t);
@@ -88,12 +82,12 @@ PostureManager::PostureMap PostureManager::getNominalPosture(double t) const
           ctl().t());
     }
     it--;
-    postures = it->second;
+    nominalPosture = it->second;
   }
-  return postures;
+  return nominalPosture;
 }
 
-bool PostureManager::appendNominalPosture(double t, const PostureManager::PostureMap & postures)
+bool PostureManager::appendNominalPosture(double t, const PostureManager::PostureMap & nominalPosture)
 {
   if(t < ctl().t())
   {
@@ -109,7 +103,7 @@ bool PostureManager::appendNominalPosture(double t, const PostureManager::Postur
       return false;
     }
   }
-  nominalPostureList_.emplace(t, postures);
+  nominalPostureList_.emplace(t, nominalPosture);
   return true;
 }
 

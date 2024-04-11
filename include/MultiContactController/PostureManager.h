@@ -44,13 +44,7 @@ public:
 
       This method should be called once when controller is reset.
    */
-  virtual void reset(const PostureManager::PostureMap & initialPosture);
-
-  /** \brief Reset.
-
-      This method should be called once when controller is reset.
-   */
-  virtual void reset();
+  virtual void reset(const PostureManager::PostureMap & initialPosture = {});
 
   /** \brief Update.
 
@@ -72,12 +66,12 @@ public:
   /** \brief Remove entries from the logger. */
   virtual void removeFromLogger(mc_rtc::Logger & logger);
 
-  /** \brief Append a nominal centroidal pose
+  /** \brief Append a nominal postures of the robot
       \param t time
-      \param PostureMap map from joint names to joint angle
+      \param PostureMap map from joint names to joint angle [rad]
       \return whether nominalCentroidalPose is appended
   */
-  virtual bool appendNominalPosture(double t, const PostureMap & joints);
+  virtual bool appendNominalPosture(double t, const PostureMap & nominalPosture);
 
   /** \brief Get nominal posture.
       \param t time

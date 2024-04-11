@@ -68,8 +68,8 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
       {
         time += baseTime;
       }
-      PostureManager::PostureMap refPosture = nominalPostureConfig("target");
-      ctl().postureManager_->appendNominalPosture(time, refPosture);
+      PostureManager::PostureMap nominalPosture = nominalPostureConfig("target");
+      ctl().postureManager_->appendNominalPosture(time, nominalPosture);
     }
   }
 
