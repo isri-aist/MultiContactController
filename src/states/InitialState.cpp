@@ -132,6 +132,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // Add GUI of managers
     ctl().limbManagerSet_->addToGUI(*ctl().gui());
     ctl().centroidalManager_->addToGUI(*ctl().gui());
+    ctl().postureManager_->addToGUI(*ctl().gui());
   }
   else if(phase_ == 2)
   {

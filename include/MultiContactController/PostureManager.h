@@ -58,7 +58,11 @@ public:
   */
   virtual void stop();
 
-  // TODO: implement GUI functions
+  /** \brief Add entries to the GUI. */
+  virtual void addToGUI(mc_rtc::gui::StateBuilder & gui);
+
+  /** \brief Remove entries from the GUI. */
+  virtual void removeFromGUI(mc_rtc::gui::StateBuilder & gui);
 
   /** \brief Add entries to the logger. */
   virtual void addToLogger(mc_rtc::Logger & logger);
