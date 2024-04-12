@@ -118,7 +118,6 @@ bool LimbManagerSet::isExecutingLimbSwing() const
 {
   for(const auto & limbManagerKV : *this)
   {
-    const auto & contactCommandList = limbManagerKV.second->contactCommandList();
     if(limbManagerKV.second->currentSwingCommand_ != nullptr)
     {
       return true;
