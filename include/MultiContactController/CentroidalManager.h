@@ -190,12 +190,12 @@ public:
       \param constraintSetConfig mc_rtc configuration that has nominalCentroidalPose
 
       This method should be called once when controller is reset.
+      The validity of nominalCentroidalPoseConfig should be checked before calling this function.
 
       An example of \p nominalCentroidalPoseConfig is as follows.
       @code
-      configs:
-        nominalCentroidalPose:
-          translation: [0.0, 0.0, 0.966]
+      nominalCentroidalPose:
+        translation: [0.0, 0.0, 0.966]
       @endcode
   */
   virtual void reset(const mc_rtc::Configuration & nominalCentroidalPoseConfig);

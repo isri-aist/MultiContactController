@@ -68,10 +68,10 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
     ctl().limbManagerSet_->reset(initialContactsConfig);
 
-    if(config_.has("configs"))
+    if(config_.has("configs") && config_("configs").has("nominalCentroidalPose"))
     {
-      // Overwrite nominalCetnroidalPose if config_("configs")("nominalCentroidalPose") exists
-      ctl().centroidalManager_->reset(config_("configs"));
+      // Overwrite nominalCetnroidalPose
+      ctl().centroidalManager_->reset(config_("configs")("nominalCentroidalPose"));
     }
     else
     {
