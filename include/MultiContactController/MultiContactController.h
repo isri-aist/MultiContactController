@@ -26,12 +26,18 @@ class PostureManager;
 struct MultiContactController : public mc_control::fsm::Controller
 {
 public:
-  /** \brief Constructor. */
+  /** \brief Constructor.
+
+      basePose in configuration allows users to set the initial pose of the robot.
+      It will be registered on datastore in this function and reflected in the reset function.
+   */
   MultiContactController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & _config);
 
   /** \brief Reset a controller.
 
       This method is called when starting the controller.
+      When MCC::ResetBasePose is in datastore, the posW of both control and real robots
+      are overwritten by it in this function.
    */
   void reset(const mc_control::ControllerResetData & resetData) override;
 
@@ -44,6 +50,9 @@ public:
   /** \brief Stop a controller.
 
       This method is called when stopping the controller.
+      When saveLastBasePose is enabled in the configuration,
+      the poseW of control robot will be saved in datastore at the end of this function
+      to use it for initialization of the following controller.
    */
   void stop() override;
 
@@ -93,7 +102,7 @@ public:
   //! Whether to enable manager update
   bool enableManagerUpdate_ = false;
 
-  //! Whether to save last base pose when stopping this controller
+  //! Whether to save last base pose when stopping this controller.
   bool saveLastBasePose_ = false;
 
 protected:

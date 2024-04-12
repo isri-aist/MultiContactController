@@ -118,10 +118,6 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
   {
     exitWhenPostureManagerFinished_ = static_cast<bool>(config_("configs")("exitWhenPostureManagerFinished"));
   }
-  if(config_.has("configs") && config_("configs").has("saveLastBasePose"))
-  {
-    saveLastBasePose_ = static_cast<bool>(config_("configs")("saveLastBasePose"));
-  }
 
   output("OK");
 }
