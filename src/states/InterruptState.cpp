@@ -24,7 +24,7 @@ void InterruptState::start(mc_control::fsm::Controller & _ctl)
   }
 
   // Setup GUI
-  ctl().gui()->addElement({ctl().name()}, mc_rtc::gui::Button("Start", [this]() { phase_ = 1; }));
+  ctl().gui()->addElement({ctl().name()}, mc_rtc::gui::Button("Resume", [this]() { phase_ = 1; }));
 
   output("OK");
 }
@@ -45,7 +45,7 @@ bool InterruptState::run(mc_control::fsm::Controller &)
     phase_ = 2;
 
     // Clean up GUI
-    ctl().gui()->removeElement({ctl().name()}, "Start");
+    ctl().gui()->removeElement({ctl().name()}, "Resume");
 
     // Start updating references
     // NOTE: enableManagerUpdate_ is not explicitly disabled by InterruptState
