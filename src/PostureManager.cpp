@@ -51,9 +51,9 @@ void PostureManager::stop()
 
 void PostureManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  gui.addElement({ctl().name(), config().name, "Status"},
-                 mc_rtc::gui::Label("Number of specified joints",
-                                    [this]() { return getNominalPosture(ctl().t()).size(); }));
+  gui.addElement({ctl().name(), config().name, "Status"}, mc_rtc::gui::Label("Number of specified joints", [this]() {
+                   return getNominalPosture(ctl().t()).size();
+                 }));
 }
 
 void PostureManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
