@@ -284,7 +284,9 @@ void LimbManager::update()
   currentContactCommand_ = getContactCommand(ctl().t());
   if(currentContactCommand_ && currentContactCommand_->constraint->type() != "Empty" && requireTouchDownPoseUpdate_)
   {
-    // Empty contact command does not have vertices for wrench distribution
+    // In contact transitions for arms, the type of currentContactCommand_ become Empty while closing the
+    // gripper. Since Empty command does not have vertices for wrench distribution, we exclude it to apply
+    // updateGlobalVertices to vertices in Grasp command following on Empty command.
     currentContactCommand_->constraint->updateGlobalVertices(targetPose_);
     requireTouchDownPoseUpdate_ = false;
   }
