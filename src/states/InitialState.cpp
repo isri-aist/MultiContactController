@@ -6,6 +6,7 @@
 #include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/states/InitialState.h>
 
 using namespace MCC;
@@ -66,8 +67,55 @@ bool InitialState::run(mc_control::fsm::Controller &)
       initialContactsConfig = config_("configs")("initialContacts");
     }
     ctl().limbManagerSet_->reset(initialContactsConfig);
-    ctl().centroidalManager_->reset();
+
+    if(config_.has("configs") && config_("configs").has("nominalCentroidalPose"))
+    {
+      // Overwrite nominalCetnroidalPose
+      ctl().centroidalManager_->reset(config_("configs")("nominalCentroidalPose"));
+    }
+    else
+    {
+      ctl().centroidalManager_->reset();
+    }
+
+    if(config_.has("configs") && config_("configs").has("nominalPosture"))
+    {
+      mc_rtc::Configuration nominalPostureConfig = config_("configs")("nominalPosture");
+      PostureManager::PostureMap initialPosture = nominalPostureConfig("target");
+      ctl().postureManager_->reset(initialPosture);
+    }
+    else
+    {
+      ctl().postureManager_->reset();
+    }
+
     ctl().enableManagerUpdate_ = true;
+
+    // Setup collisions
+    if(config_.has("configs") && config_("configs").has("collisionConfigList"))
+    {
+      for(const auto & collisionConfig : config_("configs")("collisionConfigList"))
+      {
+        std::string r1 = collisionConfig("r1");
+        std::string r2 = collisionConfig("r2", std::as_const(r1));
+        if(collisionConfig("type") == "Add")
+        {
+          ctl().addCollisions(r1, r2, static_cast<std::vector<mc_rbdyn::Collision>>(collisionConfig("collisions")));
+        }
+        else
+        {
+          if(collisionConfig.has("collisions"))
+          {
+            ctl().removeCollisions(r1, r2,
+                                   static_cast<std::vector<mc_rbdyn::Collision>>(collisionConfig("collisions")));
+          }
+          else
+          {
+            ctl().removeCollisions(r1, r2);
+          }
+        }
+      }
+    }
 
     // Setup anchor frame
     ctl().centroidalManager_->setAnchorFrame();
@@ -84,6 +132,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // Add GUI of managers
     ctl().limbManagerSet_->addToGUI(*ctl().gui());
     ctl().centroidalManager_->addToGUI(*ctl().gui());
+    ctl().postureManager_->addToGUI(*ctl().gui());
   }
   else if(phase_ == 2)
   {
@@ -94,6 +143,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // it is safe to call the update method once and then add the logger
     ctl().limbManagerSet_->addToLogger(ctl().logger());
     ctl().centroidalManager_->addToLogger(ctl().logger());
+    ctl().postureManager_->addToLogger(ctl().logger());
   }
 
   // Interpolate task stiffness

@@ -20,17 +20,26 @@ namespace MCC
 {
 class LimbManagerSet;
 class CentroidalManager;
+class PostureManager;
 
 /** \brief Humanoid multi-contact motion controller. */
 struct MultiContactController : public mc_control::fsm::Controller
 {
 public:
-  /** \brief Constructor. */
+  /** \brief Constructor.
+
+      If the pose is stored in the "basePose" key of the controller configuration, the pose will be registered in the
+     "MCC::ResetBasePose" key of the datastore and applied to the baselink poses of the control and real robots in the
+     reset function.
+   */
   MultiContactController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & _config);
 
   /** \brief Reset a controller.
 
       This method is called when starting the controller.
+
+      If the pose is registered in the "MCC::ResetBasePose" key of the datastore, the pose will be applied to the
+     baselink poses of the control and real robots in the reset function.
    */
   void reset(const mc_control::ControllerResetData & resetData) override;
 
@@ -43,6 +52,10 @@ public:
   /** \brief Stop a controller.
 
       This method is called when stopping the controller.
+
+       If the "saveLastBasePose" key in the controller configuration is true, the baselink pose of the current control
+     robot is registered in the "MCC::ResetBasePose" key of the datastore. This is intended to be used in subsequent
+     controller initializations.
    */
   void stop() override;
 
@@ -86,8 +99,14 @@ public:
   //! Centroidal manager
   std::shared_ptr<CentroidalManager> centroidalManager_;
 
+  //! Posture manager
+  std::shared_ptr<PostureManager> postureManager_;
+
   //! Whether to enable manager update
   bool enableManagerUpdate_ = false;
+
+  //! Whether to save last base pose when stopping this controller.
+  bool saveLastBasePose_ = false;
 
 protected:
   //! Controller name

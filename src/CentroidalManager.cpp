@@ -145,6 +145,12 @@ CentroidalManager::CentroidalManager(MultiContactController * ctlPtr, const mc_r
 {
 }
 
+void CentroidalManager::reset(const mc_rtc::Configuration & nominalCentroidalPoseConfig)
+{
+  config().nominalCentroidalPose = static_cast<sva::PTransformd>(nominalCentroidalPoseConfig);
+  reset();
+}
+
 void CentroidalManager::reset()
 {
   refData_.reset();
@@ -424,6 +430,15 @@ void CentroidalManager::setAnchorFrame()
     ctl().datastore().remove(anchorName);
   }
   ctl().datastore().make_call(anchorName, [this](const mc_rbdyn::Robot & robot) { return calcAnchorFrame(robot); });
+}
+
+bool CentroidalManager::isFinished(const double t) const
+{
+  if(nominalCentroidalPoseList_.empty())
+  {
+    return true;
+  }
+  return t > nominalCentroidalPoseList_.rbegin()->first;
 }
 
 CentroidalManager::RefData CentroidalManager::calcRefData(double t) const

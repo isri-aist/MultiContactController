@@ -66,6 +66,8 @@ void LimbManager::reset(const mc_rtc::Configuration & _constraintConfig)
     impGainType_ = "Uninitialized";
 
     requireImpGainUpdate_ = false;
+
+    requireTouchDownPoseUpdate_ = false;
   }
 
   contactCommandList_.clear();
@@ -144,6 +146,7 @@ void LimbManager::update()
       {
         targetPose_ = swingTraj_->endPose_;
       }
+
       targetVel_ = sva::MotionVecd::Zero();
       targetAccel_ = sva::MotionVecd::Zero();
 
@@ -244,6 +247,11 @@ void LimbManager::update()
     {
       touchDown_ = true;
 
+      if(config_.keepPoseForTouchDownLimb)
+      {
+        requireTouchDownPoseUpdate_ = true;
+      }
+
       if(config_.stopSwingTrajForTouchDownLimb)
       {
         swingTraj_->touchDown(ctl().t());
@@ -274,6 +282,16 @@ void LimbManager::update()
 
   // Update currentContactCommand_ (this should be after setting swingTraj_)
   currentContactCommand_ = getContactCommand(ctl().t());
+  if(currentContactCommand_ && currentContactCommand_->constraint->type() != "Empty" && requireTouchDownPoseUpdate_)
+  {
+    // \todo In order to correctly update global vertices when transitioning from an EmptyContact with no vertices for
+    // wrench distribution to, for example, a GraspContact with vertices for wrench distribution, the condition here is
+    // skipped for EmptyContact and requireTouchDownPoseUpdate_ is retained. The current implementation works well for
+    // contact transitions where the hand grasps the environment (i.e., EmptyContact -> GraspContact), but it does not
+    // work well to perform other contact transitions in the future (e.g., SurfaceContact -> GraspContact).
+    currentContactCommand_->constraint->updateGlobalVertices(targetPose_);
+    requireTouchDownPoseUpdate_ = false;
+  }
 
   // Update phase_
   if(currentSwingCommand_)

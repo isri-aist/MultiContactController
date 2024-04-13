@@ -10,6 +10,7 @@
 
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/centroidal/CentroidalManagerDDP.h>
 #include <MultiContactController/centroidal/CentroidalManagerPC.h>
 #include <MultiContactController/centroidal/CentroidalManagerSRB.h>
@@ -122,6 +123,15 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   {
     mc_rtc::log::warning("[MultiContactController] CentroidalManager configuration is missing.");
   }
+  if(config().has("PostureManager"))
+  {
+    postureManager_ = std::make_shared<PostureManager>(this, config()("PostureManager"));
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] PostureManager configuration is missing.");
+    postureManager_ = std::make_shared<PostureManager>(this); // config is not mandatory
+  }
 
   // Load other configurations
   if(config().has("Contacts"))
@@ -129,6 +139,24 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
     const auto & contactsConfig = config()("Contacts");
     ForceColl::SurfaceContact::loadVerticesMap(contactsConfig("Surface", mc_rtc::Configuration{}));
     ForceColl::GraspContact::loadVerticesMap(contactsConfig("Grasp", mc_rtc::Configuration{}));
+  }
+  if(config_.has("basePose"))
+  {
+    // Initialize basePose from yaml only once
+    auto configPose = config_("basePose").operator sva::PTransformd();
+    auto & ds = datastore();
+    if(!ds.has("MCC::ResetBasePose"))
+    {
+      ds.make<sva::PTransformd>("MCC::ResetBasePose", configPose);
+    }
+    else
+    {
+      ds.assign<sva::PTransformd>("MCC::ResetBasePose", configPose);
+    }
+  }
+  if(config().has("saveLastBasePose"))
+  {
+    saveLastBasePose_ = config()("saveLastBasePose");
   }
 
   // Setup anchor
@@ -140,6 +168,17 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
 void MultiContactController::reset(const mc_control::ControllerResetData & resetData)
 {
   mc_control::fsm::Controller::reset(resetData);
+
+  posture_tasks_[robot().name()]->reset();
+
+  if(datastore().has("MCC::ResetBasePose"))
+  {
+    const auto & pose = datastore().get<sva::PTransformd>("MCC::ResetBasePose");
+    robot().posW(pose);
+    realRobot().posW(pose);
+    mc_rtc::log::info("[MultiContactController] update basePose:\ntrans={}\nrot=\n{}", pose.translation().transpose(),
+                      pose.rotation());
+  }
 
   enableManagerUpdate_ = false;
 
@@ -163,6 +202,7 @@ bool MultiContactController::run()
     // Update managers
     limbManagerSet_->update();
     centroidalManager_->update();
+    postureManager_->update();
   }
 
   return mc_control::fsm::Controller::run();
@@ -182,9 +222,24 @@ void MultiContactController::stop()
   // Clean up managers
   limbManagerSet_->stop();
   centroidalManager_->stop();
+  postureManager_->stop();
 
   // Clean up anchor
   setDefaultAnchor();
+
+  // Save last base pose to keep base pose after changing controllers
+  if(saveLastBasePose_)
+  {
+    auto & ds = datastore();
+    if(!ds.has("MCC::ResetBasePose"))
+    {
+      ds.make<sva::PTransformd>("MCC::ResetBasePose", robot().posW());
+    }
+    else
+    {
+      ds.assign<sva::PTransformd>("MCC::ResetBasePose", robot().posW());
+    }
+  }
 
   mc_control::fsm::Controller::stop();
 }

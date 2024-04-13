@@ -258,5 +258,8 @@ protected:
 
   //! Whether to require updating impedance gains for limb tasks
   bool requireImpGainUpdate_ = true;
+
+  //! Whether to require updating target pose for contact constraint
+  bool requireTouchDownPoseUpdate_ = false;
 };
 } // namespace MCC

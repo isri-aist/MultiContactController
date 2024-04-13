@@ -187,6 +187,20 @@ public:
   CentroidalManager(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig = {});
 
   /** \brief Reset.
+      \param constraintSetConfig mc_rtc configuration that has nominalCentroidalPose
+
+      This method should be called once when controller is reset.
+      The validity of nominalCentroidalPoseConfig should be checked before calling this function.
+
+      An example of \p nominalCentroidalPoseConfig is as follows.
+      @code
+      nominalCentroidalPose:
+        translation: [0.0, 0.0, 0.966]
+      @endcode
+  */
+  virtual void reset(const mc_rtc::Configuration & nominalCentroidalPoseConfig);
+
+  /** \brief Reset.
 
       This method should be called once when controller is reset.
    */
@@ -228,6 +242,11 @@ public:
 
   /** \brief Set anchor frame. */
   void setAnchorFrame();
+
+  /** \brief Check whether reference CoM trajectory is completed at given time
+      \param t time
+  */
+  bool isFinished(const double t) const;
 
 protected:
   /** \brief Const accessor to the controller. */

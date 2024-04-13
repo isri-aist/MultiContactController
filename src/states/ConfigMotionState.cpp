@@ -5,6 +5,7 @@
 #include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
+#include <MultiContactController/PostureManager.h>
 #include <MultiContactController/states/ConfigMotionState.h>
 
 using namespace MCC;
@@ -57,6 +58,21 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
     }
   }
 
+  // Send nominal posture
+  if(config_.has("configs") && config_("configs").has("nominalPostureList"))
+  {
+    for(const auto & nominalPostureConfig : config_("configs")("nominalPostureList"))
+    {
+      double time = nominalPostureConfig("time");
+      if(!std::isnan(baseTime))
+      {
+        time += baseTime;
+      }
+      PostureManager::PostureMap nominalPosture = nominalPostureConfig("target");
+      ctl().postureManager_->appendNominalPosture(time, nominalPosture);
+    }
+  }
+
   // Set collision configuration list
   collisionConfigList_.clear();
   if(config_.has("configs") && config_("configs").has("collisionConfigList"))
@@ -87,6 +103,20 @@ void ConfigMotionState::start(mc_control::fsm::Controller & _ctl)
       }
       taskConfigList_.emplace(static_cast<double>(taskConfig("time")), taskConfig);
     }
+  }
+
+  // Set option to wait for finishing swing motion
+  if(config_.has("configs") && config_("configs").has("exitWhenLimbSwingFinished"))
+  {
+    exitWhenLimbSwingFinished_ = static_cast<bool>(config_("configs")("exitWhenLimbSwingFinished"));
+  }
+  if(config_.has("configs") && config_("configs").has("exitWhenCentroidalManagerFinished"))
+  {
+    exitWhenCentroidalManagerFinished_ = static_cast<bool>(config_("configs")("exitWhenCentroidalManagerFinished"));
+  }
+  if(config_.has("configs") && config_("configs").has("exitWhenPostureManagerFinished"))
+  {
+    exitWhenPostureManagerFinished_ = static_cast<bool>(config_("configs")("exitWhenPostureManagerFinished"));
   }
 
   output("OK");
@@ -161,7 +191,10 @@ bool ConfigMotionState::run(mc_control::fsm::Controller &)
     }
   }
 
-  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty();
+  return !ctl().limbManagerSet_->contactCommandStacked() && taskConfigList_.empty() && collisionConfigList_.empty()
+         && (!exitWhenLimbSwingFinished_ || !ctl().limbManagerSet_->isExecutingLimbSwing())
+         && (!exitWhenCentroidalManagerFinished_ || ctl().centroidalManager_->isFinished(ctl().t()))
+         && (!exitWhenPostureManagerFinished_ || ctl().postureManager_->isFinished(ctl().t()));
 }
 
 void ConfigMotionState::teardown(mc_control::fsm::Controller &) {}
