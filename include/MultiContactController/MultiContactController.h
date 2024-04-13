@@ -28,16 +28,18 @@ struct MultiContactController : public mc_control::fsm::Controller
 public:
   /** \brief Constructor.
 
-      basePose in configuration allows users to set the initial pose of the robot.
-      It will be registered on datastore in this function and reflected in the reset function.
+      If the pose is stored in the "basePose" key of the controller configuration, the pose will be registered in the
+     "MCC::ResetBasePose" key of the datastore and applied to the baselink poses of the control and real robots in the
+     reset function.
    */
   MultiContactController(mc_rbdyn::RobotModulePtr rm, double dt, const mc_rtc::Configuration & _config);
 
   /** \brief Reset a controller.
 
       This method is called when starting the controller.
-      When MCC::ResetBasePose is in datastore, the posW of both control and real robots
-      are overwritten by it in this function.
+
+      If the pose is registered in the "MCC::ResetBasePose" key of the datastore, the pose will be applied to the
+     baselink poses of the control and real robots in the reset function.
    */
   void reset(const mc_control::ControllerResetData & resetData) override;
 
@@ -50,9 +52,10 @@ public:
   /** \brief Stop a controller.
 
       This method is called when stopping the controller.
-      When saveLastBasePose is enabled in the configuration,
-      the poseW of control robot will be saved in datastore at the end of this function
-      to use it for initialization of the following controller.
+
+       If the "saveLastBasePose" key in the controller configuration is true, the baselink pose of the current control
+     robot is registered in the "MCC::ResetBasePose" key of the datastore. This is intended to be used in subsequent
+     controller initializations.
    */
   void stop() override;
 

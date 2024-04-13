@@ -40,7 +40,7 @@ void PostureManager::update()
   PostureMap nominalPosture = getNominalPosture(ctl().t());
   postureTask_->target(nominalPosture); // this function will do nothing if nominalPosture is empty
 
-  // TODO: update postureTask_->refVel and postureTask_->refAcc
+  // \todo update postureTask_->refVel and postureTask_->refAcc
 }
 
 void PostureManager::stop()
