@@ -152,9 +152,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a63accdf7037b020351d85c119369e501"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classMCC_1_1CentroidalManager.html">CentroidalManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1MultiContactController.html#a63accdf7037b020351d85c119369e501">centroidalManager_</a></td></tr>
 <tr class="memdesc:a63accdf7037b020351d85c119369e501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centroidal manager.  <a href="structMCC_1_1MultiContactController.html#a63accdf7037b020351d85c119369e501">More...</a><br /></td></tr>
 <tr class="separator:a63accdf7037b020351d85c119369e501"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44377af990a2e11a71896b9f9f7eb9a8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classMCC_1_1PostureManager.html">PostureManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1MultiContactController.html#a44377af990a2e11a71896b9f9f7eb9a8">postureManager_</a></td></tr>
+<tr class="memdesc:a44377af990a2e11a71896b9f9f7eb9a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posture manager.  <a href="structMCC_1_1MultiContactController.html#a44377af990a2e11a71896b9f9f7eb9a8">More...</a><br /></td></tr>
+<tr class="separator:a44377af990a2e11a71896b9f9f7eb9a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28f5f9a4ec3cd4e419bb7b7ceed707c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1MultiContactController.html#a28f5f9a4ec3cd4e419bb7b7ceed707c5">enableManagerUpdate_</a> = false</td></tr>
 <tr class="memdesc:a28f5f9a4ec3cd4e419bb7b7ceed707c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to enable manager update.  <a href="structMCC_1_1MultiContactController.html#a28f5f9a4ec3cd4e419bb7b7ceed707c5">More...</a><br /></td></tr>
 <tr class="separator:a28f5f9a4ec3cd4e419bb7b7ceed707c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3d0b7da49083f5dae50fd24a07c8796"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1MultiContactController.html#ad3d0b7da49083f5dae50fd24a07c8796">saveLastBasePose_</a> = false</td></tr>
+<tr class="memdesc:ad3d0b7da49083f5dae50fd24a07c8796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to save last base pose when stopping this controller.  <a href="structMCC_1_1MultiContactController.html#ad3d0b7da49083f5dae50fd24a07c8796">More...</a><br /></td></tr>
+<tr class="separator:ad3d0b7da49083f5dae50fd24a07c8796"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -168,7 +174,7 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Humanoid multi-contact motion controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00025">25</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00026">26</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5a4f66ba6d45b1caea4aa10095ac6afb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5a4f66ba6d45b1caea4aa10095ac6afb">&#9670;&nbsp;</a></span>MultiContactController()</h2>
@@ -203,6 +209,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
+<p>If the pose is stored in the "basePose" key of the controller configuration, the pose will be registered in the "MCC::ResetBasePose" key of the datastore and applied to the baselink poses of the control and real robots in the reset function. </p>
 
 </div>
 </div>
@@ -232,7 +239,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Get timestep. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00062">62</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00075">75</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -261,7 +268,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Get controller name. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00050">50</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00063">63</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -290,7 +297,8 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reset a controller. </p>
-<p>This method is called when starting the controller. </p>
+<p>This method is called when starting the controller.</p>
+<p>If the pose is registered in the "MCC::ResetBasePose" key of the datastore, the pose will be applied to the baselink poses of the control and real robots in the reset function. </p>
 
 </div>
 </div>
@@ -365,7 +373,8 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stop a controller. </p>
-<p>This method is called when stopping the controller. </p>
+<p>This method is called when stopping the controller.</p>
+<p>If the "saveLastBasePose" key in the controller configuration is true, the baselink pose of the current control robot is registered in the "MCC::ResetBasePose" key of the datastore. This is intended to be used in subsequent controller initializations. </p>
 
 </div>
 </div>
@@ -394,7 +403,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Get current time. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00056">56</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00069">69</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -413,7 +422,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Base link orientation task. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00075">75</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00088">88</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -431,7 +440,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Centroidal manager. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00087">87</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00100">100</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -449,7 +458,7 @@ Protected Attributes</h2></td></tr>
 
 <p>CoM task. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00072">72</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00085">85</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -467,7 +476,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Whether to enable manager update. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00090">90</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00106">106</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -485,7 +494,7 @@ Protected Attributes</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> manager set. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00084">84</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00097">97</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -503,7 +512,7 @@ Protected Attributes</h2></td></tr>
 
 <p><a class="el" href="structMCC_1_1Limb.html" title="Limb.">Limb</a> tasks. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00081">81</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00094">94</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -521,7 +530,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Momentum task. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00078">78</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00091">91</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -547,7 +556,43 @@ Protected Attributes</h2></td></tr>
 
 <p>Controller name. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00094">94</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00113">113</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+
+</div>
+</div>
+<a id="a44377af990a2e11a71896b9f9f7eb9a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44377af990a2e11a71896b9f9f7eb9a8">&#9670;&nbsp;</a></span>postureManager_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classMCC_1_1PostureManager.html">PostureManager</a>&gt; MCC::MultiContactController::postureManager_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Posture manager. </p>
+
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00103">103</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+
+</div>
+</div>
+<a id="ad3d0b7da49083f5dae50fd24a07c8796"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3d0b7da49083f5dae50fd24a07c8796">&#9670;&nbsp;</a></span>saveLastBasePose_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCC::MultiContactController::saveLastBasePose_ = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether to save last base pose when stopping this controller. </p>
+
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00109">109</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>
@@ -573,7 +618,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Current time [sec]. </p>
 
-<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00097">97</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MultiContactController_8h_source.html#l00116">116</a> of file <a class="el" href="MultiContactController_8h_source.html">MultiContactController.h</a>.</p>
 
 </div>
 </div>

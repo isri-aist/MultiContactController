@@ -83,6 +83,7 @@ $(function() {
 , <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#a0496e018b2f44146b2b431f95867a08f">MCC::CentroidalManagerDDP</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#a18c3be311765f3874593c5e4ca3ef8d6">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#af4ee52dfa25e8a6c4bbd301e23517b07">MCC::LimbManagerSet</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#af8c1409fbdd46a1e070743758f58bf2e">MCC::PostureManager</a>
 </li>
 <li>addToLogger()
 : <a class="el" href="classMCC_1_1CentroidalManager.html#a04b097ea2d51078aead4a0643b1caad2">MCC::CentroidalManager</a>
@@ -97,9 +98,13 @@ $(function() {
 , <a class="el" href="structMCC_1_1CentroidalManagerSRB_1_1Configuration.html#a6a828e4add03e5207be00d57675ef6ef">MCC::CentroidalManagerSRB::Configuration</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#acab85571ccb21fd35ca1553e0d23130c">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#a4c3b0703f0cb87882a0c801f7f2f1b12">MCC::LimbManagerSet</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#ac9dc095632c0cfa6349f46d4952e8b1b">MCC::PostureManager</a>
 </li>
 <li>appendNominalCentroidalPose()
 : <a class="el" href="classMCC_1_1CentroidalManager.html#a4eb5da7c9d5a522e73c0a7c393ddd378">MCC::CentroidalManager</a>
+</li>
+<li>appendNominalPosture()
+: <a class="el" href="classMCC_1_1PostureManager.html#a4d0c79e9ae8299ef419b5c7ae9b69ea5">MCC::PostureManager</a>
 </li>
 <li>appendStepCommand()
 : <a class="el" href="classMCC_1_1LimbManager.html#a5beb12e50a4a4cf556e45cfaff56a7f3">MCC::LimbManager</a>
@@ -147,6 +152,7 @@ $(function() {
 </li>
 <li>complete()
 : <a class="el" href="structMCC_1_1InitialState.html#aa386e100484ba6d23e62c2afa62128b5">MCC::InitialState</a>
+, <a class="el" href="structMCC_1_1InterruptState.html#adf42f5f5a665e5bd14490651eec20187">MCC::InterruptState</a>
 </li>
 <li>config()
 : <a class="el" href="classMCC_1_1CentroidalManager.html#afab0f793cecc3fd329daa5f71581ed6d">MCC::CentroidalManager</a>
@@ -155,8 +161,9 @@ $(function() {
 , <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#a497c181d4ee89643aa234ec3a5437e47">MCC::CentroidalManagerSRB</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#ad7c41ec02652478dbdd627abf476011e">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#a4487e51ac32f7fa34957dabf1cf46a10">MCC::LimbManagerSet</a>
-, <a class="el" href="classMCC_1_1SwingTraj.html#a600e702f17906fdcf664d344983fb92e">MCC::SwingTraj</a>
-, <a class="el" href="classMCC_1_1SwingTrajCubicSplineSimple.html#a594a18386b6b5a7af56cffe76f5c1867">MCC::SwingTrajCubicSplineSimple</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#a9081e146a3570af685031aeb56ad8deb">MCC::PostureManager</a>
+, <a class="el" href="classMCC_1_1SwingTraj.html#ae772344557f18d9b84d726c42fd432a5">MCC::SwingTraj</a>
+, <a class="el" href="classMCC_1_1SwingTrajCubicSplineSimple.html#a12570ec1396e0ed00e1729510923b1b0">MCC::SwingTrajCubicSplineSimple</a>
 </li>
 <li>Configuration()
 : <a class="el" href="structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a016b17cf1c649530d7e156e102365960">MCC::SwingTrajCubicSplineSimple::Configuration</a>
@@ -174,10 +181,11 @@ $(function() {
 : <a class="el" href="classMCC_1_1LimbManagerSet.html#a980462f4af14ae6e05ea57a21b6f64f7">MCC::LimbManagerSet</a>
 </li>
 <li>ctl()
-: <a class="el" href="classMCC_1_1CentroidalManager.html#a0fce9a80322b8dbf923f99ff08b1e9ad">MCC::CentroidalManager</a>
-, <a class="el" href="classMCC_1_1LimbManager.html#a033caa8cfce1cb48b23546ea87fb3c83">MCC::LimbManager</a>
-, <a class="el" href="classMCC_1_1LimbManagerSet.html#a94082409d3630c57e9bc8c31b9811bf3">MCC::LimbManagerSet</a>
-, <a class="el" href="structMCC_1_1State.html#ad142056e534be96d4953541728016468">MCC::State</a>
+: <a class="el" href="classMCC_1_1CentroidalManager.html#a2aa5f0aa8d35dd5c76b1d340e402f98b">MCC::CentroidalManager</a>
+, <a class="el" href="classMCC_1_1LimbManager.html#a6b81a1be14441dbcf28a2d5d2e416ae5">MCC::LimbManager</a>
+, <a class="el" href="classMCC_1_1LimbManagerSet.html#a92ebe7648f2b120108dbffa476047ffe">MCC::LimbManagerSet</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#abf6aaf45fd5efd131dfe522db45d95c9">MCC::PostureManager</a>
+, <a class="el" href="structMCC_1_1State.html#af1cd1093bf50b9d9fadb07d8974a75cc">MCC::State</a>
 </li>
 </ul>
 
@@ -209,11 +217,25 @@ $(function() {
 <li>getNominalCentroidalPose()
 : <a class="el" href="classMCC_1_1CentroidalManager.html#a89411fb179bca43386211aa30237fa9c">MCC::CentroidalManager</a>
 </li>
+<li>getNominalPosture()
+: <a class="el" href="classMCC_1_1PostureManager.html#a33106fb2bd0df005d1ba1093c31a734b">MCC::PostureManager</a>
+</li>
 <li>GripperCommand()
 : <a class="el" href="structMCC_1_1GripperCommand.html#ab7f4993502b74234e6563cfc34564844">MCC::GripperCommand</a>
 </li>
 <li>gripperCommandList()
 : <a class="el" href="classMCC_1_1LimbManager.html#ac89daff67db51448db6e08fa47df080c">MCC::LimbManager</a>
+</li>
+</ul>
+
+
+<h3><a id="index_i"></a>- i -</h3><ul>
+<li>isExecutingLimbSwing()
+: <a class="el" href="classMCC_1_1LimbManagerSet.html#ae2559a02f024ecb2250cfc6160de2f62">MCC::LimbManagerSet</a>
+</li>
+<li>isFinished()
+: <a class="el" href="classMCC_1_1CentroidalManager.html#a10089e1bfd43c2d0ef3541176ee7c17d">MCC::CentroidalManager</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#a30db38adb4f9ded340374e1a8c87ecd3">MCC::PostureManager</a>
 </li>
 </ul>
 
@@ -240,6 +262,7 @@ $(function() {
 , <a class="el" href="structMCC_1_1CentroidalManagerPC_1_1Configuration.html#a94d203a5a3ba734f2b517c1d6687fb4d">MCC::CentroidalManagerPC::Configuration</a>
 , <a class="el" href="structMCC_1_1CentroidalManagerSRB_1_1Configuration.html#a9a3e5109c24637e43c0927ace682b8e0">MCC::CentroidalManagerSRB::Configuration</a>
 , <a class="el" href="structMCC_1_1LimbManager_1_1Configuration.html#a7eba80db74dbd438a758bbf3bcf56743">MCC::LimbManager::Configuration</a>
+, <a class="el" href="structMCC_1_1PostureManager_1_1Configuration.html#a966d340e3fb414e581b2c382ec2b12d7">MCC::PostureManager::Configuration</a>
 , <a class="el" href="structMCC_1_1SwingTraj_1_1Configuration.html#ac1ddace86892e82915e80dd810a51765">MCC::SwingTraj::Configuration</a>
 , <a class="el" href="structMCC_1_1SwingTrajCubicSplineSimple_1_1Configuration.html#a6ce463596515fa6cd3932c43620b1ac7">MCC::SwingTrajCubicSplineSimple::Configuration</a>
 </li>
@@ -279,6 +302,9 @@ $(function() {
 : <a class="el" href="classMCC_1_1SwingTraj.html#a2e32d64cd74526cf824bae709da4f243">MCC::SwingTraj</a>
 , <a class="el" href="classMCC_1_1SwingTrajCubicSplineSimple.html#a41e610bcc63d81e2f5c6884c06b01e4a">MCC::SwingTrajCubicSplineSimple</a>
 </li>
+<li>PostureManager()
+: <a class="el" href="classMCC_1_1PostureManager.html#aa5db127de1b1f39c00bd7eb1a313264e">MCC::PostureManager</a>
+</li>
 </ul>
 
 
@@ -290,6 +316,7 @@ $(function() {
 : <a class="el" href="classMCC_1_1CentroidalManager.html#a21df479bb9449d354d9d66a5afde30cf">MCC::CentroidalManager</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#aa9d0f2ebbd4f398d4292e556d403ae92">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#af9f1f36132294aba81ee37fa91953148">MCC::LimbManagerSet</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#a9b0dd5f9a3e4e56dccb7ca94029c156b">MCC::PostureManager</a>
 </li>
 <li>removeFromLogger()
 : <a class="el" href="structMCC_1_1CentroidalManager_1_1Configuration.html#a1e34521d53180b06b3ebbd56c745f266">MCC::CentroidalManager::Configuration</a>
@@ -298,23 +325,26 @@ $(function() {
 , <a class="el" href="classMCC_1_1CentroidalManager.html#a20b132ebe08b9fac45043524949c84b8">MCC::CentroidalManager</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#afb0396508e45393c784c2d548ccb756e">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#af597a8073ded054f74349ea2a812bfa2">MCC::LimbManagerSet</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#ad422e9db551a7bc94c19587501fd9500">MCC::PostureManager</a>
 </li>
 <li>reset()
 : <a class="el" href="structMCC_1_1CentroidalManager_1_1ControlData.html#a490b1b39e77ccd79b65498e8ef44f9c6">MCC::CentroidalManager::ControlData</a>
 , <a class="el" href="structMCC_1_1CentroidalManager_1_1RefData.html#a589dc6ec49f808e01edb5b968cfd8874">MCC::CentroidalManager::RefData</a>
-, <a class="el" href="classMCC_1_1CentroidalManager.html#a60d989e553d1998499f0c52918150b50">MCC::CentroidalManager</a>
+, <a class="el" href="classMCC_1_1CentroidalManager.html#a0cb4ecc9729de90759da6d89cf25caa8">MCC::CentroidalManager</a>
 , <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#acf28c8827ee801c8e73938156aa61b86">MCC::CentroidalManagerDDP</a>
 , <a class="el" href="classMCC_1_1CentroidalManagerPC.html#aec617dbf686eccbcfb7cbaaa681a47ec">MCC::CentroidalManagerPC</a>
 , <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#af6792f33ca3dcf4e8768d5f197928bf0">MCC::CentroidalManagerSRB</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#adfc2f479ba5cd2fecdc9b1c1eb203985">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#a1c094d97b238cf5f1c6902c03a1790ec">MCC::LimbManagerSet</a>
 , <a class="el" href="structMCC_1_1MultiContactController.html#ac9abc229b6b04cac7f61f05267661082">MCC::MultiContactController</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#a82da4ff03794456730ef8468294da84f">MCC::PostureManager</a>
 </li>
 <li>run()
 : <a class="el" href="structMCC_1_1ConfigMotionState.html#af900ce3c4cf08a704309c9f6257e2449">MCC::ConfigMotionState</a>
 , <a class="el" href="structMCC_1_1GuiStepState.html#a2b852261b8d983e4f25b24e0cd3f3f71">MCC::GuiStepState</a>
 , <a class="el" href="structMCC_1_1GuiWalkState.html#ad873825ffcc9f58db891bf076bfeaf8a">MCC::GuiWalkState</a>
 , <a class="el" href="structMCC_1_1InitialState.html#aba6f4a61d2137cfcc21c5463cbbdc04a">MCC::InitialState</a>
+, <a class="el" href="structMCC_1_1InterruptState.html#a24379021a5f505b942938e52327bfbde">MCC::InterruptState</a>
 , <a class="el" href="structMCC_1_1MultiContactController.html#a41ed97703180c45afb309728fe456f3f">MCC::MultiContactController</a>
 </li>
 <li>runMpc()
@@ -353,6 +383,7 @@ $(function() {
 , <a class="el" href="structMCC_1_1GuiStepState.html#ac4379b28c21d6e07e165979986f848c4">MCC::GuiStepState</a>
 , <a class="el" href="structMCC_1_1GuiWalkState.html#a70f284d39589298c42a7188f2071acb7">MCC::GuiWalkState</a>
 , <a class="el" href="structMCC_1_1InitialState.html#a7e2617b5609212284a75fa5ab08ee6aa">MCC::InitialState</a>
+, <a class="el" href="structMCC_1_1InterruptState.html#ac61f2ca418c7c3b390d478eb847079a9">MCC::InterruptState</a>
 , <a class="el" href="structMCC_1_1State.html#a9fae2727a64c1c39c56b53ed544c1d36">MCC::State</a>
 </li>
 <li>StepCommand()
@@ -363,6 +394,7 @@ $(function() {
 , <a class="el" href="classMCC_1_1LimbManager.html#ab56f85170ef0d9acc649fe9d23d2748e">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#aa9560988cc1dba8a49b875ba5cdd3d20">MCC::LimbManagerSet</a>
 , <a class="el" href="structMCC_1_1MultiContactController.html#a7d1700772970de16a193d4cd4ab3344a">MCC::MultiContactController</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#a41ace923ada583b35f50280fe1842344">MCC::PostureManager</a>
 </li>
 <li>SwingCommand()
 : <a class="el" href="structMCC_1_1SwingCommand.html#aa79cc716d954b3679bf84ae4706c4b34">MCC::SwingCommand</a>
@@ -392,6 +424,7 @@ $(function() {
 , <a class="el" href="structMCC_1_1GuiStepState.html#a50eda93feb85731db5573e06bedc9b7c">MCC::GuiStepState</a>
 , <a class="el" href="structMCC_1_1GuiWalkState.html#a1fac314292aa11f37f976d08373a000f">MCC::GuiWalkState</a>
 , <a class="el" href="structMCC_1_1InitialState.html#ab684262777fe72f5a114a8e1d0287ba2">MCC::InitialState</a>
+, <a class="el" href="structMCC_1_1InterruptState.html#aa68b463353cd0e4b158f1fe292d35f61">MCC::InterruptState</a>
 </li>
 <li>touchDown()
 : <a class="el" href="classMCC_1_1SwingTraj.html#a7a41b00b58b34a86014ab5b3832180e7">MCC::SwingTraj</a>
@@ -408,6 +441,7 @@ $(function() {
 : <a class="el" href="classMCC_1_1CentroidalManager.html#a682d18e3177c30654b8802f83066184d">MCC::CentroidalManager</a>
 , <a class="el" href="classMCC_1_1LimbManager.html#a4e8748d49842da341832ee2775c162cb">MCC::LimbManager</a>
 , <a class="el" href="classMCC_1_1LimbManagerSet.html#a4155865fdb95c4b04c54756f762aace6">MCC::LimbManagerSet</a>
+, <a class="el" href="classMCC_1_1PostureManager.html#acf72c2c14796c6b326a88ad0cf30363a">MCC::PostureManager</a>
 </li>
 </ul>
 

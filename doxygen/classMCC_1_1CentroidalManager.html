@@ -128,6 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ddde88244bd11134d9e1a57da76921c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a0ddde88244bd11134d9e1a57da76921c">CentroidalManager</a> (<a class="el" href="structMCC_1_1MultiContactController.html">MultiContactController</a> *ctlPtr, const mc_rtc::Configuration &amp;mcRtcConfig={})</td></tr>
 <tr class="memdesc:a0ddde88244bd11134d9e1a57da76921c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classMCC_1_1CentroidalManager.html#a0ddde88244bd11134d9e1a57da76921c">More...</a><br /></td></tr>
 <tr class="separator:a0ddde88244bd11134d9e1a57da76921c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cb4ecc9729de90759da6d89cf25caa8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a0cb4ecc9729de90759da6d89cf25caa8">reset</a> (const mc_rtc::Configuration &amp;nominalCentroidalPoseConfig)</td></tr>
+<tr class="memdesc:a0cb4ecc9729de90759da6d89cf25caa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset.  <a href="classMCC_1_1CentroidalManager.html#a0cb4ecc9729de90759da6d89cf25caa8">More...</a><br /></td></tr>
+<tr class="separator:a0cb4ecc9729de90759da6d89cf25caa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60d989e553d1998499f0c52918150b50"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a60d989e553d1998499f0c52918150b50">reset</a> ()</td></tr>
 <tr class="memdesc:a60d989e553d1998499f0c52918150b50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset.  <a href="classMCC_1_1CentroidalManager.html#a60d989e553d1998499f0c52918150b50">More...</a><br /></td></tr>
 <tr class="separator:a60d989e553d1998499f0c52918150b50"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +161,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c1dcd98d5e68f394d86e4d3c804f7e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a5c1dcd98d5e68f394d86e4d3c804f7e5">setAnchorFrame</a> ()</td></tr>
 <tr class="memdesc:a5c1dcd98d5e68f394d86e4d3c804f7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set anchor frame.  <a href="classMCC_1_1CentroidalManager.html#a5c1dcd98d5e68f394d86e4d3c804f7e5">More...</a><br /></td></tr>
 <tr class="separator:a5c1dcd98d5e68f394d86e4d3c804f7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10089e1bfd43c2d0ef3541176ee7c17d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCC_1_1CentroidalManager.html#a10089e1bfd43c2d0ef3541176ee7c17d">isFinished</a> (const double t) const</td></tr>
+<tr class="memdesc:a10089e1bfd43c2d0ef3541176ee7c17d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether reference CoM trajectory is completed at given time.  <a href="classMCC_1_1CentroidalManager.html#a10089e1bfd43c2d0ef3541176ee7c17d">More...</a><br /></td></tr>
+<tr class="separator:a10089e1bfd43c2d0ef3541176ee7c17d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -584,7 +590,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00240">240</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00259">259</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -613,7 +619,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00234">234</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00253">253</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -642,6 +648,32 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get nominal centroidal pose. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a10089e1bfd43c2d0ef3541176ee7c17d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10089e1bfd43c2d0ef3541176ee7c17d">&#9670;&nbsp;</a></span>isFinished()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCC::CentroidalManager::isFinished </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check whether reference CoM trajectory is completed at given time. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t</td><td>time </td></tr>
@@ -708,7 +740,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a60d989e553d1998499f0c52918150b50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60d989e553d1998499f0c52918150b50">&#9670;&nbsp;</a></span>reset()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a60d989e553d1998499f0c52918150b50">&#9670;&nbsp;</a></span>reset() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -735,6 +767,43 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classMCC_1_1CentroidalManagerDDP.html#acf28c8827ee801c8e73938156aa61b86">MCC::CentroidalManagerDDP</a>, <a class="el" href="classMCC_1_1CentroidalManagerSRB.html#af6792f33ca3dcf4e8768d5f197928bf0">MCC::CentroidalManagerSRB</a>, and <a class="el" href="classMCC_1_1CentroidalManagerPC.html#aec617dbf686eccbcfb7cbaaa681a47ec">MCC::CentroidalManagerPC</a>.</p>
 
+</div>
+</div>
+<a id="a0cb4ecc9729de90759da6d89cf25caa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cb4ecc9729de90759da6d89cf25caa8">&#9670;&nbsp;</a></span>reset() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void MCC::CentroidalManager::reset </td>
+          <td>(</td>
+          <td class="paramtype">const mc_rtc::Configuration &amp;&#160;</td>
+          <td class="paramname"><em>nominalCentroidalPoseConfig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reset. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">constraintSetConfig</td><td>mc_rtc configuration that has nominalCentroidalPose</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This method should be called once when controller is reset. The validity of nominalCentroidalPoseConfig should be checked before calling this function.</p>
+<p>An example of <code>nominalCentroidalPoseConfig</code> is as follows. </p><div class="fragment"><div class="line">nominalCentroidalPose:</div>
+<div class="line">  translation: [0.0, 0.0, 0.966]</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="acac72348bb39f953b96755a2eb037ccb"></a>
@@ -865,7 +934,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Contact list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00302">302</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00321">321</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -891,7 +960,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Control data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00287">287</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00306">306</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -917,7 +986,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00281">281</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00300">300</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -943,7 +1012,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Low-pass filter for velocity calculation. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00296">296</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00315">315</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -969,7 +1038,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Nominal centroidal pose list. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00305">305</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00324">324</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -995,7 +1064,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reference data. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00284">284</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00303">303</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -1021,7 +1090,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Robot inertia matrix [kg m^2]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00293">293</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00312">312</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -1047,7 +1116,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Robot mass [kg]. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00290">290</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00309">309</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>
@@ -1073,7 +1142,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Wrench distribution. </p>
 
-<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00299">299</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CentroidalManager_8h_source.html#l00318">318</a> of file <a class="el" href="CentroidalManager_8h_source.html">CentroidalManager.h</a>.</p>
 
 </div>
 </div>

@@ -132,6 +132,15 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a2c188d59861b291d1432906e37a134cd"><td class="memItemLeft" align="right" valign="top">std::multimap&lt; double, mc_rtc::Configuration &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1ConfigMotionState.html#a2c188d59861b291d1432906e37a134cd">taskConfigList_</a></td></tr>
 <tr class="memdesc:a2c188d59861b291d1432906e37a134cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task configuration list.  <a href="structMCC_1_1ConfigMotionState.html#a2c188d59861b291d1432906e37a134cd">More...</a><br /></td></tr>
 <tr class="separator:a2c188d59861b291d1432906e37a134cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcf02a5fe71ac06797c6a3963849defd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1ConfigMotionState.html#abcf02a5fe71ac06797c6a3963849defd">exitWhenLimbSwingFinished_</a> = false</td></tr>
+<tr class="memdesc:abcf02a5fe71ac06797c6a3963849defd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Option to select whether this state should wait for finishing swing motion or not.  <a href="structMCC_1_1ConfigMotionState.html#abcf02a5fe71ac06797c6a3963849defd">More...</a><br /></td></tr>
+<tr class="separator:abcf02a5fe71ac06797c6a3963849defd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6351ba7df678d28b3a0cf4659e44347"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1ConfigMotionState.html#aa6351ba7df678d28b3a0cf4659e44347">exitWhenCentroidalManagerFinished_</a> = false</td></tr>
+<tr class="memdesc:aa6351ba7df678d28b3a0cf4659e44347"><td class="mdescLeft">&#160;</td><td class="mdescRight">Option to select whether this state should wait for finishing reference CoM trajectory or not.  <a href="structMCC_1_1ConfigMotionState.html#aa6351ba7df678d28b3a0cf4659e44347">More...</a><br /></td></tr>
+<tr class="separator:aa6351ba7df678d28b3a0cf4659e44347"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65c08fe52d1c756ae28329e25b4e151d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1ConfigMotionState.html#a65c08fe52d1c756ae28329e25b4e151d">exitWhenPostureManagerFinished_</a> = false</td></tr>
+<tr class="memdesc:a65c08fe52d1c756ae28329e25b4e151d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Option to select whether this state should wait for finishing reference postures or not.  <a href="structMCC_1_1ConfigMotionState.html#a65c08fe52d1c756ae28329e25b4e151d">More...</a><br /></td></tr>
+<tr class="separator:a65c08fe52d1c756ae28329e25b4e151d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_structMCC_1_1State"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_structMCC_1_1State')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="structMCC_1_1State.html">MCC::State</a></td></tr>
 <tr class="memitem:a40599486865666595af00470a0bdb8fe inherit pro_attribs_structMCC_1_1State"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMCC_1_1MultiContactController.html">MultiContactController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMCC_1_1State.html#a40599486865666595af00470a0bdb8fe">ctlPtr_</a> = nullptr</td></tr>
 <tr class="memdesc:a40599486865666595af00470a0bdb8fe inherit pro_attribs_structMCC_1_1State"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to controller.  <a href="structMCC_1_1State.html#a40599486865666595af00470a0bdb8fe">More...</a><br /></td></tr>
@@ -260,6 +269,84 @@ Additional Inherited Members</h2></td></tr>
 <p>Collision configuration list. </p>
 
 <p class="definition">Definition at line <a class="el" href="ConfigMotionState_8h_source.html#l00024">24</a> of file <a class="el" href="ConfigMotionState_8h_source.html">ConfigMotionState.h</a>.</p>
+
+</div>
+</div>
+<a id="aa6351ba7df678d28b3a0cf4659e44347"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6351ba7df678d28b3a0cf4659e44347">&#9670;&nbsp;</a></span>exitWhenCentroidalManagerFinished_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCC::ConfigMotionState::exitWhenCentroidalManagerFinished_ = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Option to select whether this state should wait for finishing reference CoM trajectory or not. </p>
+
+<p class="definition">Definition at line <a class="el" href="ConfigMotionState_8h_source.html#l00033">33</a> of file <a class="el" href="ConfigMotionState_8h_source.html">ConfigMotionState.h</a>.</p>
+
+</div>
+</div>
+<a id="abcf02a5fe71ac06797c6a3963849defd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcf02a5fe71ac06797c6a3963849defd">&#9670;&nbsp;</a></span>exitWhenLimbSwingFinished_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCC::ConfigMotionState::exitWhenLimbSwingFinished_ = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Option to select whether this state should wait for finishing swing motion or not. </p>
+
+<p class="definition">Definition at line <a class="el" href="ConfigMotionState_8h_source.html#l00030">30</a> of file <a class="el" href="ConfigMotionState_8h_source.html">ConfigMotionState.h</a>.</p>
+
+</div>
+</div>
+<a id="a65c08fe52d1c756ae28329e25b4e151d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65c08fe52d1c756ae28329e25b4e151d">&#9670;&nbsp;</a></span>exitWhenPostureManagerFinished_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCC::ConfigMotionState::exitWhenPostureManagerFinished_ = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Option to select whether this state should wait for finishing reference postures or not. </p>
+
+<p class="definition">Definition at line <a class="el" href="ConfigMotionState_8h_source.html#l00036">36</a> of file <a class="el" href="ConfigMotionState_8h_source.html">ConfigMotionState.h</a>.</p>
 
 </div>
 </div>

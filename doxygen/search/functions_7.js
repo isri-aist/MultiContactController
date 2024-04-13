@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_28_29_332',['operator()',['../structstd_1_1equal__to_3_01MCC_1_1Limb_01_4.html#a97f97ae30c42061eb9cce290088d49f2',1,'std::equal_to&lt; MCC::Limb &gt;::operator()()'],['../structstd_1_1hash_3_01MCC_1_1Limb_01_4.html#abf48d6de2b4b2e76562add8c7db05454',1,'std::hash&lt; MCC::Limb &gt;::operator()()']]]
+  ['name_357',['name',['../structMCC_1_1MultiContactController.html#a228689c84ffece9a7adf51644d34f7ff',1,'MCC::MultiContactController']]]
 ];

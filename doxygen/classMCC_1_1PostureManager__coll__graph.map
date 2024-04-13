@@ -1,0 +1,6 @@
+<map id="MCC::PostureManager" name="MCC::PostureManager">
+<area shape="rect" id="node1" title="Posture manager." alt="" coords="183,185,349,212"/>
+<area shape="rect" id="node2" href="$structMCC_1_1MultiContactController.html" title="Humanoid multi&#45;contact motion controller." alt="" coords="5,89,212,115"/>
+<area shape="rect" id="node3" title=" " alt="" coords="9,5,208,32"/>
+<area shape="rect" id="node4" href="$structMCC_1_1PostureManager_1_1Configuration.html" title="Configuration." alt="" coords="236,81,403,123"/>
+</map>
