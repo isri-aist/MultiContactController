@@ -59,6 +59,7 @@ void CentroidalManager::Configuration::load(const mc_rtc::Configuration & mcRtcC
   mcRtcConfig("enableCentroidalFeedback", enableCentroidalFeedback);
   mcRtcConfig("useTargetPoseForControlRobotAnchorFrame", useTargetPoseForControlRobotAnchorFrame);
   mcRtcConfig("useActualComForWrenchDist", useActualComForWrenchDist);
+  mcRtcConfig("actualComOffset", actualComOffset);
   mcRtcConfig("wrenchDistConfig", wrenchDistConfig);
 }
 
@@ -75,6 +76,7 @@ void CentroidalManager::Configuration::addToLogger(const std::string & baseEntry
   MC_RTC_LOG_HELPER(baseEntry + "_enableCentroidalFeedback", enableCentroidalFeedback);
   MC_RTC_LOG_HELPER(baseEntry + "_useTargetPoseForControlRobotAnchorFrame", useTargetPoseForControlRobotAnchorFrame);
   MC_RTC_LOG_HELPER(baseEntry + "_useActualComForWrenchDist", useActualComForWrenchDist);
+  MC_RTC_LOG_HELPER(baseEntry + "_actualComOffset", actualComOffset);
 }
 
 void CentroidalManager::Configuration::removeFromLogger(mc_rtc::Logger & logger)
@@ -181,7 +183,7 @@ void CentroidalManager::update()
   refData_ = calcRefData(ctl().t());
   {
     const auto & baseOriLinkName = ctl().baseOriTask_->frame_->body();
-    controlData_.actualCentroidalPose.translation() = ctl().realRobot().com();
+    controlData_.actualCentroidalPose.translation() = actualCom();
     controlData_.actualCentroidalPose.rotation() = ctl().realRobot().bodyPosW(baseOriLinkName).rotation();
     if(lowPass_.cutoffPeriod() != config().lowPassCutoffPeriod)
     {
@@ -333,43 +335,46 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                      "plannedCentroidalPose", centroidMarkerSize,
                      [this]() -> const sva::PTransformd & { return controlData_.plannedCentroidalPose; },
                      mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.8)));
-  gui.addElement({ctl().name(), config().name, "Config"},
-                 mc_rtc::gui::Label("method", [this]() -> const std::string & { return config().method; }),
-                 mc_rtc::gui::ComboInput(
-                     "nominalCentroidalPoseBaseFrame", {"LimbAveragePose", "World"},
-                     [this]() -> const std::string & { return config().nominalCentroidalPoseBaseFrame; },
-                     [this](const std::string & v) { config().nominalCentroidalPoseBaseFrame = v; }),
-                 mc_rtc::gui::ComboInput(
-                     "refComZPolicy", {"Average", "Constant", "Min", "Max"},
-                     [this]() -> const std::string & { return config().refComZPolicy; },
-                     [this](const std::string & v) { config().refComZPolicy = v; }),
-                 mc_rtc::gui::ArrayInput(
-                     "Centroidal P-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
-                     [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainP; },
-                     [this](const Eigen::Vector6d & v) { config().centroidalGainP = sva::ImpedanceVecd(v); }),
-                 mc_rtc::gui::ArrayInput(
-                     "Centroidal D-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
-                     [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainD; },
-                     [this](const Eigen::Vector6d & v) { config().centroidalGainD = sva::ImpedanceVecd(v); }),
-                 mc_rtc::gui::NumberInput(
-                     "lowPassCutoffPeriod", [this]() { return config().lowPassCutoffPeriod; },
-                     [this](double v) { config().lowPassCutoffPeriod = v; }),
-                 mc_rtc::gui::Checkbox(
-                     "useActualStateForMpc", [this]() { return config().useActualStateForMpc; },
-                     [this]() { config().useActualStateForMpc = !config().useActualStateForMpc; }),
-                 mc_rtc::gui::Checkbox(
-                     "enableCentroidalFeedback", [this]() { return config().enableCentroidalFeedback; },
-                     [this]() { config().enableCentroidalFeedback = !config().enableCentroidalFeedback; }),
-                 mc_rtc::gui::Checkbox(
-                     "useTargetPoseForControlRobotAnchorFrame",
-                     [this]() { return config().useTargetPoseForControlRobotAnchorFrame; },
-                     [this]() {
-                       config().useTargetPoseForControlRobotAnchorFrame =
-                           !config().useTargetPoseForControlRobotAnchorFrame;
-                     }),
-                 mc_rtc::gui::Checkbox(
-                     "useActualComForWrenchDist", [this]() { return config().useActualComForWrenchDist; },
-                     [this]() { config().useActualComForWrenchDist = !config().useActualComForWrenchDist; }));
+  gui.addElement(
+      {ctl().name(), config().name, "Config"},
+      mc_rtc::gui::Label("method", [this]() -> const std::string & { return config().method; }),
+      mc_rtc::gui::ComboInput(
+          "nominalCentroidalPoseBaseFrame", {"LimbAveragePose", "World"},
+          [this]() -> const std::string & { return config().nominalCentroidalPoseBaseFrame; },
+          [this](const std::string & v) { config().nominalCentroidalPoseBaseFrame = v; }),
+      mc_rtc::gui::ComboInput(
+          "refComZPolicy", {"Average", "Constant", "Min", "Max"},
+          [this]() -> const std::string & { return config().refComZPolicy; },
+          [this](const std::string & v) { config().refComZPolicy = v; }),
+      mc_rtc::gui::ArrayInput(
+          "Centroidal P-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
+          [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainP; },
+          [this](const Eigen::Vector6d & v) { config().centroidalGainP = sva::ImpedanceVecd(v); }),
+      mc_rtc::gui::ArrayInput(
+          "Centroidal D-Gain", {"ax", "ay", "az", "lx", "ly", "lz"},
+          [this]() -> const sva::ImpedanceVecd & { return config().centroidalGainD; },
+          [this](const Eigen::Vector6d & v) { config().centroidalGainD = sva::ImpedanceVecd(v); }),
+      mc_rtc::gui::NumberInput(
+          "lowPassCutoffPeriod", [this]() { return config().lowPassCutoffPeriod; },
+          [this](double v) { config().lowPassCutoffPeriod = v; }),
+      mc_rtc::gui::Checkbox(
+          "useActualStateForMpc", [this]() { return config().useActualStateForMpc; },
+          [this]() { config().useActualStateForMpc = !config().useActualStateForMpc; }),
+      mc_rtc::gui::Checkbox(
+          "enableCentroidalFeedback", [this]() { return config().enableCentroidalFeedback; },
+          [this]() { config().enableCentroidalFeedback = !config().enableCentroidalFeedback; }),
+      mc_rtc::gui::Checkbox(
+          "useTargetPoseForControlRobotAnchorFrame",
+          [this]() { return config().useTargetPoseForControlRobotAnchorFrame; },
+          [this]() {
+            config().useTargetPoseForControlRobotAnchorFrame = !config().useTargetPoseForControlRobotAnchorFrame;
+          }),
+      mc_rtc::gui::Checkbox(
+          "useActualComForWrenchDist", [this]() { return config().useActualComForWrenchDist; },
+          [this]() { config().useActualComForWrenchDist = !config().useActualComForWrenchDist; }),
+      mc_rtc::gui::ArrayInput(
+          "actualComOffset", {"x", "y", "z"}, [this]() -> const Eigen::Vector3d & { return config().actualComOffset; },
+          [this](const Eigen::Vector3d & v) { config().actualComOffset = v; }));
 }
 
 void CentroidalManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -610,4 +615,9 @@ sva::PTransformd CentroidalManager::calcAnchorFrame(const mc_rbdyn::Robot & robo
     return robot.posW();
   }
   return calcWeightedAveragePose(weightPoseList);
+}
+
+Eigen::Vector3d CentroidalManager::actualCom() const
+{
+  return ctl().realRobot().com() + config().actualComOffset;
 }
