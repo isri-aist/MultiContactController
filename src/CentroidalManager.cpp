@@ -1,9 +1,11 @@
 #include <cmath>
 
 #include <mc_rtc/gui/ArrayInput.h>
+#include <mc_rtc/gui/Button.h>
 #include <mc_rtc/gui/Checkbox.h>
 #include <mc_rtc/gui/Ellipsoid.h>
 #include <mc_rtc/gui/NumberInput.h>
+#include <mc_rtc/gui/plot.h>
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/FirstOrderImpedanceTask.h>
 #include <mc_tasks/MomentumTask.h>
@@ -376,6 +378,63 @@ void CentroidalManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
       mc_rtc::gui::ArrayInput(
           "actualComOffset", {"x", "y", "z"}, [this]() -> const Eigen::Vector3d & { return config().actualComOffset; },
           [this](const Eigen::Vector3d & v) { config().actualComOffset = v; }));
+
+  gui.addElement(
+      {ctl().name(), config().name, "Plot"}, mc_rtc::gui::ElementsStacking::Horizontal,
+      mc_rtc::gui::Button(
+          "Plot CoM-ZMP-X",
+          [this, &gui]() {
+            using namespace mc_rtc::gui;
+            gui.addPlot(
+                "CoM-ZMP-X", plot::X("t", [this]() { return ctl().t(); }),
+                plot::Y(
+                    "CoM_planned", [this]() { return controlData_.plannedCentroidalPose.translation().x(); },
+                    Color::Blue, plot::Style::Dotted),
+                plot::Y(
+                    "CoM_controlRobot", [this]() { return ctl().robot().com().x(); }, Color::Green,
+                    plot::Style::Dotted),
+                plot::Y(
+                    "CoM_realRobot", [this]() { return actualCom().x(); }, Color::Red, plot::Style::Dotted),
+                plot::Y(
+                    "ZMP_planned", [this]() { return controlData_.plannedZmp.x(); }, Color::Green),
+                plot::Y(
+                    "ZMP_control", [this]() { return controlData_.controlZmp.x(); }, Color::Magenta),
+                plot::Y(
+                    "ZMP_measured", [this]() { return controlData_.actualZmp.x(); }, Color::Red),
+                plot::Y(
+                    "SupportRegion_min", [this]() { return controlData_.contactRegionMinMax[0].x(); }, Color::Black),
+                plot::Y(
+                    "SupportRegion_max", [this]() { return controlData_.contactRegionMinMax[1].x(); }, Color::Black));
+          }),
+      mc_rtc::gui::Button("Stop CoM-ZMP-X", [&gui]() { gui.removePlot("CoM-ZMP-X"); }));
+  gui.addElement(
+      {ctl().name(), config().name, "Plot"}, mc_rtc::gui::ElementsStacking::Horizontal,
+      mc_rtc::gui::Button(
+          "Plot CoM-ZMP-Y",
+          [this, &gui]() {
+            using namespace mc_rtc::gui;
+            gui.addPlot(
+                "CoM-ZMP-Y", plot::X("t", [this]() { return ctl().t(); }),
+                plot::Y(
+                    "CoM_planned", [this]() { return controlData_.plannedCentroidalPose.translation().y(); },
+                    Color::Blue, plot::Style::Dotted),
+                plot::Y(
+                    "CoM_controlRobot", [this]() { return ctl().robot().com().y(); }, Color::Green,
+                    plot::Style::Dotted),
+                plot::Y(
+                    "CoM_realRobot", [this]() { return actualCom().y(); }, Color::Red, plot::Style::Dotted),
+                plot::Y(
+                    "ZMP_planned", [this]() { return controlData_.plannedZmp.y(); }, Color::Green),
+                plot::Y(
+                    "ZMP_control", [this]() { return controlData_.controlZmp.y(); }, Color::Magenta),
+                plot::Y(
+                    "ZMP_measured", [this]() { return controlData_.actualZmp.y(); }, Color::Red),
+                plot::Y(
+                    "SupportRegion_min", [this]() { return controlData_.contactRegionMinMax[0].y(); }, Color::Black),
+                plot::Y(
+                    "SupportRegion_max", [this]() { return controlData_.contactRegionMinMax[1].y(); }, Color::Black));
+          }),
+      mc_rtc::gui::Button("Stop CoM-ZMP-Y", [&gui]() { gui.removePlot("CoM-ZMP-Y"); }));
 }
 
 void CentroidalManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
