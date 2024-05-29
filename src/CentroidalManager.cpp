@@ -225,8 +225,9 @@ void CentroidalManager::update()
     wrenchDist_ = std::make_shared<ForceColl::WrenchDistribution>(ForceColl::getContactVecFromMap(contactList_),
                                                                   config().wrenchDistConfig);
     Eigen::Vector3d comForWrenchDist =
-        (config().useActualComForWrenchDist ? controlData_.actualCentroidalPose.translation()
-                                            : controlData_.plannedCentroidalPose.translation());
+        (config().useActualComForWrenchDist
+             ? controlData_.actualCentroidalPose.translation()
+             : controlData_.plannedCentroidalPose.translation() + config().actualComOffset);
     wrenchDist_->run(controlData_.controlCentroidalWrench, comForWrenchDist);
     controlData_.projectedControlCentroidalWrench = wrenchDist_->resultTotalWrench_;
   }
