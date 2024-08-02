@@ -144,6 +144,10 @@ $(function() {
 <li>Setup controller <div class="fragment"><div class="line">$ mkdir -p ~/.config/mc_rtc/controllers</div>
 <div class="line">$ cp ~/ros/ws_mcc/src/isri-aist/MultiContactController/etc/mc_rtc.yaml ~/.config/mc_rtc/mc_rtc.yaml</div>
 </div><!-- fragment --></li>
+<li>Setup motion configuration file (optional) <div class="fragment"><div class="line">$ roscd multi_contact_controller</div>
+<div class="line">$ cd .github/workflows</div>
+<div class="line">$ python ./scripts/mergeConfigs.py ./config/MotionSampleField.yaml ./config/DDP.yaml &gt; ~/.config/mc_rtc/controllers/MultiContactController.yaml</div>
+</div><!-- fragment --></li>
 </ol>
 <h2>Simulation execution</h2>
 <div class="fragment"><div class="line"># Terminal 1</div>
