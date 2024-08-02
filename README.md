@@ -92,6 +92,13 @@ $ mkdir -p ~/.config/mc_rtc/controllers
 $ cp ~/ros/ws_mcc/src/isri-aist/MultiContactController/etc/mc_rtc.yaml ~/.config/mc_rtc/mc_rtc.yaml
 ```
 
+5. Setup motion configuration file (optional)
+```bash
+$ roscd multi_contact_controller
+$ cd .github/workflows
+$ python ./scripts/mergeConfigs.py ./config/MotionSampleField.yaml ./config/DDP.yaml > ~/.config/mc_rtc/controllers/MultiContactController.yaml
+```
+
 ### Simulation execution
 ```bash
 # Terminal 1
