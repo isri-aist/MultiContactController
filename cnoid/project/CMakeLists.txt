@@ -1,7 +1,7 @@
 
-if(NOT CNOID_USE_PYTHON2)
+if(ENABLE_PYTHON3)
   execute_process(
-    COMMAND python -c "from distutils import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
+    COMMAND python3 -c "import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
     OUTPUT_VARIABLE PYTHON_VERSION
     RESULT_VARIABLE PYTHON_VERSION_SUCCESS
     OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -12,6 +12,15 @@ else()
     RESULT_VARIABLE PYTHON_VERSION_SUCCESS
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
+if(NOT PYTHON_VERSION_SUCCESS STREQUAL 0)
+  message("Python version failed to be detected")
+  execute_process(
+    COMMAND python -c "from distutils import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
+    OUTPUT_VARIABLE PYTHON_VERSION
+    RESULT_VARIABLE PYTHON_VERSION_SUCCESS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+message("-- Python version detected: ${PYTHON_VERSION}")
 
 set(MCC_CNOID_CONFIG_FILE_LIST
   rtc.conf.choreonoid
