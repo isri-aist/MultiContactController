@@ -14,7 +14,6 @@ set(CMAKE_COLOR_DIAGNOSTICS ON)
 option(ENABLE_CNOID "Install Choreonoid files" ON)
 option(ENABLE_MUJOCO "Install MuJoCo files" OFF)
 option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
-option(ENABLE_PYTHON3 "Enable usagen of python3" OFF)
 
 include(cmake/base.cmake)
 project(multi_contact_controller LANGUAGES CXX)

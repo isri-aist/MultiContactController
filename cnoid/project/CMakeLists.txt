@@ -1,5 +1,4 @@
-
-if(ENABLE_PYTHON3)
+if(NOT ${CHOREONOID_USE_PYTHON2})
   execute_process(
     COMMAND python3 -c "import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
     OUTPUT_VARIABLE PYTHON_VERSION
@@ -13,7 +12,6 @@ else()
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 if(NOT PYTHON_VERSION_SUCCESS STREQUAL 0)
-  message("Python version failed to be detected")
   execute_process(
     COMMAND python -c "from distutils import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
     OUTPUT_VARIABLE PYTHON_VERSION
