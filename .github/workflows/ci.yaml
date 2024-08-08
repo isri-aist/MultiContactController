@@ -126,6 +126,11 @@ jobs:
           catkin-test-args: --no-deps
           build-packages: multi_contact_controller
           test-packages: multi_contact_controller
+      - name: Check python
+        run: |
+          set -e
+          set -x
+          python -c "from distutils import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
       - name: Run simulation
         if: env.RUN_SIMULATION_STEPS == 'true'
         # https://github.com/jrl-umi3218/lipm_walking_controller/blob/b564d655388ae6a6725c504e5c74a62192e58c7c/.github/workflows/build.yml#L64-L92
