@@ -27,7 +27,8 @@ This controller integrates the following elements related to humanoid multi-cont
 For more information on the technical details, please see the following papers:
 - Papers listed in [CentroidalControlCollection](https://github.com/isri-aist/CentroidalControlCollection)
 - Papers listed in [ForceControlCollection](https://github.com/isri-aist/ForceControlCollection)
-- M Murooka, et al. Centroidal trajectory generation and stabilization based on preview control for humanoid multi-contact motion. RA-Letters, 2022. [(available here)](https://hal.science/hal-03720407)
+- M. Murooka, et al., "Centroidal trajectory generation and stabilization based on preview control for humanoid multi-contact motion", IEEE Robotics and Automation Letters, 2022. [10.1109/LRA.2022.3186515](https://doi.org/10.1109/LRA.2022.3186515) [(available here)](https://hal.science/hal-03720407)
+- M. Murooka, et al., "Whole-body multi-contact motion control for humanoid robots based on distributed tactile sensors", IEEE Robotics and Automation Letters, 2024. [10.1109/LRA.2024.3475052](https://doi.org/10.1109/LRA.2024.3475052) [(available here)](https://hal.science/hal-04729434v1)
 
 ## Install
 
