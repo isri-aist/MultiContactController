@@ -1,3 +1,25 @@
+if(NOT ${CHOREONOID_USE_PYTHON2})
+  execute_process(
+    COMMAND python3 -c "import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
+    OUTPUT_VARIABLE PYTHON_VERSION
+    RESULT_VARIABLE PYTHON_VERSION_SUCCESS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+  execute_process(
+    COMMAND python2 -c "from distutils import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
+    OUTPUT_VARIABLE PYTHON_VERSION
+    RESULT_VARIABLE PYTHON_VERSION_SUCCESS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+if(NOT PYTHON_VERSION_SUCCESS STREQUAL 0)
+  execute_process(
+    COMMAND python -c "from distutils import sysconfig; print(sysconfig.get_config_var(\"VERSION\"))"
+    OUTPUT_VARIABLE PYTHON_VERSION
+    RESULT_VARIABLE PYTHON_VERSION_SUCCESS
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+message("-- Python version detected: ${PYTHON_VERSION}")
+
 set(MCC_CNOID_CONFIG_FILE_LIST
   rtc.conf.choreonoid
   robot.conf
@@ -5,6 +27,7 @@ set(MCC_CNOID_CONFIG_FILE_LIST
   PDcontroller.conf.choreonoid
   PDgains_sim.dat
 )
+
 foreach(CNOID_CONFIG_FILE IN LISTS MCC_CNOID_CONFIG_FILE_LIST)
   execute_process(COMMAND cmake -E create_symlink
     "${HRPSYSBASE_PREFIX}/share/hrpsys/samples/JVRC1/${CNOID_CONFIG_FILE}"
