@@ -30,6 +30,7 @@ For more information on the technical details, please see the following papers:
 - M. Murooka, et al., "Centroidal trajectory generation and stabilization based on preview control for humanoid multi-contact motion", IEEE Robotics and Automation Letters, 2022. [10.1109/LRA.2022.3186515](https://doi.org/10.1109/LRA.2022.3186515) [(available here)](https://hal.science/hal-03720407)
 - M. Murooka, et al., "Whole-body multi-contact motion control for humanoid robots based on distributed tactile sensors", IEEE Robotics and Automation Letters, 2024. [10.1109/LRA.2024.3475052](https://doi.org/10.1109/LRA.2024.3475052) [(available here)](https://hal.science/hal-04729434v1)
 
+
 ## Install
 
 ### Requirements
@@ -113,4 +114,33 @@ $ choreonoid MCC_JVRC1_SampleField.cnoid --start-simulation
 # Terminal 3
 $ source ~/ros/ws_mcc/devel/setup.bash
 $ roslaunch multi_contact_controller display.launch
+```
+
+## Citation
+You can cite this work with:
+```bib
+@ARTICLE{PreviewControlForMultiContactMotion,
+  author={Murooka, Masaki and Morisawa, Mitsuharu and Kanehiro, Fumio},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Centroidal Trajectory Generation and Stabilization Based on Preview Control for Humanoid Multi-Contact Motion}, 
+  year={2022},
+  volume={7},
+  number={3},
+  pages={8225-8232},
+  doi={10.1109/LRA.2022.3186515}
+}
+```
+
+If you focus on whole-body multi-contact motion using tactile sensors, the following paper is also relevant. You can reproduce the simulation experiments with the code in [this branch](https://github.com/mmurooka/MultiContactController/tree/RAL2024).
+```bib
+@ARTICLE{MultiContactMotionWithTactileSensors,
+  author={Murooka, Masaki and Fukumitsu, Kensuke and Hamze, Marwan and Morisawa, Mitsuharu and Kaminaga, Hiroshi and Kanehiro, Fumio and Yoshida, Eiichi},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Whole-Body Multi-Contact Motion Control for Humanoid Robots Based on Distributed Tactile Sensors}, 
+  year={2024},
+  volume={9},
+  number={11},
+  pages={10620-10627},
+  doi={10.1109/LRA.2024.3475052}
+}
 ```
