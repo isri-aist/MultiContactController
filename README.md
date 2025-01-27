@@ -26,8 +26,6 @@ For more information on the technical details, please see the following papers:
 - Papers listed in [CentroidalControlCollection](https://github.com/isri-aist/CentroidalControlCollection)
 - Papers listed in [ForceControlCollection](https://github.com/isri-aist/ForceControlCollection)
 - M. Murooka, et al., "Centroidal trajectory generation and stabilization based on preview control for humanoid multi-contact motion", IEEE Robotics and Automation Letters, 2022. [10.1109/LRA.2022.3186515](https://doi.org/10.1109/LRA.2022.3186515) [(available here)](https://hal.science/hal-03720407)
-- M. Murooka, et al., "Whole-body multi-contact motion control for humanoid robots based on distributed tactile sensors", IEEE Robotics and Automation Letters, 2024. [10.1109/LRA.2024.3475052](https://doi.org/10.1109/LRA.2024.3475052) [(available here)](https://hal.science/hal-04729434v1)
-
 
 ## Install
 
@@ -115,10 +113,17 @@ $ roslaunch multi_contact_controller display.launch
 ```
 
 ## Examples of studies using this controller
-- A. Demont, et al., "The kinetics observer: a tightly coupled estimator for legged robots", arXiv, 2024. [arXiv:2406.13267](https://arxiv.org/abs/2406.13267)
+- M. Murooka, et al., "Whole-body multi-contact motion control for humanoid robots based on distributed tactile sensors", IEEE Robotics and Automation Letters, 2024. [10.1109/LRA.2024.3475052](https://doi.org/10.1109/LRA.2024.3475052) [(available here)](https://hal.science/hal-04729434v1)
+  - You can reproduce the simulation experiments with the code in [this branch](https://github.com/mmurooka/MultiContactController/tree/RAL2024).
+
+https://github.com/user-attachments/assets/a50d2b41-d93f-4e4c-8ca2-74fba00e194f
+
 - M. Benallegue, et al., "Humanoid robot RHP friends: seamless combination of autonomous and teleoperated tasks in a nursing context", IEEE Robotics and Automation Magazine, 2025. [10.1109/MRA.2024.3521995](https://ieeexplore.ieee.org/document/10852168)
 
 https://github.com/user-attachments/assets/a0258202-5369-4de8-bc36-b88adb26812f
+
+- A. Demont, et al., "The kinetics observer: a tightly coupled estimator for legged robots", arXiv, 2024. [arXiv:2406.13267](https://arxiv.org/abs/2406.13267)
+- M. Tsuru, et al., "Online multi-contact motion replanning for humanoid robots with semantic 3D voxel mapping: ExOctomap", Sensors, 2023. [10.3390/s23218837](https://doi.org/10.3390/s23218837)
 
 ## Citation
 You can cite this work with:
@@ -132,19 +137,5 @@ You can cite this work with:
   number={3},
   pages={8225-8232},
   doi={10.1109/LRA.2022.3186515}
-}
-```
-
-If you focus on whole-body multi-contact motion using tactile sensors, the following paper is also relevant. You can reproduce the simulation experiments with the code in [this branch](https://github.com/mmurooka/MultiContactController/tree/RAL2024).
-```bib
-@ARTICLE{MultiContactMotionWithTactileSensors,
-  author={Murooka, Masaki and Fukumitsu, Kensuke and Hamze, Marwan and Morisawa, Mitsuharu and Kaminaga, Hiroshi and Kanehiro, Fumio and Yoshida, Eiichi},
-  journal={IEEE Robotics and Automation Letters}, 
-  title={Whole-Body Multi-Contact Motion Control for Humanoid Robots Based on Distributed Tactile Sensors}, 
-  year={2024},
-  volume={9},
-  number={11},
-  pages={10620-10627},
-  doi={10.1109/LRA.2024.3475052}
 }
 ```
