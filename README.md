@@ -9,8 +9,6 @@ https://user-images.githubusercontent.com/6636600/220029546-ef3d5e66-c06d-417e-a
 
 https://user-images.githubusercontent.com/6636600/218400660-a3200de4-4c8b-492f-97e3-c4b7076b9c6a.mp4
 
-https://user-images.githubusercontent.com/6636600/227840423-618b41c1-cd10-436c-bf14-8af3ea85e3b3.mp4
-
 ## Features
 - Completely open source! (controller framework: mc_rtc, simulator: Choreonoid, sample robot model: JVRC1)
 - Unified control of bipedal walking, multi-contact locomotion including surface/grasp contacts, and jumping motion.
@@ -115,6 +113,12 @@ $ choreonoid MCC_JVRC1_SampleField.cnoid --start-simulation
 $ source ~/ros/ws_mcc/devel/setup.bash
 $ roslaunch multi_contact_controller display.launch
 ```
+
+## Examples of studies using this controller
+- A. Demont, et al., "The kinetics observer: a tightly coupled estimator for legged robots", arXiv, 2024. [arXiv:2406.13267](https://arxiv.org/abs/2406.13267)
+- M. Benallegue, et al., "Humanoid robot RHP friends: seamless combination of autonomous and teleoperated tasks in a nursing context", IEEE Robotics and Automation Magazine, 2025. [10.1109/MRA.2024.3521995](https://ieeexplore.ieee.org/document/10852168)
+
+https://github.com/user-attachments/assets/a0258202-5369-4de8-bc36-b88adb26812f
 
 ## Citation
 You can cite this work with:
